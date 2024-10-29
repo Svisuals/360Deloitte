@@ -21,8 +21,6 @@ iframe {
     height: 100%;
     border: none;
     display: none; /* Inicialmente oculta todos los iframes */
-    position: relative; /* Agregado */
-    z-index: 1; /* Agregado */
 }
 
 #iframe1 {
@@ -34,31 +32,50 @@ iframe {
 }
 
 /* Botones */
-#toggleButton, #toggleIframe3Button, #settingsButton {
+#toggleButton {
     position: fixed;
     top: 10px;
+    left: calc(49%);
     width: 32px;
     height: 32px;
+    background: url('DUP.png') no-repeat center center;
     background-size: cover;
     border: none;
     cursor: pointer;
     z-index: 1000;
 }
 
-#toggleButton {
-    left: calc(49%);
-    background: url('DUP.png') no-repeat center center;
+#toggleIframe2ButtonMobile {
+    display: none;
 }
 
 #toggleIframe3Button {
+    position: fixed;
+    top: 10px;
     left: 55px;
+    width: 32px;
+    height: 32px;
     background: url('CRO.png') no-repeat center center;
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
     display: block;
 }
 
+/* Nuevo botón de ajustes */
 #settingsButton {
-    left: 100px; /* Ajusta según la posición del botón CRO */
-    background: url('SETTINGS_ICON.png') no-repeat center center; /* Reemplaza con el icono adecuado */
+    position: fixed;
+    top: 10px;
+    left: 100px; /* Ajusta este valor según sea necesario para posicionarlo debajo del botón "CRO" */
+    width: 32px;
+    height: 32px;
+    background: url('SETTINGS.png') no-repeat center center; /* Reemplaza 'SETTINGS.png' con el icono adecuado */
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    display: block;
 }
 
 /* Menús desplegables */
@@ -100,31 +117,31 @@ iframe {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #ffffff;
-    min-width: 200px;
-    max-width: 300px;
-    width: 60%;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
+    background-color: #ffffff; /* Fondo blanco */
+    min-width: 200px; /* Tamaño mínimo común para ambos menús */
+    max-width: 300px; /* Limitar ancho máximo */
+    width: 60%; /* Ajustar el ancho al 60% del contenedor */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3); /* Sombra suave para todo el menú */
+    border-radius: 8px; /* Bordes redondeados */
     z-index: 1;
-    padding: 10px 0;
+    padding: 10px 0; /* Añadir padding vertical */
 }
 
 .dropdown-content a {
     color: black;
-    padding: 12px 16px;
+    padding: 12px 16px; /* Más espacio alrededor del texto */
     text-decoration: none;
     display: block;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 5px;
+    font-weight: bold; /* Hacer el texto más destacado */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombreado del texto */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave en el hover */
+    border-radius: 5px; /* Bordes redondeados en cada enlace */
 }
 
 .dropdown-content a:hover {
-    background-color: #f1f1f1;
-    color: #0c7a20;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+    background-color: #f1f1f1; /* Color de fondo en hover */
+    color: #0c7a20; /* Color de texto al pasar el mouse */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); /* Más sombra en el hover */
 }
 
 /* Mostrar el menú al agregar la clase 'show' */
@@ -167,8 +184,8 @@ iframe {
 
     /* Ajustar dimensiones del botón del menú del iframe2 */
     #iframe2Menu button {
-        padding: 8px;
-        font-size: 16px;
+        padding: 8px;         /* Igual que el botón del iframe1 */
+        font-size: 16px;      /* Igual que el botón del iframe1 */
     }
 
     /* Ajustar posicion del contenido del menú del iframe2 */
@@ -177,11 +194,19 @@ iframe {
         right: auto;
     }
 
-    /* Posicionar botón */
+    /* Posicionar botones */
     #toggleButton {
         top: 10px;
         right: 10px;
         left: auto;
+    }
+
+    #toggleIframe3Button {
+        display: none;
+    }
+
+    #settingsButton {
+        display: none;
     }
 }
 
@@ -225,11 +250,15 @@ iframe {
         left: auto;
     }
 
-    /* Posicionar botón */
+    /* Posicionar botones */
     #toggleButton {
         top: 10px;
         right: 10px;
         left: calc(49%);
+    }
+
+    #settingsButton {
+        display: none;
     }
 }
 
@@ -240,12 +269,12 @@ iframe {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #000000;
+    background-color: #000000; /* Fondo negro */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2000;
-    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.7);
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.7); /* Sombra interna para oscurecer los bordes */
 }
 
 #loginContent {
@@ -255,29 +284,29 @@ iframe {
 }
 
 #loginLogo {
-    max-width: 360px;
+    max-width: 360px; /* Tamaño del logo */ 
     height: auto;
     margin-bottom: 20px;
-    margin-left: 5%;
+    margin-left: 5%; /* Ajusta este valor para mover la imagen a la derecha */
 }
 
 /* Estilos para el formulario de inicio de sesión */
 #loginForm {
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
+    background-color: transparent; /* Hacer el fondo transparente */
+    border: none; /* Eliminar el borde */
+    box-shadow: none; /* Eliminar las sombras */
     padding: 20px 30px;
     max-width: 350px;
     width: 100%;
     font-family: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; /* Centra el contenido del formulario */
 }
 
 #loginForm h2 {
     margin-bottom: 20px;
-    color: white;
+    color: white; /* Color del texto en blanco */
     font-size: 1.5em;
     font-weight: bold;
 }
@@ -286,7 +315,7 @@ iframe {
     display: block;
     margin: 10px 0 5px;
     text-align: left;
-    color: white;
+    color: white; /* Cambia las etiquetas a color blanco */
     font-size: 0.95em;
 }
 
@@ -297,12 +326,12 @@ iframe {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 0.95em;
-    background-color: #f5f5f5;
-    color: #000000;
+    background-color: #f5f5f5; /* Fondo claro para los inputs */
+    color: #000000; /* Cambia el texto dentro de los inputs a negro */
 }
 
 #loginForm input::placeholder {
-    color: #a9a9a9;
+    color: #a9a9a9; /* Color para los placeholders */
 }
 
 #loginForm button {
@@ -317,7 +346,7 @@ iframe {
     font-size: 1em;
     transition: background-color 0.3s ease;
     margin-top: 10px;
-    margin-left: 18%;
+    margin-left: 18%; /* Ajusta este valor para mover el botón hacia la derecha */
     text-align: center;
 }
 
@@ -346,26 +375,16 @@ iframe {
 }
 
 #settingsContent {
-    background-color: #fff;
-    padding: 20px 30px;
+    background-color: #ffffff;
+    padding: 20px;
     border-radius: 8px;
-    max-width: 400px;
     width: 90%;
+    max-width: 400px;
+    text-align: center;
 }
 
-#settingsContent h2 {
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    color: #333;
-}
-
-#settingsContent label {
-    display: block;
-    margin: 10px 0 5px;
-    color: #333;
-}
-
-#settingsContent input {
+#settingsForm input,
+#settingsForm select {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -373,20 +392,21 @@ iframe {
     border-radius: 6px;
 }
 
-#settingsContent button {
+#settingsForm button {
     padding: 10px 20px;
-    background-color: #0c7a20;
-    color: #fff;
+    margin: 5px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 1em;
-    margin-right: 10px;
 }
 
-#settingsContent button#closeSettings {
+#settingsForm button[type="submit"] {
+    background-color: #0c7a20;
+    color: white;
+}
+
+#settingsForm button#closeSettings {
     background-color: #ccc;
-    color: #333;
 }
 
 /* Media Query para pantallas más pequeñas */
@@ -413,15 +433,20 @@ iframe {
     #loginForm button {
         padding: 5px;
     }
-}
 
-/* Media Query para pantallas más pequeñas en orientación vertical */
-@media (max-width: 768px) and (orientation: portrait) {
-    #loginForm button {
-        width: 100%;
-        max-width: 200px;
-        margin-top: 10px;
-        margin-left: 10%;
-        text-align: center;
+    /* Ajustes para la página de ajustes en pantallas pequeñas */
+    #settingsContent {
+        width: 90%;
+        padding: 15px;
+    }
+
+    #settingsForm input,
+    #settingsForm select {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    #settingsForm button {
+        padding: 8px 16px;
     }
 }
