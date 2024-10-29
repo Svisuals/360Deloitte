@@ -54,22 +54,22 @@ iframe2MenuButton.addEventListener('click', () => {
     iframe2Menu.classList.toggle('show');
 });
 
-// Event listener para los enlaces de los menús
+// Función para actualizar los event listeners de los menús
 function updateMenuEventListeners() {
     iframe1MenuContent.querySelectorAll('a').forEach((link) => {
-        link.onclick = (event) => {
+        link.addEventListener('click', (event) => {
             event.preventDefault();
             iframe1.src = event.target.href;
             iframe1Menu.classList.remove('show');
-        };
+        });
     });
 
     iframe2MenuContent.querySelectorAll('a').forEach((link) => {
-        link.onclick = (event) => {
+        link.addEventListener('click', (event) => {
             event.preventDefault();
             iframe2.src = event.target.href;
             iframe2Menu.classList.remove('show');
-        };
+        });
     });
 }
 
@@ -174,7 +174,7 @@ window.addEventListener('resize', adjustLayout);
 window.addEventListener('orientationchange', adjustLayout);
 adjustLayout();
 
-// Cerrar los menús si el usuario hace clic fuera de ellos
+// Cerrar el menú si el usuario hace clic fuera de él
 window.onclick = function(event) {
     if (!event.target.closest('#iframe1MenuButton')) {
         iframe1Menu.classList.remove('show');
@@ -208,7 +208,7 @@ addLinkForm.addEventListener('submit', (event) => {
     newLink1.href = linkURL;
     newLink1.textContent = linkText;
 
-    const newLink2 = newLink1.cloneNode(true); // Clonar el enlace para el segundo menú
+    const newLink2 = newLink1.cloneNode(true);
 
     // Agregar el enlace a ambos menús
     iframe1MenuContent.appendChild(newLink1);
