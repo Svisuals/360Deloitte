@@ -75,7 +75,7 @@ iframe {
     border: none;
     cursor: pointer;
     z-index: 1000;
-    display: block;
+    display: none; /* Oculto por defecto */
 }
 
 /* Menús desplegables */
@@ -127,7 +127,7 @@ iframe {
     padding: 10px 0;
 
     /* Añadido para scrollbar vertical */
-    max-height: 300px; /* Ajusta este valor según tus necesidades */
+    max-height: 300px;
     overflow-y: auto;
 }
 
@@ -457,7 +457,7 @@ iframe {
     margin-top: 20px;
 
     /* Añadido para scrollbar vertical */
-    max-height: 200px; /* Ajusta este valor según tus necesidades */
+    max-height: 200px;
     overflow-y: auto;
 }
 
