@@ -28,25 +28,24 @@
         </div>
     </div>
 
-    <!-- Botón para dispositivos de escritorio -->
+    <!-- Botones -->
     <div id="toggleButton"></div>
-    <!-- Botón para dispositivos móviles -->
     <div id="toggleIframe2ButtonMobile"></div>
     <div id="container">
-        <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <iframe id="iframe2" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <iframe id="iframe3" src="https://svisuals.github.io/Cronograma/"></iframe>
+        <iframe id="iframe1"></iframe>
+        <iframe id="iframe2"></iframe>
+        <iframe id="iframe3"></iframe>
         <!-- Botón para el cronograma -->
         <div id="toggleIframe3Button"></div>
+        <!-- Botón para ajustes -->
+        <a href="settings.html" id="settingsButton"></a>
     </div>
 
     <!-- Menú desplegable para iframe1 -->
     <div id="iframe1Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe1">
         <button id="iframe1MenuButton">▼</button>
         <div id="iframe1MenuContent" class="dropdown-content">
-            <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
-            <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
-            <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
+            <!-- Enlaces cargados desde localStorage -->
         </div>
     </div>
 
@@ -54,31 +53,8 @@
     <div id="iframe2Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe2">
         <button id="iframe2MenuButton">▼</button>
         <div id="iframe2MenuContent" class="dropdown-content">
-            <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
-            <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
-            <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
+            <!-- Enlaces cargados desde localStorage -->
         </div>
-    </div>
-
-    <!-- Formulario para agregar nuevos enlaces -->
-    <div id="addLinkFormContainer">
-        <h3>Agregar Nuevo Enlace</h3>
-        <form id="addLinkForm">
-            <label for="menuSelect">Seleccionar Menú:</label>
-            <select id="menuSelect" name="menuSelect" required>
-                <option value="iframe1MenuContent">Menú Iframe 1</option>
-                <option value="iframe2MenuContent">Menú Iframe 2</option>
-            </select>
-
-            <label for="linkText">Texto del Enlace:</label>
-            <input type="text" id="linkText" name="linkText" required>
-
-            <label for="linkURL">URL del Enlace:</label>
-            <input type="url" id="linkURL" name="linkURL" required>
-
-            <button type="submit">Agregar Enlace</button>
-        </form>
-        <p id="addLinkMessage"></p>
     </div>
 
     <!-- Cargar el script al final del body -->
