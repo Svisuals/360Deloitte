@@ -33,7 +33,7 @@ iframe {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: calc(50% - 16px); /* Centrar horizontalmente */
+    left: calc(50% - 16px);
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
@@ -43,6 +43,10 @@ iframe {
     z-index: 1000;
 }
 
+#toggleIframe2ButtonMobile {
+    display: none;
+}
+
 #toggleIframe3Button {
     position: fixed;
     top: 10px;
@@ -50,19 +54,6 @@ iframe {
     width: 32px;
     height: 32px;
     background: url('CRO.png') no-repeat center center;
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-}
-
-#settingsButton {
-    position: fixed;
-    top: 50px; /* Debajo del botón CRO */
-    left: 55px;
-    width: 32px;
-    height: 32px;
-    background: url('SET.png') no-repeat center center; /* Asegúrate de tener 'SET.png' */
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -147,22 +138,99 @@ iframe {
     left: auto;
 }
 
-/* Estilos para el botón de volver en settings.html */
-#backButton {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    background-color: #0c7a20;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    z-index: 1000;
+/* Media Queries */
+
+/* Orientación vertical en dispositivos móviles */
+@media (max-width: 1300px) and (orientation: portrait) {
+    #container {
+        flex-direction: column;
+    }
+
+    #iframe1,
+    #iframe2 {
+        width: 100%;
+    }
+
+    #iframe1 {
+        height: 50%;
+    }
+
+    #iframe2 {
+        height: 50%;
+    }   
+
+    /* Posicionar menú del iframe2 */
+    #iframe2Menu {
+        top: calc(50% + 10px);
+        left: 10px;    
+    }
+
+    /* Ajustar dimensiones del botón del menú del iframe2 */
+    #iframe2Menu button {
+        padding: 8px;         /* Igual que el botón del iframe1 */
+        font-size: 16px;      /* Igual que el botón del iframe1 */
+    }
+
+    /* Ajustar posicion del contenido del menú del iframe2 */
+   #iframe2Menu .dropdown-content {
+        left: 0;
+        right: auto;
+    }
+
+    /* Posicionar botón */
+    #toggleButton {
+        top: 10px;
+        right: 10px;
+        left: auto;
+    }
 }
 
-#backButton:hover {
-    background-color: #095c16;
+/* Orientación horizontal en dispositivos móviles */
+@media (max-width: 1300px) and (orientation: landscape) {
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    #container {
+        height: 100%;
+        width: 100%;
+        flex-direction: row;
+    }
+
+    #iframe1, #iframe2 {
+        width: 50%;
+        height: 100%;
+        display: block;
+    }
+
+    #toggleIframe3Button {
+        display: none;
+    }
+
+    #iframe3 {
+        display: none;
+    }
+
+    /* Posicionar menús */
+    #iframe1Menu {
+        top: 10px;
+        left: 10px;
+    }
+
+    #iframe2Menu {
+        top: 10px;
+        right: 10px;
+        left: auto;
+    }
+
+    /* Posicionar botón */
+    #toggleButton {
+        top: 10px;
+        right: 10px;
+        left: calc(50% - 16px);
+    }
 }
 
 /* Estilos para la pantalla de inicio de sesión */
@@ -249,7 +317,7 @@ iframe {
     font-size: 1em;
     transition: background-color 0.3s ease;
     margin-top: 10px;
-    margin-left: 0; /* Centrar el botón */
+    margin-left: 18%; /* Ajusta este valor para mover el botón hacia la derecha */
     text-align: center;
 }
 
@@ -263,15 +331,54 @@ iframe {
     display: none;
 }
 
+/* Media Query para pantallas más pequeñas */
+@media (max-width: 768px), (max-height: 768px) {
+    #loginForm {
+        padding: 10px 15px;
+        max-width: 300px;
+    }
+
+    #loginForm h2 {
+        font-size: 1.2em;
+    }
+
+    #loginForm label,
+    #loginForm input,
+    #loginForm button {
+        font-size: 0.9em;
+    }
+
+    #loginForm input {
+        padding: 4px;
+    }
+
+    #loginForm button {
+        padding: 5px;
+    }
+
+    /* Media Query para pantallas más pequeñas en orientación vertical */
+    @media (max-width: 768px) and (orientation: portrait) {
+        #loginForm button {
+            width: 100%;
+            max-width: 200px;
+            margin-top: 10px;
+            margin-left: 10%; /* Ajusta este valor para mover el botón hacia la derecha */
+            text-align: center;
+        }
+    }
+}
+
 /* Estilos para el formulario de agregar enlaces */
 #addLinkFormContainer {
-    position: relative;
-    margin: 100px auto 0 auto;
-    max-width: 400px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    max-width: 300px;
 }
 
 #addLinkFormContainer h3 {
@@ -287,8 +394,7 @@ iframe {
     color: #333;
 }
 
-#addLinkForm input,
-#addLinkForm select {
+#addLinkForm input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -316,23 +422,4 @@ iframe {
     margin-top: 10px;
     font-size: 0.9em;
     text-align: center;
-}
-
-/* Media Queries para dispositivos móviles */
-@media (max-width: 768px) {
-    #toggleButton {
-        left: calc(50% - 16px); /* Centrar horizontalmente */
-    }
-
-    #toggleIframe3Button,
-    #settingsButton {
-        left: 10px;
-        top: auto;
-        bottom: 10px;
-    }
-
-    #settingsButton {
-        top: auto;
-        bottom: 50px;
-    }
 }
