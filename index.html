@@ -38,6 +38,8 @@
         <iframe id="iframe3" src="https://svisuals.github.io/Cronograma/"></iframe>
         <!-- Botón para el cronograma -->
         <div id="toggleIframe3Button"></div>
+        <!-- Botón para mostrar/ocultar el formulario -->
+        <div id="toggleFormButton"></div>
     </div>
 
     <!-- Menú desplegable para iframe1 -->
@@ -60,9 +62,9 @@
         </div>
     </div>
 
-    <!-- Formulario para agregar nuevos enlaces -->
+    <!-- Formulario para agregar, editar y eliminar enlaces -->
     <div id="addLinkFormContainer">
-        <h3>Agregar Nuevo Enlace</h3>
+        <h3>Gestionar Enlaces</h3>
         <form id="addLinkForm">
             <label for="linkText">Texto del Enlace:</label>
             <input type="text" id="linkText" name="linkText" required>
@@ -71,8 +73,16 @@
             <input type="url" id="linkURL" name="linkURL" required>
 
             <button type="submit">Agregar Enlace</button>
+            <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
+            <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
         </form>
         <p id="addLinkMessage"></p>
+
+        <!-- Lista de enlaces existentes -->
+        <div id="linkListContainer">
+            <h4>Enlaces Existentes</h4>
+            <ul id="linkList"></ul>
+        </div>
     </div>
 
     <!-- Cargar el script al final del body -->
