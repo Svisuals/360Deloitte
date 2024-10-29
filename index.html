@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <title>Acompanhamento de Obra 360</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Asegúrate de vincular el archivo CSS actualizado -->
+    <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Tela de início de sessão -->
+    <!-- Pantalla de inicio de sesión -->
     <div id="loginOverlay">
         <div id="loginContent">
-            <img src="DT.png" alt="Logo da Deloitte 360" id="loginLogo"> <!-- Logo fora do formulário -->
+            <img src="DT.png" alt="Logo da Deloitte 360" id="loginLogo">
             <div id="loginForm">
                 <h2>Iniciar Sessão</h2>
                 <form id="authForm">
                     <label for="username">Usuário:</label>
                     <input type="text" id="username" name="username" required autocomplete="off">
-                    
+
                     <label for="password">Senha:</label>
                     <input type="password" id="password" name="password" required autocomplete="off">
-                    
+
                     <button type="submit">Entrar</button>
                     <p id="errorMessage" class="error"></p>
                 </form>
@@ -28,19 +28,16 @@
         </div>
     </div>
 
-    <!-- Botón para dispositivos de desktop -->
+    <!-- Botón para dispositivos de escritorio -->
     <div id="toggleButton"></div>
     <!-- Botón para dispositivos móviles -->
     <div id="toggleIframe2ButtonMobile"></div>
-    <!-- Botón para el cronograma -->
-    <div id="toggleIframe3Button"></div>
-    <!-- Nuevo botón para ajustes -->
-    <div id="settingsButton"></div>
-
     <div id="container">
         <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
         <iframe id="iframe2" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
         <iframe id="iframe3" src="https://svisuals.github.io/Cronograma/"></iframe>
+        <!-- Botón para el cronograma -->
+        <div id="toggleIframe3Button"></div>
     </div>
 
     <!-- Menú desplegable para iframe1 -->
@@ -63,32 +60,28 @@
         </div>
     </div>
 
-    <!-- Página de ajustes -->
-    <div id="settingsOverlay">
-        <div id="settingsContent">
-            <h2>Añadir Nuevo Enlace</h2>
-            <form id="settingsForm">
-                <label for="linkText">Texto a Mostrar:</label>
-                <input type="text" id="linkText" name="linkText" required>
-                
-                <label for="linkURL">URL del Enlace:</label>
-                <input type="url" id="linkURL" name="linkURL" required>
-                
-                <label for="iframeTarget">Selecciona el menú donde agregar el enlace:</label>
-                <select id="iframeTarget" name="iframeTarget" required>
-                    <option value="iframe1">Menú Iframe 1</option>
-                    <option value="iframe2">Menú Iframe 2</option>
-                    <!-- Puedes agregar más opciones si lo deseas -->
-                </select>
+    <!-- Formulario para agregar nuevos enlaces -->
+    <div id="addLinkFormContainer">
+        <h3>Agregar Nuevo Enlace</h3>
+        <form id="addLinkForm">
+            <label for="menuSelect">Seleccionar Menú:</label>
+            <select id="menuSelect" name="menuSelect" required>
+                <option value="iframe1MenuContent">Menú Iframe 1</option>
+                <option value="iframe2MenuContent">Menú Iframe 2</option>
+            </select>
 
-                <button type="submit">Agregar</button>
-                <button type="button" id="closeSettings">Cerrar</button>
-            </form>
-        </div>
+            <label for="linkText">Texto del Enlace:</label>
+            <input type="text" id="linkText" name="linkText" required>
+
+            <label for="linkURL">URL del Enlace:</label>
+            <input type="url" id="linkURL" name="linkURL" required>
+
+            <button type="submit">Agregar Enlace</button>
+        </form>
+        <p id="addLinkMessage"></p>
     </div>
 
     <!-- Cargar el script al final del body -->
-    <!-- Asegúrate de vincular el archivo JS actualizado -->
     <script src="script.js"></script>
 </body>
 </html>
