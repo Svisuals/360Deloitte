@@ -29,6 +29,7 @@ const iframe1 = document.getElementById('iframe1');
 const iframe2 = document.getElementById('iframe2');
 const iframe3 = document.getElementById('iframe3');
 const toggleIframe3Button = document.getElementById('toggleIframe3Button');
+const toggleFormButton = document.getElementById('toggleFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -115,6 +116,16 @@ toggleIframe3Button.addEventListener('click', () => {
     adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe3
 });
 
+// Event listener para el botón que alterna el formulario
+toggleFormButton.addEventListener('click', () => {
+    const formContainer = document.getElementById('addLinkFormContainer');
+    if (window.getComputedStyle(formContainer).display === 'none') {
+        formContainer.style.display = 'block';
+    } else {
+        formContainer.style.display = 'none';
+    }
+});
+
 // Función para ajustar el layout
 function adjustLayout() {
     const isMobile = window.innerWidth <= 1300;
@@ -189,8 +200,13 @@ const addLinkForm = document.getElementById('addLinkForm');
 const linkTextInput = document.getElementById('linkText');
 const linkURLInput = document.getElementById('linkURL');
 const addLinkMessage = document.getElementById('addLinkMessage');
+const linkList = document.getElementById('linkList');
+const updateLinkButton = document.getElementById('updateLinkButton');
+const cancelEditButton = document.getElementById('cancelEditButton');
 
-// Manejar el envío del formulario
+let editIndex = null; // Variable para saber si estamos editando un enlace
+
+// Manejar el envío del formulario para agregar o actualizar enlaces
 addLinkForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
@@ -203,7 +219,29 @@ addLinkForm.addEventListener('submit', (event) => {
         return;
     }
 
-    // Crear un nuevo elemento de enlace
+    if (editIndex !== null) {
+        // Actualizar el enlace existente
+        updateExistingLink(linkText, linkURL);
+    } else {
+        // Agregar un nuevo enlace
+        addNewLink(linkText, linkURL);
+    }
+
+    // Limpiar los campos del formulario
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar los enlaces en localStorage
+    saveLinks();
+});
+
+// Función para agregar un nuevo enlace
+function addNewLink(linkText, linkURL) {
+    // Crear nuevos elementos de enlace
     const newLink1 = document.createElement('a');
     newLink1.href = linkURL;
     newLink1.textContent = linkText;
@@ -214,19 +252,108 @@ addLinkForm.addEventListener('submit', (event) => {
     iframe1MenuContent.appendChild(newLink1);
     iframe2MenuContent.appendChild(newLink2);
 
-    // Limpiar los campos del formulario
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    // Agregar a la lista de enlaces
+    addLinkToList(linkText, linkURL);
+
+    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para actualizar un enlace existente
+function updateExistingLink(linkText, linkURL) {
+    // Actualizar en los menús
+    const links1 = iframe1MenuContent.querySelectorAll('a');
+    const links2 = iframe2MenuContent.querySelectorAll('a');
+
+    links1[editIndex].textContent = linkText;
+    links1[editIndex].href = linkURL;
+
+    links2[editIndex].textContent = linkText;
+    links2[editIndex].href = linkURL;
+
+    // Actualizar en la lista
+    const listItems = linkList.querySelectorAll('li');
+    const span = listItems[editIndex].querySelector('span');
+    span.textContent = linkText;
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    addLinkMessage.textContent = 'Enlace actualizado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para agregar el enlace a la lista de enlaces
+function addLinkToList(linkText, linkURL) {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = linkText;
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.classList.add('edit-button');
+    editButton.addEventListener('click', () => editLink(li, linkText, linkURL));
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.addEventListener('click', () => deleteLink(li));
+
+    li.appendChild(span);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
+
+    linkList.appendChild(li);
+}
+
+// Función para editar un enlace
+function editLink(li, linkText, linkURL) {
+    const index = Array.from(linkList.children).indexOf(li);
+    editIndex = index;
+
+    linkTextInput.value = linkText;
+    linkURLInput.value = linkURL;
+
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateLinkButton.style.display = 'block';
+    cancelEditButton.style.display = 'block';
+}
+
+// Event listener para el botón de actualizar enlace
+updateLinkButton.addEventListener('click', () => {
+    addLinkForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición
+cancelEditButton.addEventListener('click', () => {
     linkTextInput.value = '';
     linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
+    addLinkMessage.textContent = '';
+});
 
-    addLinkMessage.textContent = 'Enlace agregado exitosamente a ambos menús.';
-    addLinkMessage.style.color = 'green';
+// Función para eliminar un enlace
+function deleteLink(li) {
+    const index = Array.from(linkList.children).indexOf(li);
 
-    // Actualizar los event listeners después de agregar el nuevo enlace
+    // Eliminar de los menús
+    iframe1MenuContent.removeChild(iframe1MenuContent.children[index]);
+    iframe2MenuContent.removeChild(iframe2MenuContent.children[index]);
+
+    // Eliminar de la lista
+    linkList.removeChild(li);
+
+    // Actualizar los event listeners
     updateMenuEventListeners();
 
     // Guardar los enlaces en localStorage
     saveLinks();
-});
+}
 
 // Función para guardar los enlaces en localStorage
 function saveLinks() {
@@ -234,14 +361,8 @@ function saveLinks() {
         text: link.textContent,
         href: link.href
     }));
-    const iframe2Links = Array.from(iframe2MenuContent.querySelectorAll('a')).map(link => ({
-        text: link.textContent,
-        href: link.href
-    }));
-
     const linksData = {
-        iframe1Links,
-        iframe2Links
+        iframe1Links
     };
 
     localStorage.setItem('menuLinks', JSON.stringify(linksData));
@@ -252,24 +373,26 @@ function loadLinks() {
     const linksData = JSON.parse(localStorage.getItem('menuLinks'));
 
     if (linksData) {
-        // Limpiar menús existentes
+        // Limpiar menús y lista existentes
         iframe1MenuContent.innerHTML = '';
         iframe2MenuContent.innerHTML = '';
+        linkList.innerHTML = '';
 
-        // Cargar enlaces en iframe1MenuContent
+        // Cargar enlaces en los menús y en la lista
         linksData.iframe1Links.forEach(linkData => {
-            const link = document.createElement('a');
-            link.href = linkData.href;
-            link.textContent = linkData.text;
-            iframe1MenuContent.appendChild(link);
-        });
+            // Agregar a los menús
+            const link1 = document.createElement('a');
+            link1.href = linkData.href;
+            link1.textContent = linkData.text;
+            iframe1MenuContent.appendChild(link1);
 
-        // Cargar enlaces en iframe2MenuContent
-        linksData.iframe2Links.forEach(linkData => {
-            const link = document.createElement('a');
-            link.href = linkData.href;
-            link.textContent = linkData.text;
-            iframe2MenuContent.appendChild(link);
+            const link2 = document.createElement('a');
+            link2.href = linkData.href;
+            link2.textContent = linkData.text;
+            iframe2MenuContent.appendChild(link2);
+
+            // Agregar a la lista
+            addLinkToList(linkData.text, linkData.href);
         });
 
         // Actualizar event listeners
