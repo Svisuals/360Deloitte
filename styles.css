@@ -4,6 +4,8 @@ body, html {
     padding: 0;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 #container {
@@ -33,7 +35,7 @@ iframe {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: calc(50% - 16px);
+    left: calc(49%);
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
@@ -167,8 +169,8 @@ iframe {
 
     /* Ajustar dimensiones del botón del menú del iframe2 */
     #iframe2Menu button {
-        padding: 8px;         /* Igual que el botón del iframe1 */
-        font-size: 16px;      /* Igual que el botón del iframe1 */
+        padding: 8px;
+        font-size: 16px;
     }
 
     /* Ajustar posicion del contenido del menú del iframe2 */
@@ -229,7 +231,7 @@ iframe {
     #toggleButton {
         top: 10px;
         right: 10px;
-        left: calc(50% - 16px);
+        left: calc(49%);
     }
 }
 
@@ -263,21 +265,21 @@ iframe {
 
 /* Estilos para el formulario de inicio de sesión */
 #loginForm {
-    background-color: transparent; /* Hacer el fondo transparente */
-    border: none; /* Eliminar el borde */
-    box-shadow: none; /* Eliminar las sombras */
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
     padding: 20px 30px;
     max-width: 350px;
     width: 100%;
     font-family: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra el contenido del formulario */
+    align-items: center;
 }
 
 #loginForm h2 {
     margin-bottom: 20px;
-    color: white; /* Color del texto en blanco */
+    color: white;
     font-size: 1.5em;
     font-weight: bold;
 }
@@ -286,7 +288,7 @@ iframe {
     display: block;
     margin: 10px 0 5px;
     text-align: left;
-    color: white; /* Cambia las etiquetas a color blanco */
+    color: white;
     font-size: 0.95em;
 }
 
@@ -297,12 +299,12 @@ iframe {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 0.95em;
-    background-color: #f5f5f5; /* Fondo claro para los inputs */
-    color: #000000; /* Cambia el texto dentro de los inputs a negro */
+    background-color: #f5f5f5;
+    color: #000000;
 }
 
 #loginForm input::placeholder {
-    color: #a9a9a9; /* Color para los placeholders */
+    color: #a9a9a9;
 }
 
 #loginForm button {
@@ -317,7 +319,7 @@ iframe {
     font-size: 1em;
     transition: background-color 0.3s ease;
     margin-top: 10px;
-    margin-left: 18%; /* Ajusta este valor para mover el botón hacia la derecha */
+    margin-left: 18%;
     text-align: center;
 }
 
@@ -362,7 +364,7 @@ iframe {
             width: 100%;
             max-width: 200px;
             margin-top: 10px;
-            margin-left: 10%; /* Ajusta este valor para mover el botón hacia la derecha */
+            margin-left: 10%;
             text-align: center;
         }
     }
