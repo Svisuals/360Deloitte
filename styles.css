@@ -63,6 +63,21 @@ iframe {
     display: block;
 }
 
+/* Botón para alternar el formulario */
+#toggleFormButton {
+    position: fixed;
+    top: 10px;
+    left: 100px;
+    width: 32px;
+    height: 32px;
+    background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    display: block;
+}
+
 /* Menús desplegables */
 .dropdown {
     position: fixed;
@@ -373,14 +388,17 @@ iframe {
 /* Estilos para el formulario de agregar enlaces */
 #addLinkFormContainer {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 15px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1001;
-    max-width: 300px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    z-index: 2001;
+    max-width: 400px;
+    width: 90%;
+    display: none; /* Oculto por defecto */
 }
 
 #addLinkFormContainer h3 {
@@ -424,4 +442,52 @@ iframe {
     margin-top: 10px;
     font-size: 0.9em;
     text-align: center;
+}
+
+/* Estilos para la lista de enlaces */
+#linkListContainer {
+    margin-top: 20px;
+}
+
+#linkListContainer h4 {
+    margin-bottom: 10px;
+    color: #0c7a20;
+}
+
+#linkList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#linkList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+#linkList li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+#linkList li button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+#linkList li button.edit-button {
+    background-color: #3498db;
+}
+
+#linkList li button:hover {
+    opacity: 0.8;
 }
