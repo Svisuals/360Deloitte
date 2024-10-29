@@ -16,6 +16,9 @@ authForm.addEventListener('submit', (event) => {
     if (username === 'ADM' && password === '1234') {
         // Ocultar la pantalla de inicio de sesión
         loginOverlay.style.display = 'none';
+
+        // Llamar a adjustLayout para ajustar el diseño
+        adjustLayout();
     } else {
         // Mostrar mensaje de error
         errorMessage.textContent = 'Usuário ou senha incorretos.';
