@@ -6,26 +6,7 @@ const passwordInput = document.getElementById('password');
 const errorMessage = document.getElementById('errorMessage');
 
 // Variable para almacenar el usuario autenticado
-let loggedInUser = localStorage.getItem('loggedInUser') || null;
-
-// Función para verificar el estado de autenticación al cargar la página
-function checkAuthentication() {
-    if (loggedInUser) {
-        loginOverlay.style.display = 'none';
-
-        // Mostrar u ocultar el botón del formulario según el usuario
-        if (loggedInUser === 'deloitte') {
-            toggleFormButton.style.display = 'block';
-        } else {
-            toggleFormButton.style.display = 'none';
-        }
-    } else {
-        loginOverlay.style.display = 'flex'; // Mostrar el login si no hay usuario autenticado
-    }
-}
-
-// Llamar a la función al cargar la página
-checkAuthentication();
+let loggedInUser = null;
 
 // Manejar el envío del formulario de autenticación
 authForm.addEventListener('submit', (event) => {
@@ -38,7 +19,6 @@ authForm.addEventListener('submit', (event) => {
     if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
         // Establecer el usuario autenticado
         loggedInUser = username;
-        localStorage.setItem('loggedInUser', loggedInUser);
 
         // Ocultar la pantalla de inicio de sesión
         loginOverlay.style.display = 'none';
@@ -78,10 +58,8 @@ iframe3.style.display = 'none';
 // Ocultar menú del iframe2 inicialmente
 iframe2Menu.style.display = 'none';
 
-// Ocultar el botón del formulario por defecto si el usuario no está autenticado
-if (loggedInUser !== 'deloitte') {
-    toggleFormButton.style.display = 'none';
-}
+// Ocultar el botón del formulario por defecto
+toggleFormButton.style.display = 'none';
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -95,33 +73,20 @@ iframe2MenuButton.addEventListener('click', () => {
 
 // Función para actualizar los event listeners de los menús
 function updateMenuEventListeners() {
-    // Eliminar event listeners anteriores para evitar duplicados
-    const iframe1Links = iframe1MenuContent.querySelectorAll('a');
-    const iframe2Links = iframe2MenuContent.querySelectorAll('a');
-
-    iframe1Links.forEach((link) => {
-        link.replaceWith(link.cloneNode(true));
-    });
-
-    iframe2Links.forEach((link) => {
-        link.replaceWith(link.cloneNode(true));
-    });
-
-    // Añadir nuevos event listeners
     iframe1MenuContent.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', (event) => {
+        link.onclick = function(event) {
             event.preventDefault();
-            iframe1.src = event.target.href;
+            iframe1.src = this.href;
             iframe1Menu.classList.remove('show');
-        });
+        };
     });
 
     iframe2MenuContent.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', (event) => {
+        link.onclick = function(event) {
             event.preventDefault();
-            iframe2.src = event.target.href;
+            iframe2.src = this.href;
             iframe2Menu.classList.remove('show');
-        });
+        };
     });
 }
 
@@ -260,7 +225,6 @@ let editIndex = null; // Variable para saber si estamos editando un enlace
 // Manejar el envío del formulario para agregar o actualizar enlaces
 addLinkForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Evitar el comportamiento por defecto del formulario
-    console.log('Formulario enviado');
 
     const linkText = linkTextInput.value.trim();
     const linkURL = linkURLInput.value.trim();
@@ -289,22 +253,6 @@ addLinkForm.addEventListener('submit', (event) => {
 
     // Guardar los enlaces en localStorage
     saveLinks();
-});
-
-// Event listener para el botón de actualizar enlace
-updateLinkButton.addEventListener('click', () => {
-    addLinkForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición
-cancelEditButton.addEventListener('click', () => {
-    linkTextInput.value = '';
-    linkURLInput.value = '';
-    editIndex = null;
-    updateLinkButton.style.display = 'none';
-    cancelEditButton.style.display = 'none';
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
-    addLinkMessage.textContent = '';
 });
 
 // Función para agregar un nuevo enlace
@@ -389,6 +337,22 @@ function editLink(li, linkText, linkURL) {
     cancelEditButton.style.display = 'block';
 }
 
+// Event listener para el botón de actualizar enlace
+updateLinkButton.addEventListener('click', () => {
+    addLinkForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición
+cancelEditButton.addEventListener('click', () => {
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
+    addLinkMessage.textContent = '';
+});
+
 // Función para eliminar un enlace
 function deleteLink(li) {
     const index = Array.from(linkList.children).indexOf(li);
@@ -413,8 +377,11 @@ function saveLinks() {
         text: link.textContent,
         href: link.href
     }));
+    const linksData = {
+        iframe1Links
+    };
 
-    localStorage.setItem('menuLinks', JSON.stringify({ iframe1Links }));
+    localStorage.setItem('menuLinks', JSON.stringify(linksData));
 }
 
 // Función para cargar los enlaces desde localStorage
