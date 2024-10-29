@@ -5,6 +5,12 @@ const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const errorMessage = document.getElementById('errorMessage');
 
+// Variable para almacenar el usuario logueado
+let loggedInUser = null;
+
+// Obtener el botón del formulario
+const toggleFormButton = document.getElementById('toggleFormButton');
+
 // Manejar el envío del formulario de autenticación
 authForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
@@ -13,9 +19,19 @@ authForm.addEventListener('submit', (event) => {
     const password = passwordInput.value.trim();
 
     // Verificar las credenciales
-    if (username === 'ADM' && password === '1234') {
+    if ((username === 'ADM' && password === '1234') || (username === 'deloitte' && password === '1234')) {
         // Ocultar la pantalla de inicio de sesión
         loginOverlay.style.display = 'none';
+
+        // Guardar el usuario logueado
+        loggedInUser = username;
+
+        // Controlar la visibilidad del botón del formulario
+        if (username === 'deloitte') {
+            toggleFormButton.style.display = 'block'; // Mostrar el botón
+        } else {
+            toggleFormButton.style.display = 'none'; // Asegurarse de que esté oculto
+        }
     } else {
         // Mostrar mensaje de error
         errorMessage.textContent = 'Usuário ou senha incorretos.';
@@ -29,7 +45,6 @@ const iframe1 = document.getElementById('iframe1');
 const iframe2 = document.getElementById('iframe2');
 const iframe3 = document.getElementById('iframe3');
 const toggleIframe3Button = document.getElementById('toggleIframe3Button');
-const toggleFormButton = document.getElementById('toggleFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
