@@ -63,21 +63,6 @@ iframe {
     display: block;
 }
 
-/* Nuevo botón de ajustes */
-#settingsButton {
-    position: fixed;
-    top: 10px;
-    left: 100px; /* Ajusta este valor según sea necesario para posicionarlo debajo del botón "CRO" */
-    width: 32px;
-    height: 32px;
-    background: url('SETTINGS.png') no-repeat center center; /* Reemplaza 'SETTINGS.png' con el icono adecuado */
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-    display: block;
-}
-
 /* Menús desplegables */
 .dropdown {
     position: fixed;
@@ -194,19 +179,11 @@ iframe {
         right: auto;
     }
 
-    /* Posicionar botones */
+    /* Posicionar botón */
     #toggleButton {
         top: 10px;
         right: 10px;
         left: auto;
-    }
-
-    #toggleIframe3Button {
-        display: none;
-    }
-
-    #settingsButton {
-        display: none;
     }
 }
 
@@ -250,15 +227,11 @@ iframe {
         left: auto;
     }
 
-    /* Posicionar botones */
+    /* Posicionar botón */
     #toggleButton {
         top: 10px;
         right: 10px;
         left: calc(49%);
-    }
-
-    #settingsButton {
-        display: none;
     }
 }
 
@@ -360,55 +333,6 @@ iframe {
     display: none;
 }
 
-/* Estilos para la página de ajustes */
-#settingsOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: none; /* Oculto por defecto */
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
-
-#settingsContent {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-}
-
-#settingsForm input,
-#settingsForm select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-}
-
-#settingsForm button {
-    padding: 10px 20px;
-    margin: 5px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-#settingsForm button[type="submit"] {
-    background-color: #0c7a20;
-    color: white;
-}
-
-#settingsForm button#closeSettings {
-    background-color: #ccc;
-}
-
 /* Media Query para pantallas más pequeñas */
 @media (max-width: 768px), (max-height: 768px) {
     #loginForm {
@@ -434,19 +358,71 @@ iframe {
         padding: 5px;
     }
 
-    /* Ajustes para la página de ajustes en pantallas pequeñas */
-    #settingsContent {
-        width: 90%;
-        padding: 15px;
+    /* Media Query para pantallas más pequeñas en orientación vertical */
+    @media (max-width: 768px) and (orientation: portrait) {
+        #loginForm button {
+            width: 100%;
+            max-width: 200px;
+            margin-top: 10px;
+            margin-left: 10%; /* Ajusta este valor para mover el botón hacia la derecha */
+            text-align: center;
+        }
     }
+}
 
-    #settingsForm input,
-    #settingsForm select {
-        font-size: 0.9em;
-        padding: 8px;
-    }
+/* Estilos para el formulario de agregar enlaces */
+#addLinkFormContainer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    max-width: 300px;
+}
 
-    #settingsForm button {
-        padding: 8px 16px;
-    }
+#addLinkFormContainer h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #0c7a20;
+}
+
+#addLinkForm label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+#addLinkForm input,
+#addLinkForm select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+#addLinkForm button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0c7a20;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+#addLinkForm button:hover {
+    background-color: #095c16;
+}
+
+#addLinkMessage {
+    margin-top: 10px;
+    font-size: 0.9em;
+    text-align: center;
 }
