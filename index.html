@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>Acompanhamento de Obra 360</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Enlace al archivo CSS -->
+    <!-- Asegúrate de vincular el archivo CSS actualizado -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Pantalla de inicio de sesión -->
+    <!-- Tela de início de sessão -->
     <div id="loginOverlay">
         <div id="loginContent">
-            <img src="DT.png" alt="Logo da Deloitte 360" id="loginLogo">
+            <img src="DT.png" alt="Logo da Deloitte 360" id="loginLogo"> <!-- Logo fora do formulário -->
             <div id="loginForm">
                 <h2>Iniciar Sessão</h2>
                 <form id="authForm">
@@ -28,33 +28,35 @@
         </div>
     </div>
 
-    <!-- Contenedor principal -->
+    <!-- Botón para dispositivos de desktop -->
+    <div id="toggleButton"></div>
+    <!-- Botón para dispositivos móviles -->
+    <div id="toggleIframe2ButtonMobile"></div>
+    <!-- Botón para el cronograma -->
+    <div id="toggleIframe3Button"></div>
+    <!-- Nuevo botón para ajustes -->
+    <div id="settingsButton"></div>
+
     <div id="container">
         <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <iframe id="iframe2" src=""></iframe>
+        <iframe id="iframe2" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
         <iframe id="iframe3" src="https://svisuals.github.io/Cronograma/"></iframe>
     </div>
 
-    <!-- Botones principales -->
-    <div id="toggleButton"></div>
-    <div id="toggleIframe3Button"></div>
-    <div id="settingsButton"></div>
-
-    <!-- Menús desplegables -->
-    <div id="iframe1Menu" class="dropdown" role="menu" aria-label="Menu suspenso do iframe1">
+    <!-- Menú desplegable para iframe1 -->
+    <div id="iframe1Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe1">
         <button id="iframe1MenuButton">▼</button>
         <div id="iframe1MenuContent" class="dropdown-content">
-            <!-- Enlaces iniciales para iframe1 -->
             <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
             <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
             <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
         </div>
     </div>
 
-    <div id="iframe2Menu" class="dropdown" role="menu" aria-label="Menu suspenso do iframe2">
+    <!-- Menú desplegable para iframe2 -->
+    <div id="iframe2Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe2">
         <button id="iframe2MenuButton">▼</button>
         <div id="iframe2MenuContent" class="dropdown-content">
-            <!-- Enlaces iniciales para iframe2 -->
             <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
             <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
             <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
@@ -64,13 +66,20 @@
     <!-- Página de ajustes -->
     <div id="settingsOverlay">
         <div id="settingsContent">
-            <h2>Agregar Nuevo Enlace</h2>
+            <h2>Añadir Nuevo Enlace</h2>
             <form id="settingsForm">
-                <label for="linkTitle">Título (Fecha):</label>
-                <input type="text" id="linkTitle" name="linkTitle" required>
-
+                <label for="linkText">Texto a Mostrar:</label>
+                <input type="text" id="linkText" name="linkText" required>
+                
                 <label for="linkURL">URL del Enlace:</label>
                 <input type="url" id="linkURL" name="linkURL" required>
+                
+                <label for="iframeTarget">Selecciona el menú donde agregar el enlace:</label>
+                <select id="iframeTarget" name="iframeTarget" required>
+                    <option value="iframe1">Menú Iframe 1</option>
+                    <option value="iframe2">Menú Iframe 2</option>
+                    <!-- Puedes agregar más opciones si lo deseas -->
+                </select>
 
                 <button type="submit">Agregar</button>
                 <button type="button" id="closeSettings">Cerrar</button>
@@ -78,7 +87,8 @@
         </div>
     </div>
 
-    <!-- Enlace al archivo JavaScript -->
+    <!-- Cargar el script al final del body -->
+    <!-- Asegúrate de vincular el archivo JS actualizado -->
     <script src="script.js"></script>
 </body>
 </html>
