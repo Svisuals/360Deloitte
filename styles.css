@@ -21,6 +21,8 @@ iframe {
     height: 100%;
     border: none;
     display: none; /* Inicialmente oculta todos los iframes */
+    position: relative; /* Agregado */
+    z-index: 1; /* Agregado */
 }
 
 #iframe1 {
