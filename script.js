@@ -23,7 +23,7 @@ authForm.addEventListener('submit', (event) => {
     }
 });
 
-// Elementos principales
+// Resto del código existente
 const toggleButton = document.getElementById('toggleButton');
 const iframe1 = document.getElementById('iframe1');
 const iframe2 = document.getElementById('iframe2');
@@ -35,12 +35,6 @@ const iframe1MenuButton = document.getElementById('iframe1MenuButton');
 const iframe2MenuButton = document.getElementById('iframe2MenuButton');
 const iframe1MenuContent = document.getElementById('iframe1MenuContent');
 const iframe2MenuContent = document.getElementById('iframe2MenuContent');
-
-// Elementos para la página de ajustes
-const settingsButton = document.getElementById('settingsButton');
-const settingsOverlay = document.getElementById('settingsOverlay');
-const settingsForm = document.getElementById('settingsForm');
-const closeSettingsButton = document.getElementById('closeSettings');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -56,26 +50,30 @@ iframe1MenuButton.addEventListener('click', () => {
 });
 
 // Event listener para los enlaces del menú del iframe1
-iframe1MenuContent.addEventListener('click', (event) => {
-    if (event.target.tagName === 'A') {
-        iframe1.src = event.target.href;
-        iframe1Menu.classList.remove('show');
-        event.preventDefault();
-    }
-});
+function updateMenuEventListeners() {
+    iframe1MenuContent.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            iframe1.src = event.target.href;
+            iframe1Menu.classList.remove('show');
+        });
+    });
+
+    iframe2MenuContent.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            iframe2.src = event.target.href;
+            iframe2Menu.classList.remove('show');
+        });
+    });
+}
+
+// Llamar a la función inicialmente
+updateMenuEventListeners();
 
 // Event listener para el botón del menú del iframe2
 iframe2MenuButton.addEventListener('click', () => {
     iframe2Menu.classList.toggle('show');
-});
-
-// Event listener para los enlaces del menú del iframe2
-iframe2MenuContent.addEventListener('click', (event) => {
-    if (event.target.tagName === 'A') {
-        iframe2.src = event.target.href;
-        iframe2Menu.classList.remove('show');
-        event.preventDefault();
-    }
 });
 
 // Event listener para el botón 'DUP'
@@ -126,7 +124,6 @@ function adjustLayout() {
         // En modo móvil, ocultamos iframe3 y su botón
         iframe3.style.display = 'none';
         toggleIframe3Button.style.display = 'none';
-        settingsButton.style.display = 'none';
 
         if (isPortrait) {
             // En orientación vertical, iframes dividen la altura
@@ -149,10 +146,9 @@ function adjustLayout() {
             }
         }
     } else {
-        // En modo desktop, los iframes ocupan toda la altura y se distribuyen por el ancho
+        // En modo escritorio, los iframes ocupan toda la altura y se distribuyen por el ancho
         iframe1.style.height = '100%';
         toggleIframe3Button.style.display = 'block';
-        settingsButton.style.display = 'block';
 
         if (window.getComputedStyle(iframe2).display === 'block') {
             iframe1.style.width = '50%';
@@ -188,100 +184,98 @@ window.onclick = function(event) {
     }
 };
 
-// Lógica para la página de ajustes
+// Obtener elementos del formulario de agregar enlaces
+const addLinkForm = document.getElementById('addLinkForm');
+const menuSelect = document.getElementById('menuSelect');
+const linkTextInput = document.getElementById('linkText');
+const linkURLInput = document.getElementById('linkURL');
+const addLinkMessage = document.getElementById('addLinkMessage');
 
-// Mostrar la página de ajustes al hacer clic en el botón
-settingsButton.addEventListener('click', () => {
-    settingsOverlay.style.display = 'flex';
-});
+// Manejar el envío del formulario
+addLinkForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
-// Cerrar la página de ajustes al hacer clic en el botón "Cerrar"
-closeSettingsButton.addEventListener('click', () => {
-    settingsOverlay.style.display = 'none';
-});
+    const selectedMenuId = menuSelect.value;
+    const linkText = linkTextInput.value.trim();
+    const linkURL = linkURLInput.value.trim();
 
-// Manejar el envío del formulario de ajustes
-settingsForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const linkText = document.getElementById('linkText').value.trim();
-    const linkURL = document.getElementById('linkURL').value.trim();
-    const iframeTarget = document.getElementById('iframeTarget').value;
-
-    // Validación básica
-    if (linkText && linkURL && iframeTarget) {
-        // Crear nuevo elemento de enlace
-        const newLink = document.createElement('a');
-        newLink.href = linkURL;
-        newLink.textContent = linkText;
-
-        // Agregar evento al nuevo enlace
-        newLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            if (iframeTarget === 'iframe1') {
-                iframe1.src = linkURL;
-                iframe1Menu.classList.remove('show');
-            } else if (iframeTarget === 'iframe2') {
-                iframe2.src = linkURL;
-                iframe2Menu.classList.remove('show');
-            }
-        });
-
-        // Agregar el nuevo enlace al menú correspondiente
-        if (iframeTarget === 'iframe1') {
-            iframe1MenuContent.appendChild(newLink);
-        } else if (iframeTarget === 'iframe2') {
-            iframe2MenuContent.appendChild(newLink);
-        }
-
-        // Guardar el enlace en localStorage
-        saveLinkToLocalStorage({ text: linkText, url: linkURL, target: iframeTarget });
-
-        // Limpiar el formulario
-        settingsForm.reset();
-
-        // Cerrar la página de ajustes
-        settingsOverlay.style.display = 'none';
-    } else {
-        alert('Por favor, completa todos los campos.');
+    if (linkText === '' || linkURL === '') {
+        addLinkMessage.textContent = 'Por favor, completa todos los campos.';
+        addLinkMessage.style.color = 'red';
+        return;
     }
+
+    // Crear un nuevo elemento de enlace
+    const newLink = document.createElement('a');
+    newLink.href = linkURL;
+    newLink.textContent = linkText;
+
+    // Agregar el enlace al menú seleccionado
+    const selectedMenu = document.getElementById(selectedMenuId);
+    selectedMenu.appendChild(newLink);
+
+    // Limpiar los campos del formulario
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+
+    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
+    addLinkMessage.style.color = 'green';
+
+    // Actualizar los event listeners después de agregar el nuevo enlace
+    updateMenuEventListeners();
+
+    // Guardar los enlaces en localStorage
+    saveLinks();
 });
 
-// Función para guardar enlaces en localStorage
-function saveLinkToLocalStorage(link) {
-    let savedLinks = JSON.parse(localStorage.getItem('customLinks')) || [];
-    savedLinks.push(link);
-    localStorage.setItem('customLinks', JSON.stringify(savedLinks));
+// Función para guardar los enlaces en localStorage
+function saveLinks() {
+    const iframe1Links = Array.from(iframe1MenuContent.querySelectorAll('a')).map(link => ({
+        text: link.textContent,
+        href: link.href
+    }));
+    const iframe2Links = Array.from(iframe2MenuContent.querySelectorAll('a')).map(link => ({
+        text: link.textContent,
+        href: link.href
+    }));
+
+    const linksData = {
+        iframe1Links,
+        iframe2Links
+    };
+
+    localStorage.setItem('menuLinks', JSON.stringify(linksData));
 }
 
-// Función para cargar enlaces desde localStorage al iniciar
-function loadLinksFromLocalStorage() {
-    let savedLinks = JSON.parse(localStorage.getItem('customLinks')) || [];
-    savedLinks.forEach(link => {
-        const newLink = document.createElement('a');
-        newLink.href = link.url;
-        newLink.textContent = link.text;
+// Función para cargar los enlaces desde localStorage
+function loadLinks() {
+    const linksData = JSON.parse(localStorage.getItem('menuLinks'));
 
-        // Agregar evento al nuevo enlace
-        newLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            if (link.target === 'iframe1') {
-                iframe1.src = link.url;
-                iframe1Menu.classList.remove('show');
-            } else if (link.target === 'iframe2') {
-                iframe2.src = link.url;
-                iframe2Menu.classList.remove('show');
-            }
+    if (linksData) {
+        // Limpiar menús existentes
+        iframe1MenuContent.innerHTML = '';
+        iframe2MenuContent.innerHTML = '';
+
+        // Cargar enlaces en iframe1MenuContent
+        linksData.iframe1Links.forEach(linkData => {
+            const link = document.createElement('a');
+            link.href = linkData.href;
+            link.textContent = linkData.text;
+            iframe1MenuContent.appendChild(link);
         });
 
-        // Agregar el nuevo enlace al menú correspondiente
-        if (link.target === 'iframe1') {
-            iframe1MenuContent.appendChild(newLink);
-        } else if (link.target === 'iframe2') {
-            iframe2MenuContent.appendChild(newLink);
-        }
-    });
+        // Cargar enlaces en iframe2MenuContent
+        linksData.iframe2Links.forEach(linkData => {
+            const link = document.createElement('a');
+            link.href = linkData.href;
+            link.textContent = linkData.text;
+            iframe2MenuContent.appendChild(link);
+        });
+
+        // Actualizar event listeners
+        updateMenuEventListeners();
+    }
 }
 
-// Cargar los enlaces al iniciar la página
-loadLinksFromLocalStorage();
+// Llamar a loadLinks() al cargar la página
+loadLinks();
