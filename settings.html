@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajustes - Acompanhamento de Obra 360</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Botón para volver a la página principal -->
+    <a href="index.html" id="backButton">Voltar</a>
+
+    <!-- Formulario para agregar nuevos enlaces -->
+    <div id="addLinkFormContainer">
+        <h3>Agregar Nuevo Enlace</h3>
+        <form id="addLinkForm">
+            <label for="menuSelect">Seleccionar Menú:</label>
+            <select id="menuSelect" name="menuSelect" required>
+                <option value="iframe1Links">Menú Iframe 1</option>
+                <option value="iframe2Links">Menú Iframe 2</option>
+            </select>
+
+            <label for="linkText">Texto del Enlace:</label>
+            <input type="text" id="linkText" name="linkText" required>
+
+            <label for="linkURL">URL del Enlace:</label>
+            <input type="url" id="linkURL" name="linkURL" required>
+
+            <button type="submit">Agregar Enlace</button>
+        </form>
+        <p id="addLinkMessage"></p>
+    </div>
+
+    <!-- Cargar el script al final del body -->
+    <script src="script.js"></script>
+</body>
+</html>
