@@ -390,12 +390,12 @@ iframe, embed {
     }
 }
 
-/* Estilos para el contenedor de formularios y botones A y B */
-#formContainer {
+/* Estilos para el formulario de agregar enlaces */
+#addLinkFormContainer {
     position: fixed;
-    top: 20%;
+    top: 50%;
     left: 50%;
-    transform: translate(-50%, -20%);
+    transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, 0.95);
     padding: 20px;
     border-radius: 8px;
@@ -404,60 +404,26 @@ iframe, embed {
     max-width: 400px;
     width: 90%;
     display: none;
+
+    /* Añadido para scrollbar vertical */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-#formButtons {
-    position: absolute;
-    top: 20px;
-    left: -60px; /* Ajusta este valor según tus necesidades */
-    display: flex;
-    flex-direction: column;
-}
-
-#buttonA,
-#buttonB {
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-
-#buttonA {
-    background-image: url('A.png');
-}
-
-#buttonB {
-    background-image: url('B.png');
-}
-
-/* Estilos para los formularios */
-#addLinkFormContainer,
-#uploadPdfFormContainer {
-    /* Mantiene los estilos existentes para los formularios */
-}
-
-/* Estilos para el formulario de agregar enlaces */
-#addLinkFormContainer h3,
-#uploadPdfFormContainer h3 {
+#addLinkFormContainer h3 {
     margin-top: 0;
     text-align: center;
     color: #0c7a20;
 }
 
-#addLinkFormContainer label,
-#uploadPdfFormContainer label {
+#addLinkForm label {
     display: block;
     margin: 10px 0 5px;
     font-size: 0.9em;
     color: #333;
 }
 
-#addLinkFormContainer input,
-#uploadPdfFormContainer input {
+#addLinkForm input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -465,8 +431,7 @@ iframe, embed {
     font-size: 0.9em;
 }
 
-#addLinkFormContainer button,
-#uploadPdfFormContainer button {
+#addLinkForm button {
     width: 100%;
     padding: 10px;
     background-color: #0c7a20;
@@ -478,13 +443,11 @@ iframe, embed {
     margin-top: 10px;
 }
 
-#addLinkFormContainer button:hover,
-#uploadPdfFormContainer button:hover {
+#addLinkForm button:hover {
     background-color: #095c16;
 }
 
-#addLinkMessage,
-#uploadPdfMessage {
+#addLinkMessage {
     margin-top: 10px;
     font-size: 0.9em;
     text-align: center;
@@ -493,6 +456,8 @@ iframe, embed {
 /* Estilos para la lista de enlaces */
 #linkListContainer {
     margin-top: 20px;
+
+    /* Añadido para scrollbar vertical */
     max-height: 200px;
     overflow-y: auto;
 }
