@@ -1,435 +1,103 @@
-// Obtener elementos de inicio de sesión
-const loginOverlay = document.getElementById('loginOverlay');
-const authForm = document.getElementById('authForm');
-const usernameInput = document.getElementById('username');
-const passwordInput = document.getElementById('password');
-const errorMessage = document.getElementById('errorMessage');
-
-// Variable para almacenar el usuario autenticado
-let loggedInUser = null;
-
-// Manejar el envío del formulario de autenticación
-authForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    // Verificar las credenciales
-    if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
-        // Establecer el usuario autenticado
-        loggedInUser = username;
-
-        // Ocultar la pantalla de inicio de sesión
-        loginOverlay.style.display = 'none';
-
-        // Mostrar u ocultar el botón del formulario según el usuario
-        if (loggedInUser === 'deloitte') {
-            toggleFormButton.style.display = 'block';
-        } else {
-            toggleFormButton.style.display = 'none';
-        }
-    } else {
-        // Mostrar mensaje de error
-        errorMessage.textContent = 'Usuário ou senha incorretos.';
-        errorMessage.style.display = 'block';
-    }
-});
-
-// Resto del código existente
-const toggleButton = document.getElementById('toggleButton');
-const iframe1 = document.getElementById('iframe1');
-const iframe2 = document.getElementById('iframe2');
-// Reemplazamos iframe3 por pdfViewer
-const pdfViewer = document.getElementById('pdfViewer');
-const togglePdfButton = document.getElementById('togglePdfButton');
-const toggleFormButton = document.getElementById('toggleFormButton');
-const iframe1Menu = document.getElementById('iframe1Menu');
-const iframe2Menu = document.getElementById('iframe2Menu');
-const iframe1MenuButton = document.getElementById('iframe1MenuButton');
-const iframe2MenuButton = document.getElementById('iframe2MenuButton');
-const iframe1MenuContent = document.getElementById('iframe1MenuContent');
-const iframe2MenuContent = document.getElementById('iframe2MenuContent');
-
-// Inicialmente mostrar solo iframe1
-iframe1.style.display = 'block';
-iframe2.style.display = 'none';
-pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
-
-// Ocultar menú del iframe2 inicialmente
-iframe2Menu.style.display = 'none';
-
-// Ocultar el botón del formulario por defecto
-toggleFormButton.style.display = 'none';
-
-// Event listener para el botón del menú del iframe1
-iframe1MenuButton.addEventListener('click', () => {
-    iframe1Menu.classList.toggle('show');
-});
-
-// Event listener para el botón del menú del iframe2
-iframe2MenuButton.addEventListener('click', () => {
-    iframe2Menu.classList.toggle('show');
-});
-
-// Función para actualizar los event listeners de los menús
-function updateMenuEventListeners() {
-    iframe1MenuContent.querySelectorAll('a').forEach((link) => {
-        link.onclick = function(event) {
-            event.preventDefault();
-            iframe1.src = this.href;
-            iframe1Menu.classList.remove('show');
-        };
-    });
-
-    iframe2MenuContent.querySelectorAll('a').forEach((link) => {
-        link.onclick = function(event) {
-            event.preventDefault();
-            iframe2.src = this.href;
-            iframe2Menu.classList.remove('show');
-        };
-    });
-}
-
-// Llamar a la función inicialmente
-updateMenuEventListeners();
-
-// Event listener para el botón 'DUP'
-toggleButton.addEventListener('click', () => {
-    if (window.getComputedStyle(iframe2).display === 'none') {
-        iframe2.style.display = 'block';
-        iframe2Menu.style.display = 'block'; // Mostrar menú del iframe2
-        iframe1.style.width = '50%';
-        iframe2.style.width = '50%';
-        pdfViewer.style.display = 'none';
-        togglePdfButton.style.display = 'none';
-        document.getElementById('container').classList.remove('horizontal-split');
-    } else {
-        iframe2.style.display = 'none';
-        iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
-        iframe1.style.width = '100%';
-        togglePdfButton.style.display = 'block';
-        document.getElementById('container').classList.remove('horizontal-split');
-    }
-    adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe2
-});
-
-// Event listener para el botón del visor PDF
-togglePdfButton.addEventListener('click', () => {
-    if (window.getComputedStyle(pdfViewer).display === 'none') {
-        pdfViewer.style.display = 'block';
-        iframe1.style.width = '50%';
-        pdfViewer.style.width = '50%';
-        iframe2.style.display = 'none';
-        iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
-        togglePdfButton.style.display = 'block';
-        document.getElementById('container').classList.add('horizontal-split');
-    } else {
-        pdfViewer.style.display = 'none';
-        iframe1.style.width = '100%';
-        togglePdfButton.style.display = 'block';
-        document.getElementById('container').classList.remove('horizontal-split');
-    }
-    adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
-});
-
-// Event listener para el botón que alterna el formulario
-toggleFormButton.addEventListener('click', () => {
-    const formContainer = document.getElementById('addLinkFormContainer');
-    if (window.getComputedStyle(formContainer).display === 'none') {
-        formContainer.style.display = 'flex'; // Cambiamos a 'flex' para mantener el diseño
-    } else {
-        formContainer.style.display = 'none';
-    }
-});
-
-// Manejadores de eventos para los botones A y B
-document.getElementById('buttonA').addEventListener('click', () => {
-    // Acción para el botón A
-    alert('Botón A presionado');
-});
-
-document.getElementById('buttonB').addEventListener('click', () => {
-    // Acción para el botón B
-    alert('Botón B presionado');
-});
-
-// Función para ajustar el layout
-function adjustLayout() {
-    const isMobile = window.innerWidth <= 1300;
-    const isPortrait = window.innerHeight > window.innerWidth;
-
-    if (isMobile) {
-        // En modo móvil, ocultamos el visor PDF y su botón
-        pdfViewer.style.display = 'none';
-        togglePdfButton.style.display = 'none';
-
-        if (isPortrait) {
-            // En orientación vertical, iframes dividen la altura
-            iframe1.style.width = '100%';
-            iframe1.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '100%';
-            iframe2.style.width = '100%';
-            iframe2.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '0';
-        } else {
-            // En orientación horizontal, mostrar u ocultar iframe2 según su estado actual
-            if (window.getComputedStyle(iframe2).display === 'block') {
-                iframe1.style.width = '50%';
-                iframe1.style.height = '100%';
-                iframe2.style.width = '50%';
-                iframe2.style.height = '100%';
-            } else {
-                iframe1.style.width = '100%';
-                iframe1.style.height = '100%';
-                iframe2.style.width = '0';
-                iframe2.style.height = '0';
-            }
-        }
-    } else {
-        // En modo escritorio, los elementos ocupan toda la altura y se distribuyen por el ancho
-        iframe1.style.height = '100%';
-        togglePdfButton.style.display = 'block';
-
-        if (window.getComputedStyle(iframe2).display === 'block') {
-            iframe1.style.width = '50%';
-            iframe2.style.width = '50%';
-            iframe2.style.height = '100%';
-            pdfViewer.style.display = 'none';
-        } else if (window.getComputedStyle(pdfViewer).display === 'block') {
-            iframe1.style.width = '50%';
-            pdfViewer.style.width = '50%';
-            iframe2.style.height = '0';
-            iframe2.style.display = 'none';
-        } else {
-            iframe1.style.width = '100%';
-            iframe2.style.height = '0';
-            iframe2.style.display = 'none';
-            pdfViewer.style.display = 'none';
-        }
-    }
-
-    // Asegurar que los menús no afecten la posición de los botones
-    iframe1Menu.style.position = 'fixed';
-    iframe2Menu.style.position = 'fixed';
-}
-
-window.addEventListener('resize', adjustLayout);
-window.addEventListener('orientationchange', adjustLayout);
-adjustLayout();
-
-// Cerrar el menú si el usuario hace clic fuera de él
-window.addEventListener('click', function(event) {
-    if (!event.target.closest('#iframe1MenuButton')) {
-        iframe1Menu.classList.remove('show');
-    }
-    if (!event.target.closest('#iframe2MenuButton')) {
-        iframe2Menu.classList.remove('show');
-    }
-});
-
-// Obtener elementos del formulario de agregar enlaces
-const addLinkForm = document.getElementById('addLinkForm');
-const linkTextInput = document.getElementById('linkText');
-const linkURLInput = document.getElementById('linkURL');
-const addLinkMessage = document.getElementById('addLinkMessage');
-const linkList = document.getElementById('linkList');
-const updateLinkButton = document.getElementById('updateLinkButton');
-const cancelEditButton = document.getElementById('cancelEditButton');
-
-let editIndex = null; // Variable para saber si estamos editando un enlace
-
-// Manejar el envío del formulario para agregar o actualizar enlaces
-addLinkForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
-
-    const linkText = linkTextInput.value.trim();
-    const linkURL = linkURLInput.value.trim();
-
-    if (linkText === '' || linkURL === '') {
-        addLinkMessage.textContent = 'Por favor, completa todos los campos.';
-        addLinkMessage.style.color = 'red';
-        return;
-    }
-
-    if (editIndex !== null) {
-        // Actualizar el enlace existente
-        updateExistingLink(linkText, linkURL);
-    } else {
-        // Agregar un nuevo enlace
-        addNewLink(linkText, linkURL);
-    }
-
-    // Limpiar los campos del formulario
-    linkTextInput.value = '';
-    linkURLInput.value = '';
-    editIndex = null;
-    updateLinkButton.style.display = 'none';
-    cancelEditButton.style.display = 'none';
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
-
-    // Guardar los enlaces en localStorage
-    saveLinks();
-});
-
-// Función para agregar un nuevo enlace
-function addNewLink(linkText, linkURL) {
-    // Crear nuevos elementos de enlace
-    const newLink1 = document.createElement('a');
-    newLink1.href = linkURL;
-    newLink1.textContent = linkText;
-
-    const newLink2 = newLink1.cloneNode(true);
-
-    // Agregar el enlace a ambos menús
-    iframe1MenuContent.appendChild(newLink1);
-    iframe2MenuContent.appendChild(newLink2);
-
-    // Actualizar los event listeners
-    updateMenuEventListeners();
-
-    // Agregar a la lista de enlaces
-    addLinkToList(linkText, linkURL);
-
-    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
-    addLinkMessage.style.color = 'green';
-}
-
-// Función para actualizar un enlace existente
-function updateExistingLink(linkText, linkURL) {
-    // Actualizar en los menús
-    const links1 = iframe1MenuContent.querySelectorAll('a');
-    const links2 = iframe2MenuContent.querySelectorAll('a');
-
-    links1[editIndex].textContent = linkText;
-    links1[editIndex].href = linkURL;
-
-    links2[editIndex].textContent = linkText;
-    links2[editIndex].href = linkURL;
-
-    // Actualizar en la lista
-    const listItems = linkList.querySelectorAll('li');
-    const span = listItems[editIndex].querySelector('span');
-    span.textContent = linkText;
-
-    // Actualizar los event listeners
-    updateMenuEventListeners();
-
-    addLinkMessage.textContent = 'Enlace actualizado exitosamente.';
-    addLinkMessage.style.color = 'green';
-}
-
-// Función para agregar el enlace a la lista de enlaces
-function addLinkToList(linkText, linkURL) {
-    const li = document.createElement('li');
-    const span = document.createElement('span');
-    span.textContent = linkText;
-
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Editar';
-    editButton.classList.add('edit-button');
-    editButton.addEventListener('click', () => editLink(li, linkText, linkURL));
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Eliminar';
-    deleteButton.addEventListener('click', () => deleteLink(li));
-
-    li.appendChild(span);
-    li.appendChild(editButton);
-    li.appendChild(deleteButton);
-
-    linkList.appendChild(li);
-}
-
-// Función para editar un enlace
-function editLink(li, linkText, linkURL) {
-    const index = Array.from(linkList.children).indexOf(li);
-    editIndex = index;
-
-    linkTextInput.value = linkText;
-    linkURLInput.value = linkURL;
-
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'none';
-    updateLinkButton.style.display = 'block';
-    cancelEditButton.style.display = 'block';
-}
-
-// Event listener para el botón de actualizar enlace
-updateLinkButton.addEventListener('click', () => {
-    addLinkForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición
-cancelEditButton.addEventListener('click', () => {
-    linkTextInput.value = '';
-    linkURLInput.value = '';
-    editIndex = null;
-    updateLinkButton.style.display = 'none';
-    cancelEditButton.style.display = 'none';
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
-    addLinkMessage.textContent = '';
-});
-
-// Función para eliminar un enlace
-function deleteLink(li) {
-    const index = Array.from(linkList.children).indexOf(li);
-
-    // Eliminar de los menús
-    iframe1MenuContent.removeChild(iframe1MenuContent.children[index]);
-    iframe2MenuContent.removeChild(iframe2MenuContent.children[index]);
-
-    // Eliminar de la lista
-    linkList.removeChild(li);
-
-    // Actualizar los event listeners
-    updateMenuEventListeners();
-
-    // Guardar los enlaces en localStorage
-    saveLinks();
-}
-
-// Función para guardar los enlaces en localStorage
-function saveLinks() {
-    const iframe1Links = Array.from(iframe1MenuContent.querySelectorAll('a')).map(link => ({
-        text: link.textContent,
-        href: link.href
-    }));
-    const linksData = {
-        iframe1Links
-    };
-
-    localStorage.setItem('menuLinks', JSON.stringify(linksData));
-}
-
-// Función para cargar los enlaces desde localStorage
-function loadLinks() {
-    const linksData = JSON.parse(localStorage.getItem('menuLinks'));
-
-    if (linksData) {
-        // Limpiar menús y lista existentes
-        iframe1MenuContent.innerHTML = '';
-        iframe2MenuContent.innerHTML = '';
-        linkList.innerHTML = '';
-
-        // Cargar enlaces en los menús y en la lista
-        linksData.iframe1Links.forEach(linkData => {
-            // Agregar a los menús
-            const link1 = document.createElement('a');
-            link1.href = linkData.href;
-            link1.textContent = linkData.text;
-            iframe1MenuContent.appendChild(link1);
-
-            const link2 = document.createElement('a');
-            link2.href = linkData.href;
-            link2.textContent = linkData.text;
-            iframe2MenuContent.appendChild(link2);
-
-            // Agregar a la lista
-            addLinkToList(linkData.text, linkData.href);
-        });
-
-        // Actualizar event listeners
-        updateMenuEventListeners();
-    }
-}
-
-// Llamar a loadLinks() al cargar la página
-loadLinks();
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Acompanhamento de Obra 360</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enlace al archivo CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Pantalla de inicio de sesión -->
+    <div id="loginOverlay">
+        <div id="loginContent">
+            <img src="DT.png" alt="Logo da Deloitte 360" id="loginLogo">
+            <div id="loginForm">
+                <h2>Iniciar Sessão</h2>
+                <form id="authForm">
+                    <label for="username">Usuário:</label>
+                    <input type="text" id="username" name="username" required autocomplete="off">
+
+                    <label for="password">Senha:</label>
+                    <input type="password" id="password" name="password" required autocomplete="off">
+
+                    <button type="submit">Entrar</button>
+                    <p id="errorMessage" class="error"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón para dispositivos de escritorio -->
+    <div id="toggleButton"></div>
+    <!-- Botón para dispositivos móviles -->
+    <div id="toggleIframe2ButtonMobile"></div>
+    <div id="container">
+        <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
+        <iframe id="iframe2" src="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
+        <!-- Reemplazamos iframe3 por un visor PDF -->
+        <embed id="pdfViewer" src="CRONOGRAMA.pdf" type="application/pdf" />
+        <!-- Botón para el cronograma (PDF) -->
+        <div id="togglePdfButton"></div>
+        <!-- Botón para mostrar/ocultar el formulario -->
+        <div id="toggleFormButton"></div>
+    </div>
+
+    <!-- Menú desplegable para iframe1 -->
+    <div id="iframe1Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe1">
+        <button id="iframe1MenuButton">▼</button>
+        <div id="iframe1MenuContent" class="dropdown-content">
+            <!-- Enlaces del menú -->
+            <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
+            <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
+            <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
+        </div>
+    </div>
+
+    <!-- Menú desplegable para iframe2 -->
+    <div id="iframe2Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe2">
+        <button id="iframe2MenuButton">▼</button>
+        <div id="iframe2MenuContent" class="dropdown-content">
+            <!-- Enlaces del menú -->
+            <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
+            <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
+            <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
+        </div>
+    </div>
+
+    <!-- Formulario para agregar, editar y eliminar enlaces -->
+    <div id="addLinkFormContainer">
+        <!-- Contenedor para los botones A y B -->
+        <div id="sideButtons">
+            <button id="buttonA"></button>
+            <button id="buttonB"></button>
+        </div>
+
+        <!-- Contenido del formulario -->
+        <div id="formContent">
+            <h3>Gestionar Enlaces</h3>
+            <form id="addLinkForm">
+                <label for="linkText">Texto del Enlace:</label>
+                <input type="text" id="linkText" name="linkText" required>
+
+                <label for="linkURL">URL del Enlace:</label>
+                <input type="url" id="linkURL" name="linkURL" required>
+
+                <button type="submit">Agregar Enlace</button>
+                <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
+                <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
+            </form>
+            <p id="addLinkMessage"></p>
+
+            <!-- Lista de enlaces existentes -->
+            <div id="linkListContainer">
+                <h4>Enlaces Existentes</h4>
+                <ul id="linkList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cargar el script al final del body -->
+    <script src="script.js"></script>
+</body>
+</html>
