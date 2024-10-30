@@ -40,6 +40,7 @@ authForm.addEventListener('submit', (event) => {
 const toggleButton = document.getElementById('toggleButton');
 const iframe1 = document.getElementById('iframe1');
 const iframe2 = document.getElementById('iframe2');
+// Reemplazamos iframe3 por pdfViewer
 const pdfViewer = document.getElementById('pdfViewer');
 const togglePdfButton = document.getElementById('togglePdfButton');
 const toggleFormButton = document.getElementById('toggleFormButton');
@@ -49,11 +50,6 @@ const iframe1MenuButton = document.getElementById('iframe1MenuButton');
 const iframe2MenuButton = document.getElementById('iframe2MenuButton');
 const iframe1MenuContent = document.getElementById('iframe1MenuContent');
 const iframe2MenuContent = document.getElementById('iframe2MenuContent');
-
-// Nuevos elementos
-const leftButtons = document.getElementById('leftButtons');
-const buttonA = document.getElementById('buttonA');
-const buttonB = document.getElementById('buttonB');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -65,9 +61,6 @@ iframe2Menu.style.display = 'none';
 
 // Ocultar el botón del formulario por defecto
 toggleFormButton.style.display = 'none';
-
-// Ocultar los botones A y B por defecto
-leftButtons.style.display = 'none';
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -140,27 +133,14 @@ togglePdfButton.addEventListener('click', () => {
     adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
 });
 
-// Event listener para el botón que alterna la visibilidad del formulario
+// Event listener para el botón que alterna el formulario
 toggleFormButton.addEventListener('click', () => {
     const formContainer = document.getElementById('addLinkFormContainer');
     if (window.getComputedStyle(formContainer).display === 'none') {
         formContainer.style.display = 'block';
-        // Mostrar los botones A y B
-        leftButtons.style.display = 'flex';
     } else {
         formContainer.style.display = 'none';
-        leftButtons.style.display = 'none';
     }
-});
-
-// Event listener para el botón A (opcional, puedes agregar funcionalidad)
-buttonA.addEventListener('click', () => {
-    // Puedes agregar funcionalidad adicional aquí si lo deseas
-});
-
-// Event listener para el botón B (opcional, puedes agregar funcionalidad)
-buttonB.addEventListener('click', () => {
-    // Puedes agregar funcionalidad adicional aquí si lo deseas
 });
 
 // Función para ajustar el layout
