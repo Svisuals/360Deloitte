@@ -1,103 +1,232 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <title>Acompanhamento de Obra 360</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Enlace al archivo CSS -->
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Pantalla de inicio de sesión -->
-    <div id="loginOverlay">
-        <div id="loginContent">
-            <img src="DT.png" alt="Logo da Deloitte 360" id="loginLogo">
-            <div id="loginForm">
-                <h2>Iniciar Sessão</h2>
-                <form id="authForm">
-                    <label for="username">Usuário:</label>
-                    <input type="text" id="username" name="username" required autocomplete="off">
+// Obtener elementos de inicio de sesión
+const loginOverlay = document.getElementById('loginOverlay');
+const authForm = document.getElementById('authForm');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const errorMessage = document.getElementById('errorMessage');
 
-                    <label for="password">Senha:</label>
-                    <input type="password" id="password" name="password" required autocomplete="off">
+// Variable para almacenar el usuario autenticado
+let loggedInUser = null;
 
-                    <button type="submit">Entrar</button>
-                    <p id="errorMessage" class="error"></p>
-                </form>
-            </div>
-        </div>
-    </div>
+// Manejar el envío del formulario de autenticación
+authForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
-    <!-- Botón para dispositivos de escritorio -->
-    <div id="toggleButton"></div>
-    <!-- Botón para dispositivos móviles -->
-    <div id="toggleIframe2ButtonMobile"></div>
-    <div id="container">
-        <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <iframe id="iframe2" src="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <!-- Reemplazamos iframe3 por un visor PDF -->
-        <embed id="pdfViewer" src="CRONOGRAMA.pdf" type="application/pdf" />
-        <!-- Botón para el cronograma (PDF) -->
-        <div id="togglePdfButton"></div>
-        <!-- Botón para mostrar/ocultar el formulario -->
-        <div id="toggleFormButton"></div>
-    </div>
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
 
-    <!-- Menú desplegable para iframe1 -->
-    <div id="iframe1Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe1">
-        <button id="iframe1MenuButton">▼</button>
-        <div id="iframe1MenuContent" class="dropdown-content">
-            <!-- Enlaces del menú -->
-            <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
-            <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
-            <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
-        </div>
-    </div>
+    // Verificar las credenciales
+    if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
+        // Establecer el usuario autenticado
+        loggedInUser = username;
 
-    <!-- Menú desplegable para iframe2 -->
-    <div id="iframe2Menu" class="dropdown" role="menu" aria-label="Menú desplegable del iframe2">
-        <button id="iframe2MenuButton">▼</button>
-        <div id="iframe2MenuContent" class="dropdown-content">
-            <!-- Enlaces del menú -->
-            <a href="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Silicato</a>
-            <a href="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Real Capture Silicato</a>
-            <a href="https://momento360.com/e/uc/51c95022f269476289cc23adc2a69b03?utm_campaign=embed&utm_source=other&size=large&display-plan=true">Modelo 3D Virador de Vagões</a>
-        </div>
-    </div>
+        // Ocultar la pantalla de inicio de sesión
+        loginOverlay.style.display = 'none';
 
-    <!-- Formulario para agregar, editar y eliminar enlaces -->
-    <div id="addLinkFormContainer">
-        <!-- Contenedor para los botones A y B -->
-        <div id="sideButtons">
-            <button id="buttonA"></button>
-            <button id="buttonB"></button>
-        </div>
+        // Mostrar u ocultar el botón del formulario según el usuario
+        if (loggedInUser === 'deloitte') {
+            toggleFormButton.style.display = 'block';
+        } else {
+            toggleFormButton.style.display = 'none';
+        }
+    } else {
+        // Mostrar mensaje de error
+        errorMessage.textContent = 'Usuário ou senha incorretos.';
+        errorMessage.style.display = 'block';
+    }
+});
 
-        <!-- Contenido del formulario -->
-        <div id="formContent">
-            <h3>Gestionar Enlaces</h3>
-            <form id="addLinkForm">
-                <label for="linkText">Texto del Enlace:</label>
-                <input type="text" id="linkText" name="linkText" required>
+// Resto del código existente
+const toggleButton = document.getElementById('toggleButton');
+const iframe1 = document.getElementById('iframe1');
+const iframe2 = document.getElementById('iframe2');
+const pdfViewer = document.getElementById('pdfViewer');
+const togglePdfButton = document.getElementById('togglePdfButton');
+const toggleFormButton = document.getElementById('toggleFormButton');
+const iframe1Menu = document.getElementById('iframe1Menu');
+const iframe2Menu = document.getElementById('iframe2Menu');
+const iframe1MenuButton = document.getElementById('iframe1MenuButton');
+const iframe2MenuButton = document.getElementById('iframe2MenuButton');
+const iframe1MenuContent = document.getElementById('iframe1MenuContent');
+const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 
-                <label for="linkURL">URL del Enlace:</label>
-                <input type="url" id="linkURL" name="linkURL" required>
+// Nuevos elementos
+const leftButtons = document.getElementById('leftButtons');
+const buttonA = document.getElementById('buttonA');
+const buttonB = document.getElementById('buttonB');
 
-                <button type="submit">Agregar Enlace</button>
-                <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
-                <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
-            </form>
-            <p id="addLinkMessage"></p>
+// Inicialmente mostrar solo iframe1
+iframe1.style.display = 'block';
+iframe2.style.display = 'none';
+pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
 
-            <!-- Lista de enlaces existentes -->
-            <div id="linkListContainer">
-                <h4>Enlaces Existentes</h4>
-                <ul id="linkList"></ul>
-            </div>
-        </div>
-    </div>
+// Ocultar menú del iframe2 inicialmente
+iframe2Menu.style.display = 'none';
 
-    <!-- Cargar el script al final del body -->
-    <script src="script.js"></script>
-</body>
-</html>
+// Ocultar el botón del formulario por defecto
+toggleFormButton.style.display = 'none';
+
+// Event listener para el botón del menú del iframe1
+iframe1MenuButton.addEventListener('click', () => {
+    iframe1Menu.classList.toggle('show');
+});
+
+// Event listener para el botón del menú del iframe2
+iframe2MenuButton.addEventListener('click', () => {
+    iframe2Menu.classList.toggle('show');
+});
+
+// Función para actualizar los event listeners de los menús
+function updateMenuEventListeners() {
+    iframe1MenuContent.querySelectorAll('a').forEach((link) => {
+        link.onclick = function(event) {
+            event.preventDefault();
+            iframe1.src = this.href;
+            iframe1Menu.classList.remove('show');
+        };
+    });
+
+    iframe2MenuContent.querySelectorAll('a').forEach((link) => {
+        link.onclick = function(event) {
+            event.preventDefault();
+            iframe2.src = this.href;
+            iframe2Menu.classList.remove('show');
+        };
+    });
+}
+
+// Llamar a la función inicialmente
+updateMenuEventListeners();
+
+// Event listener para el botón 'DUP'
+toggleButton.addEventListener('click', () => {
+    if (window.getComputedStyle(iframe2).display === 'none') {
+        iframe2.style.display = 'block';
+        iframe2Menu.style.display = 'block'; // Mostrar menú del iframe2
+        iframe1.style.width = '50%';
+        iframe2.style.width = '50%';
+        pdfViewer.style.display = 'none';
+        togglePdfButton.style.display = 'none';
+        document.getElementById('container').classList.remove('horizontal-split');
+    } else {
+        iframe2.style.display = 'none';
+        iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
+        iframe1.style.width = '100%';
+        togglePdfButton.style.display = 'block';
+        document.getElementById('container').classList.remove('horizontal-split');
+    }
+    adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe2
+});
+
+// Event listener para el botón del visor PDF
+togglePdfButton.addEventListener('click', () => {
+    if (window.getComputedStyle(pdfViewer).display === 'none') {
+        pdfViewer.style.display = 'block';
+        iframe1.style.width = '50%';
+        pdfViewer.style.width = '50%';
+        iframe2.style.display = 'none';
+        iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
+        togglePdfButton.style.display = 'block';
+        document.getElementById('container').classList.add('horizontal-split');
+    } else {
+        pdfViewer.style.display = 'none';
+        iframe1.style.width = '100%';
+        togglePdfButton.style.display = 'block';
+        document.getElementById('container').classList.remove('horizontal-split');
+    }
+    adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
+});
+
+// Event listener para el botón que alterna los botones A y B
+toggleFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(leftButtons).display === 'none') {
+        leftButtons.style.display = 'flex';
+    } else {
+        leftButtons.style.display = 'none';
+    }
+});
+
+// Event listener para el botón A que alterna la visibilidad del formulario
+buttonA.addEventListener('click', () => {
+    const formContainer = document.getElementById('addLinkFormContainer');
+    if (window.getComputedStyle(formContainer).display === 'none') {
+        formContainer.style.display = 'block';
+    } else {
+        formContainer.style.display = 'none';
+    }
+});
+
+// Función para ajustar el layout
+function adjustLayout() {
+    const isMobile = window.innerWidth <= 1300;
+    const isPortrait = window.innerHeight > window.innerWidth;
+
+    if (isMobile) {
+        // En modo móvil, ocultamos el visor PDF y su botón
+        pdfViewer.style.display = 'none';
+        togglePdfButton.style.display = 'none';
+
+        if (isPortrait) {
+            // En orientación vertical, iframes dividen la altura
+            iframe1.style.width = '100%';
+            iframe1.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '100%';
+            iframe2.style.width = '100%';
+            iframe2.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '0';
+        } else {
+            // En orientación horizontal, mostrar u ocultar iframe2 según su estado actual
+            if (window.getComputedStyle(iframe2).display === 'block') {
+                iframe1.style.width = '50%';
+                iframe1.style.height = '100%';
+                iframe2.style.width = '50%';
+                iframe2.style.height = '100%';
+            } else {
+                iframe1.style.width = '100%';
+                iframe1.style.height = '100%';
+                iframe2.style.width = '0';
+                iframe2.style.height = '0';
+            }
+        }
+    } else {
+        // En modo escritorio, los elementos ocupan toda la altura y se distribuyen por el ancho
+        iframe1.style.height = '100%';
+        togglePdfButton.style.display = 'block';
+
+        if (window.getComputedStyle(iframe2).display === 'block') {
+            iframe1.style.width = '50%';
+            iframe2.style.width = '50%';
+            iframe2.style.height = '100%';
+            pdfViewer.style.display = 'none';
+        } else if (window.getComputedStyle(pdfViewer).display === 'block') {
+            iframe1.style.width = '50%';
+            pdfViewer.style.width = '50%';
+            iframe2.style.height = '0';
+            iframe2.style.display = 'none';
+        } else {
+            iframe1.style.width = '100%';
+            iframe2.style.height = '0';
+            iframe2.style.display = 'none';
+            pdfViewer.style.display = 'none';
+        }
+    }
+
+    // Asegurar que los menús no afecten la posición de los botones
+    iframe1Menu.style.position = 'fixed';
+    iframe2Menu.style.position = 'fixed';
+}
+
+window.addEventListener('resize', adjustLayout);
+window.addEventListener('orientationchange', adjustLayout);
+adjustLayout();
+
+// Cerrar el menú si el usuario hace clic fuera de él
+window.addEventListener('click', function(event) {
+    if (!event.target.closest('#iframe1MenuButton')) {
+        iframe1Menu.classList.remove('show');
+    }
+    if (!event.target.closest('#iframe2MenuButton')) {
+        iframe2Menu.classList.remove('show');
+    }
+});
+
+// Resto del código para el formulario y gestión de enlaces
+// ... (código existente sin cambios) ...
