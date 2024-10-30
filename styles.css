@@ -94,6 +94,11 @@ iframe, embed {
     display: none; /* Oculto por defecto, solo visible cuando el formulario está activo */
 }
 
+/* Mostrar el botón de subir PDF cuando tenga la clase 'visible' */
+#toggleUploadFormButton.visible {
+    display: block;
+}
+
 /* Menús desplegables */
 .dropdown {
     position: fixed;
@@ -428,26 +433,18 @@ iframe, embed {
     color: #0c7a20;
 }
 
-#addLinkFormContainer #toggleUploadFormButton {
-    display: none; /* Oculto por defecto */
-}
-
-#addLinkFormContainer #toggleUploadFormButton.visible {
-    display: block;
-}
-
-#addLinkForm {
+#addLinkFormContainer form {
     margin-top: 10px;
 }
 
-#addLinkForm label {
+#addLinkFormContainer label {
     display: block;
     margin: 10px 0 5px;
     font-size: 0.9em;
     color: #333;
 }
 
-#addLinkForm input {
+#addLinkFormContainer input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -455,7 +452,7 @@ iframe, embed {
     font-size: 0.9em;
 }
 
-#addLinkForm button {
+#addLinkFormContainer button {
     width: 100%;
     padding: 10px;
     background-color: #0c7a20;
@@ -468,7 +465,7 @@ iframe, embed {
     transition: background-color 0.3s ease;
 }
 
-#addLinkForm button:hover {
+#addLinkFormContainer button:hover {
     background-color: #095c16;
 }
 
@@ -557,14 +554,14 @@ iframe, embed {
     margin-top: 10px;
 }
 
-#uploadPdfForm label {
+#uploadPdfFormContainer label {
     display: block;
     margin: 10px 0 5px;
     font-size: 0.9em;
     color: #333;
 }
 
-#uploadPdfForm input[type="file"] {
+#uploadPdfFormContainer input[type="file"] {
     width: 100%;
     padding: 5px;
     border: 1px solid #ccc;
@@ -572,7 +569,7 @@ iframe, embed {
     font-size: 0.9em;
 }
 
-#uploadPdfForm button {
+#uploadPdfFormContainer button {
     width: 100%;
     padding: 10px;
     background-color: #0c7a20;
@@ -585,7 +582,7 @@ iframe, embed {
     transition: background-color 0.3s ease;
 }
 
-#uploadPdfForm button:hover {
+#uploadPdfFormContainer button:hover {
     background-color: #095c16;
 }
 
@@ -596,14 +593,11 @@ iframe, embed {
     color: green;
 }
 
-/* Estilos para los menús desplegables */
-.dropdown-content a {
-    /* Ya definidos anteriormente */
-}
-
 /* Asegurar que el botón de subir PDF se muestre solo cuando el formulario está activo */
-#addLinkFormContainer.show #toggleUploadFormButton {
+#addLinkFormContainer.show #toggleUploadFormButton,
+#addLinkFormContainer #toggleUploadFormButton.visible {
     display: block;
 }
 
 /* Responsividad adicional si es necesario */
+/* ... (puedes añadir más estilos según tus necesidades) ... */
