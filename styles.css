@@ -1,297 +1,424 @@
-/* Estilos generales */
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
+// Obtener elementos de inicio de sesión
+const loginOverlay = document.getElementById('loginOverlay');
+const authForm = document.getElementById('authForm');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const errorMessage = document.getElementById('errorMessage');
+
+// Variable para almacenar el usuario autenticado
+let loggedInUser = null;
+
+// Manejar el envío del formulario de autenticación
+authForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    // Verificar las credenciales
+    if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
+        // Establecer el usuario autenticado
+        loggedInUser = username;
+
+        // Ocultar la pantalla de inicio de sesión
+        loginOverlay.style.display = 'none';
+
+        // Mostrar u ocultar el botón del formulario según el usuario
+        if (loggedInUser === 'deloitte') {
+            toggleFormButton.style.display = 'block';
+        } else {
+            toggleFormButton.style.display = 'none';
+        }
+    } else {
+        // Mostrar mensaje de error
+        errorMessage.textContent = 'Usuário ou senha incorretos.';
+        errorMessage.style.display = 'block';
+    }
+});
+
+// Resto del código existente
+const toggleButton = document.getElementById('toggleButton');
+const iframe1 = document.getElementById('iframe1');
+const iframe2 = document.getElementById('iframe2');
+// Reemplazamos iframe3 por pdfViewer
+const pdfViewer = document.getElementById('pdfViewer');
+const togglePdfButton = document.getElementById('togglePdfButton');
+const toggleFormButton = document.getElementById('toggleFormButton');
+const iframe1Menu = document.getElementById('iframe1Menu');
+const iframe2Menu = document.getElementById('iframe2Menu');
+const iframe1MenuButton = document.getElementById('iframe1MenuButton');
+const iframe2MenuButton = document.getElementById('iframe2MenuButton');
+const iframe1MenuContent = document.getElementById('iframe1MenuContent');
+const iframe2MenuContent = document.getElementById('iframe2MenuContent');
+
+// Inicialmente mostrar solo iframe1
+iframe1.style.display = 'block';
+iframe2.style.display = 'none';
+pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
+
+// Ocultar menú del iframe2 inicialmente
+iframe2Menu.style.display = 'none';
+
+// Ocultar el botón del formulario por defecto
+toggleFormButton.style.display = 'none';
+
+// Event listener para el botón del menú del iframe1
+iframe1MenuButton.addEventListener('click', () => {
+    iframe1Menu.classList.toggle('show');
+});
+
+// Event listener para el botón del menú del iframe2
+iframe2MenuButton.addEventListener('click', () => {
+    iframe2Menu.classList.toggle('show');
+});
+
+// Función para actualizar los event listeners de los menús
+function updateMenuEventListeners() {
+    iframe1MenuContent.querySelectorAll('a').forEach((link) => {
+        link.onclick = function(event) {
+            event.preventDefault();
+            iframe1.src = this.href;
+            iframe1Menu.classList.remove('show');
+        };
+    });
+
+    iframe2MenuContent.querySelectorAll('a').forEach((link) => {
+        link.onclick = function(event) {
+            event.preventDefault();
+            iframe2.src = this.href;
+            iframe2Menu.classList.remove('show');
+        };
+    });
 }
 
-#container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    flex-direction: row;
-}
+// Llamar a la función inicialmente
+updateMenuEventListeners();
 
-iframe, embed {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none;
-}
+// Event listener para el botón 'DUP'
+toggleButton.addEventListener('click', () => {
+    if (window.getComputedStyle(iframe2).display === 'none') {
+        iframe2.style.display = 'block';
+        iframe2Menu.style.display = 'block'; // Mostrar menú del iframe2
+        iframe1.style.width = '50%';
+        iframe2.style.width = '50%';
+        pdfViewer.style.display = 'none';
+        togglePdfButton.style.display = 'none';
+        document.getElementById('container').classList.remove('horizontal-split');
+    } else {
+        iframe2.style.display = 'none';
+        iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
+        iframe1.style.width = '100%';
+        togglePdfButton.style.display = 'block';
+        document.getElementById('container').classList.remove('horizontal-split');
+    }
+    adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe2
+});
 
-#iframe1 {
-    display: block;
-}
+// Event listener para el botón del visor PDF
+togglePdfButton.addEventListener('click', () => {
+    if (window.getComputedStyle(pdfViewer).display === 'none') {
+        pdfViewer.style.display = 'block';
+        iframe1.style.width = '50%';
+        pdfViewer.style.width = '50%';
+        iframe2.style.display = 'none';
+        iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
+        togglePdfButton.style.display = 'block';
+        document.getElementById('container').classList.add('horizontal-split');
+    } else {
+        pdfViewer.style.display = 'none';
+        iframe1.style.width = '100%';
+        togglePdfButton.style.display = 'block';
+        document.getElementById('container').classList.remove('horizontal-split');
+    }
+    adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
+});
 
-#iframe2, #pdfViewer {
-    display: none;
-}
+// Event listener para el botón que alterna el formulario
+toggleFormButton.addEventListener('click', () => {
+    const formContainer = document.getElementById('addLinkFormContainer');
+    if (window.getComputedStyle(formContainer).display === 'none') {
+        formContainer.style.display = 'block';
+    } else {
+        formContainer.style.display = 'none';
+    }
+});
 
-/* Botones */
-#toggleButton {
-    position: fixed;
-    top: 10px;
-    left: calc(49%);
-    width: 32px;
-    height: 32px;
-    background: url('DUP.png') no-repeat center center;
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-}
+// Función para ajustar el layout
+function adjustLayout() {
+    const isMobile = window.innerWidth <= 1300;
+    const isPortrait = window.innerHeight > window.innerWidth;
 
-#toggleIframe2ButtonMobile {
-    display: none;
-}
+    if (isMobile) {
+        // En modo móvil, ocultamos el visor PDF y su botón
+        pdfViewer.style.display = 'none';
+        togglePdfButton.style.display = 'none';
 
-/* Botón para alternar el visor PDF */
-#togglePdfButton {
-    position: fixed;
-    top: 10px;
-    left: 55px;
-    width: 32px;
-    height: 32px;
-    background: url('PDF.png') no-repeat center center; /* Debes proporcionar esta imagen */
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-    display: block;
-}
+        if (isPortrait) {
+            // En orientación vertical, iframes dividen la altura
+            iframe1.style.width = '100%';
+            iframe1.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '100%';
+            iframe2.style.width = '100%';
+            iframe2.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '0';
+        } else {
+            // En orientación horizontal, mostrar u ocultar iframe2 según su estado actual
+            if (window.getComputedStyle(iframe2).display === 'block') {
+                iframe1.style.width = '50%';
+                iframe1.style.height = '100%';
+                iframe2.style.width = '50%';
+                iframe2.style.height = '100%';
+            } else {
+                iframe1.style.width = '100%';
+                iframe1.style.height = '100%';
+                iframe2.style.width = '0';
+                iframe2.style.height = '0';
+            }
+        }
+    } else {
+        // En modo escritorio, los elementos ocupan toda la altura y se distribuyen por el ancho
+        iframe1.style.height = '100%';
+        togglePdfButton.style.display = 'block';
 
-/* Botón para mostrar/ocultar el formulario */
-#toggleFormButton {
-    position: fixed;
-    top: 10px;
-    left: 100px;
-    width: 32px;
-    height: 32px;
-    background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
-    background-size: cover;
-    border: none;
-    cursor: pointer;
-    z-index: 1000;
-    display: none; /* Oculto por defecto */
-}
-
-/* Contenedor de los botones A y B */
-#leftButtons {
-    position: fixed;
-    top: 50%;
-    left: calc(50% - 250px); /* 50% de la ventana menos 250px para posicionarlo a 5cm (50px) a la izquierda del formulario */
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    z-index: 2000;
-    display: none; /* Oculto por defecto */
-}
-
-/* Botón A */
-#buttonA {
-    width: 32px;
-    height: 32px;
-    background: url('A.png') no-repeat center center;
-    background-size: cover;
-    margin-bottom: 10px; /* Espacio entre botones */
-    cursor: pointer;
-}
-
-/* Botón B */
-#buttonB {
-    width: 32px;
-    height: 32px;
-    background: url('B.png') no-repeat center center;
-    background-size: cover;
-    cursor: pointer;
-}
-
-/* Menús desplegables */
-.dropdown {
-    position: fixed;
-    top: 10px;
-    z-index: 1001;
-}
-
-#iframe1Menu {
-    left: 10px;
-    right: auto;
-}
-
-#iframe2Menu {
-    right: 10px;
-    left: auto;
-}
-
-.dropdown button {
-    background-color: #0c7a20;
-    color: white;
-    padding: 8px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-}
-
-.dropdown button::after {
-    content: '';
-    display: inline-block;
-    margin-left: 5px;
-    vertical-align: middle;
-    border-width: 5px;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
-}
-
-/* Estilo mejorado para los menús desplegables */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #ffffff;
-    min-width: 200px;
-    max-width: 300px;
-    width: 60%;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    z-index: 1;
-    padding: 10px 0;
-
-    /* Añadido para scrollbar vertical */
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 5px;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-    color: #0c7a20;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
-}
-
-/* Mostrar el menú al agregar la clase 'show' */
-.dropdown.show .dropdown-content {
-    display: block;
-}
-
-/* Alinear el menú de iframe2 hacia la izquierda */
-#iframe2Menu .dropdown-content {
-    right: 0;
-    left: auto;
-}
-
-/* Media Queries */
-
-/* Orientación vertical en dispositivos móviles */
-@media (max-width: 1300px) and (orientation: portrait) {
-    #container {
-        flex-direction: column;
+        if (window.getComputedStyle(iframe2).display === 'block') {
+            iframe1.style.width = '50%';
+            iframe2.style.width = '50%';
+            iframe2.style.height = '100%';
+            pdfViewer.style.display = 'none';
+        } else if (window.getComputedStyle(pdfViewer).display === 'block') {
+            iframe1.style.width = '50%';
+            pdfViewer.style.width = '50%';
+            iframe2.style.height = '0';
+            iframe2.style.display = 'none';
+        } else {
+            iframe1.style.width = '100%';
+            iframe2.style.height = '0';
+            iframe2.style.display = 'none';
+            pdfViewer.style.display = 'none';
+        }
     }
 
-    #iframe1,
-    #iframe2 {
-        width: 100%;
+    // Asegurar que los menús no afecten la posición de los botones
+    iframe1Menu.style.position = 'fixed';
+    iframe2Menu.style.position = 'fixed';
+}
+
+window.addEventListener('resize', adjustLayout);
+window.addEventListener('orientationchange', adjustLayout);
+adjustLayout();
+
+// Cerrar el menú si el usuario hace clic fuera de él
+window.addEventListener('click', function(event) {
+    if (!event.target.closest('#iframe1MenuButton')) {
+        iframe1Menu.classList.remove('show');
+    }
+    if (!event.target.closest('#iframe2MenuButton')) {
+        iframe2Menu.classList.remove('show');
+    }
+});
+
+// Obtener elementos del formulario de agregar enlaces
+const addLinkForm = document.getElementById('addLinkForm');
+const linkTextInput = document.getElementById('linkText');
+const linkURLInput = document.getElementById('linkURL');
+const addLinkMessage = document.getElementById('addLinkMessage');
+const linkList = document.getElementById('linkList');
+const updateLinkButton = document.getElementById('updateLinkButton');
+const cancelEditButton = document.getElementById('cancelEditButton');
+
+let editIndex = null; // Variable para saber si estamos editando un enlace
+
+// Manejar el envío del formulario para agregar o actualizar enlaces
+addLinkForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    const linkText = linkTextInput.value.trim();
+    const linkURL = linkURLInput.value.trim();
+
+    if (linkText === '' || linkURL === '') {
+        addLinkMessage.textContent = 'Por favor, completa todos los campos.';
+        addLinkMessage.style.color = 'red';
+        return;
     }
 
-    #iframe1 {
-        height: 50%;
+    if (editIndex !== null) {
+        // Actualizar el enlace existente
+        updateExistingLink(linkText, linkURL);
+    } else {
+        // Agregar un nuevo enlace
+        addNewLink(linkText, linkURL);
     }
 
-    #iframe2 {
-        height: 50%;
-    }
+    // Limpiar los campos del formulario
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
 
-    /* Posicionar menú del iframe1 */
-    #iframe1Menu {
-        top: 10px;
-        left: 10px;
-    }
+    // Guardar los enlaces en localStorage
+    saveLinks();
+});
 
-    /* Posicionar menú del iframe2 */
-    #iframe2Menu {
-        top: calc(50% + 10px);
-        right: 10px;
-        left: auto;
-    }
+// Función para agregar un nuevo enlace
+function addNewLink(linkText, linkURL) {
+    // Crear nuevos elementos de enlace
+    const newLink1 = document.createElement('a');
+    newLink1.href = linkURL;
+    newLink1.textContent = linkText;
 
-    /* Posicionar botón */
-    #toggleButton {
-        top: 10px;
-        right: 10px;
-        left: auto;
+    const newLink2 = newLink1.cloneNode(true);
+
+    // Agregar el enlace a ambos menús
+    iframe1MenuContent.appendChild(newLink1);
+    iframe2MenuContent.appendChild(newLink2);
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    // Agregar a la lista de enlaces
+    addLinkToList(linkText, linkURL);
+
+    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para actualizar un enlace existente
+function updateExistingLink(linkText, linkURL) {
+    // Actualizar en los menús
+    const links1 = iframe1MenuContent.querySelectorAll('a');
+    const links2 = iframe2MenuContent.querySelectorAll('a');
+
+    links1[editIndex].textContent = linkText;
+    links1[editIndex].href = linkURL;
+
+    links2[editIndex].textContent = linkText;
+    links2[editIndex].href = linkURL;
+
+    // Actualizar en la lista
+    const listItems = linkList.querySelectorAll('li');
+    const span = listItems[editIndex].querySelector('span');
+    span.textContent = linkText;
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    addLinkMessage.textContent = 'Enlace actualizado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para agregar el enlace a la lista de enlaces
+function addLinkToList(linkText, linkURL) {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = linkText;
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.classList.add('edit-button');
+    editButton.addEventListener('click', () => editLink(li, linkText, linkURL));
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.addEventListener('click', () => deleteLink(li));
+
+    li.appendChild(span);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
+
+    linkList.appendChild(li);
+}
+
+// Función para editar un enlace
+function editLink(li, linkText, linkURL) {
+    const index = Array.from(linkList.children).indexOf(li);
+    editIndex = index;
+
+    linkTextInput.value = linkText;
+    linkURLInput.value = linkURL;
+
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateLinkButton.style.display = 'block';
+    cancelEditButton.style.display = 'block';
+}
+
+// Event listener para el botón de actualizar enlace
+updateLinkButton.addEventListener('click', () => {
+    addLinkForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición
+cancelEditButton.addEventListener('click', () => {
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
+    addLinkMessage.textContent = '';
+});
+
+// Función para eliminar un enlace
+function deleteLink(li) {
+    const index = Array.from(linkList.children).indexOf(li);
+
+    // Eliminar de los menús
+    iframe1MenuContent.removeChild(iframe1MenuContent.children[index]);
+    iframe2MenuContent.removeChild(iframe2MenuContent.children[index]);
+
+    // Eliminar de la lista
+    linkList.removeChild(li);
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    // Guardar los enlaces en localStorage
+    saveLinks();
+}
+
+// Función para guardar los enlaces en localStorage
+function saveLinks() {
+    const iframe1Links = Array.from(iframe1MenuContent.querySelectorAll('a')).map(link => ({
+        text: link.textContent,
+        href: link.href
+    }));
+    const linksData = {
+        iframe1Links
+    };
+
+    localStorage.setItem('menuLinks', JSON.stringify(linksData));
+}
+
+// Función para cargar los enlaces desde localStorage
+function loadLinks() {
+    const linksData = JSON.parse(localStorage.getItem('menuLinks'));
+
+    if (linksData) {
+        // Limpiar menús y lista existentes
+        iframe1MenuContent.innerHTML = '';
+        iframe2MenuContent.innerHTML = '';
+        linkList.innerHTML = '';
+
+        // Cargar enlaces en los menús y en la lista
+        linksData.iframe1Links.forEach(linkData => {
+            // Agregar a los menús
+            const link1 = document.createElement('a');
+            link1.href = linkData.href;
+            link1.textContent = linkData.text;
+            iframe1MenuContent.appendChild(link1);
+
+            const link2 = document.createElement('a');
+            link2.href = linkData.href;
+            link2.textContent = linkData.text;
+            iframe2MenuContent.appendChild(link2);
+
+            // Agregar a la lista
+            addLinkToList(linkData.text, linkData.href);
+        });
+
+        // Actualizar event listeners
+        updateMenuEventListeners();
     }
 }
 
-/* Orientación horizontal en dispositivos móviles */
-@media (max-width: 1300px) and (orientation: landscape) {
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-
-    #container {
-        height: 100%;
-        width: 100%;
-        flex-direction: row;
-    }
-
-    #iframe1, #iframe2 {
-        width: 50%;
-        height: 100%;
-        display: block;
-    }
-
-    #togglePdfButton {
-        display: none;
-    }
-
-    #pdfViewer {
-        display: none;
-    }
-
-    /* Posicionar menús */
-    #iframe1Menu {
-        top: 10px;
-        left: 10px;
-    }
-
-    #iframe2Menu {
-        top: 10px;
-        right: 10px;
-        left: auto;
-    }
-
-    /* Posicionar botón */
-    #toggleButton {
-        top: 10px;
-        right: 10px;
-        left: calc(49%);
-    }
-}
-
-/* Estilos para la pantalla de inicio de sesión */
-/* ... (estilos existentes) ... */
-
-/* Estilos para el formulario de agregar enlaces */
-#addLinkFormContainer {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* ... (resto de estilos existentes) ... */
-}
-
-/* ... (resto de estilos existentes) ... */
+// Llamar a loadLinks() al cargar la página
+loadLinks();
