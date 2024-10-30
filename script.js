@@ -137,10 +137,21 @@ togglePdfButton.addEventListener('click', () => {
 toggleFormButton.addEventListener('click', () => {
     const formContainer = document.getElementById('addLinkFormContainer');
     if (window.getComputedStyle(formContainer).display === 'none') {
-        formContainer.style.display = 'block';
+        formContainer.style.display = 'flex'; // Cambiamos a 'flex' para mantener el diseño
     } else {
         formContainer.style.display = 'none';
     }
+});
+
+// Manejadores de eventos para los botones A y B
+document.getElementById('buttonA').addEventListener('click', () => {
+    // Acción para el botón A
+    alert('Botón A presionado');
+});
+
+document.getElementById('buttonB').addEventListener('click', () => {
+    // Acción para el botón B
+    alert('Botón B presionado');
 });
 
 // Función para ajustar el layout
