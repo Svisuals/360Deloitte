@@ -35,12 +35,14 @@
     <div id="container">
         <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
         <iframe id="iframe2" src="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <!-- Reemplazamos iframe3 por un visor PDF -->
+        <!-- Visor PDF -->
         <embed id="pdfViewer" src="CRONOGRAMA.pdf" type="application/pdf" />
-        <!-- Botón para el cronograma (PDF) -->
+        <!-- Botón para el visor PDF -->
         <div id="togglePdfButton"></div>
-        <!-- Botón para mostrar/ocultar el formulario -->
+        <!-- Botón para mostrar/ocultar el formulario de enlaces -->
         <div id="toggleFormButton"></div>
+        <!-- Botón para mostrar/ocultar el formulario de subir PDF -->
+        <div id="toggleUploadFormButton"></div>
     </div>
 
     <!-- Menú desplegable para iframe1 -->
@@ -86,6 +88,19 @@
             <h4>Enlaces Existentes</h4>
             <ul id="linkList"></ul>
         </div>
+    </div>
+
+    <!-- Nuevo formulario para subir PDFs -->
+    <div id="uploadPdfFormContainer" style="display: none;">
+        <h3>Subir Documento PDF</h3>
+        <form id="uploadPdfForm">
+            <label for="pdfFile">Seleccione un archivo PDF:</label>
+            <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
+
+            <button type="submit">Subir PDF</button>
+            <button type="button" id="cancelUploadButton">Cancelar</button>
+        </form>
+        <p id="uploadMessage"></p>
     </div>
 
     <!-- Cargar el script al final del body -->
