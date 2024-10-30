@@ -40,8 +40,9 @@ authForm.addEventListener('submit', (event) => {
 const toggleButton = document.getElementById('toggleButton');
 const iframe1 = document.getElementById('iframe1');
 const iframe2 = document.getElementById('iframe2');
-const iframe3 = document.getElementById('iframe3');
-const toggleIframe3Button = document.getElementById('toggleIframe3Button');
+// Reemplazamos iframe3 por pdfViewer
+const pdfViewer = document.getElementById('pdfViewer');
+const togglePdfButton = document.getElementById('togglePdfButton');
 const toggleFormButton = document.getElementById('toggleFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
@@ -53,7 +54,7 @@ const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
 iframe2.style.display = 'none';
-iframe3.style.display = 'none';
+pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
 
 // Ocultar menú del iframe2 inicialmente
 iframe2Menu.style.display = 'none';
@@ -100,36 +101,36 @@ toggleButton.addEventListener('click', () => {
         iframe2Menu.style.display = 'block'; // Mostrar menú del iframe2
         iframe1.style.width = '50%';
         iframe2.style.width = '50%';
-        iframe3.style.display = 'none';
-        toggleIframe3Button.style.display = 'none';
+        pdfViewer.style.display = 'none';
+        togglePdfButton.style.display = 'none';
         document.getElementById('container').classList.remove('horizontal-split');
     } else {
         iframe2.style.display = 'none';
         iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
         iframe1.style.width = '100%';
-        toggleIframe3Button.style.display = 'block';
+        togglePdfButton.style.display = 'block';
         document.getElementById('container').classList.remove('horizontal-split');
     }
     adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe2
 });
 
-// Event listener para el botón del cronograma
-toggleIframe3Button.addEventListener('click', () => {
-    if (window.getComputedStyle(iframe3).display === 'none') {
-        iframe3.style.display = 'block';
+// Event listener para el botón del visor PDF
+togglePdfButton.addEventListener('click', () => {
+    if (window.getComputedStyle(pdfViewer).display === 'none') {
+        pdfViewer.style.display = 'block';
         iframe1.style.width = '50%';
-        iframe3.style.width = '50%';
+        pdfViewer.style.width = '50%';
         iframe2.style.display = 'none';
         iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
-        toggleIframe3Button.style.display = 'block';
+        togglePdfButton.style.display = 'block';
         document.getElementById('container').classList.add('horizontal-split');
     } else {
-        iframe3.style.display = 'none';
+        pdfViewer.style.display = 'none';
         iframe1.style.width = '100%';
-        toggleIframe3Button.style.display = 'block';
+        togglePdfButton.style.display = 'block';
         document.getElementById('container').classList.remove('horizontal-split');
     }
-    adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe3
+    adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
 });
 
 // Event listener para el botón que alterna el formulario
@@ -148,9 +149,9 @@ function adjustLayout() {
     const isPortrait = window.innerHeight > window.innerWidth;
 
     if (isMobile) {
-        // En modo móvil, ocultamos iframe3 y su botón
-        iframe3.style.display = 'none';
-        toggleIframe3Button.style.display = 'none';
+        // En modo móvil, ocultamos el visor PDF y su botón
+        pdfViewer.style.display = 'none';
+        togglePdfButton.style.display = 'none';
 
         if (isPortrait) {
             // En orientación vertical, iframes dividen la altura
@@ -173,22 +174,25 @@ function adjustLayout() {
             }
         }
     } else {
-        // En modo escritorio, los iframes ocupan toda la altura y se distribuyen por el ancho
+        // En modo escritorio, los elementos ocupan toda la altura y se distribuyen por el ancho
         iframe1.style.height = '100%';
-        toggleIframe3Button.style.display = 'block';
+        togglePdfButton.style.display = 'block';
 
         if (window.getComputedStyle(iframe2).display === 'block') {
             iframe1.style.width = '50%';
             iframe2.style.width = '50%';
             iframe2.style.height = '100%';
-            iframe3.style.display = 'none';
-        } else if (window.getComputedStyle(iframe3).display === 'block') {
+            pdfViewer.style.display = 'none';
+        } else if (window.getComputedStyle(pdfViewer).display === 'block') {
             iframe1.style.width = '50%';
-            iframe3.style.width = '50%';
+            pdfViewer.style.width = '50%';
             iframe2.style.height = '0';
+            iframe2.style.display = 'none';
         } else {
             iframe1.style.width = '100%';
             iframe2.style.height = '0';
+            iframe2.style.display = 'none';
+            pdfViewer.style.display = 'none';
         }
     }
 
