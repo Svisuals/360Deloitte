@@ -26,9 +26,10 @@ authForm.addEventListener('submit', (event) => {
         // Mostrar u ocultar los botones según el usuario
         if (loggedInUser === 'deloitte') {
             toggleFormButton.style.display = 'block';
-            // El botón de subir PDF está dentro del formulario y será visible cuando el formulario esté activo
+            toggleUploadFormButton.style.display = 'block'; // Mostrar el botón del formulario de subir PDF
         } else {
             toggleFormButton.style.display = 'none';
+            toggleUploadFormButton.style.display = 'none'; // Ocultar el botón del formulario de subir PDF
         }
     } else {
         // Mostrar mensaje de error
@@ -44,6 +45,7 @@ const iframe2 = document.getElementById('iframe2');
 const pdfViewer = document.getElementById('pdfViewer');
 const togglePdfButton = document.getElementById('togglePdfButton');
 const toggleFormButton = document.getElementById('toggleFormButton');
+const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -51,14 +53,6 @@ const iframe2MenuButton = document.getElementById('iframe2MenuButton');
 const iframe1MenuContent = document.getElementById('iframe1MenuContent');
 const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
-
-// Obtener elementos relacionados con el nuevo formulario de subir PDF
-const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
-const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
-const uploadPdfForm = document.getElementById('uploadPdfForm');
-const pdfFileInput = document.getElementById('pdfFile');
-const uploadMessage = document.getElementById('uploadMessage');
-const cancelUploadButton = document.getElementById('cancelUploadButton');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -68,8 +62,9 @@ pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
 // Ocultar menú del iframe2 inicialmente
 iframe2Menu.style.display = 'none';
 
-// Ocultar el botón del formulario por defecto
+// Ocultar los botones del formulario por defecto
 toggleFormButton.style.display = 'none';
+toggleUploadFormButton.style.display = 'none';
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -146,21 +141,26 @@ togglePdfButton.addEventListener('click', () => {
 toggleFormButton.addEventListener('click', () => {
     // Ocultar el formulario de subir PDF si está visible
     uploadPdfFormContainer.style.display = 'none';
-    toggleUploadFormButton.classList.remove('visible');
 
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
-        // Mostrar el botón de subir PDF
-        toggleUploadFormButton.classList.add('visible');
     } else {
         addLinkFormContainer.style.display = 'none';
-        // Ocultar el botón de subir PDF
-        toggleUploadFormButton.classList.remove('visible');
     }
 });
 
+// Obtener elementos relacionados con el nuevo formulario de subir PDF
+const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
+const uploadPdfForm = document.getElementById('uploadPdfForm');
+const pdfFileInput = document.getElementById('pdfFile');
+const uploadMessage = document.getElementById('uploadMessage');
+const cancelUploadButton = document.getElementById('cancelUploadButton');
+
 // Event listener para alternar la visibilidad del formulario de subir PDF
 toggleUploadFormButton.addEventListener('click', () => {
+    // Ocultar el otro formulario si está visible
+    addLinkFormContainer.style.display = 'none';
+
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
     } else {
@@ -203,7 +203,6 @@ uploadPdfForm.addEventListener('submit', (event) => {
     setTimeout(() => {
         uploadPdfFormContainer.style.display = 'none';
         uploadMessage.textContent = '';
-        pdfFileInput.value = '';
     }, 2000);
 });
 
@@ -319,10 +318,6 @@ addLinkForm.addEventListener('submit', (event) => {
     cancelEditButton.style.display = 'none';
     addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
 
-    // Ocultar el formulario de enlaces y el botón de subir PDF
-    addLinkFormContainer.style.display = 'none';
-    toggleUploadFormButton.classList.remove('visible');
-
     // Guardar los enlaces en localStorage
     saveLinks();
 });
@@ -423,10 +418,6 @@ cancelEditButton.addEventListener('click', () => {
     cancelEditButton.style.display = 'none';
     addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
     addLinkMessage.textContent = '';
-
-    // Ocultar el formulario de enlaces y el botón de subir PDF
-    addLinkFormContainer.style.display = 'none';
-    toggleUploadFormButton.classList.remove('visible');
 });
 
 // Función para eliminar un enlace
@@ -445,9 +436,6 @@ function deleteLink(li) {
 
     // Guardar los enlaces en localStorage
     saveLinks();
-
-    addLinkMessage.textContent = 'Enlace eliminado exitosamente.';
-    addLinkMessage.style.color = 'green';
 }
 
 // Función para guardar los enlaces en localStorage
