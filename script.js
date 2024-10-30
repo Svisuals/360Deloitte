@@ -146,6 +146,7 @@ togglePdfButton.addEventListener('click', () => {
 toggleFormButton.addEventListener('click', () => {
     // Ocultar el formulario de subir PDF si está visible
     uploadPdfFormContainer.style.display = 'none';
+    toggleUploadFormButton.classList.remove('visible');
 
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
