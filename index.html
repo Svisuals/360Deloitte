@@ -35,9 +35,9 @@
     <div id="container">
         <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
         <iframe id="iframe2" src="https://momento360.com/e/uc/e0e6b60410484a949026c3aec52ef112?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
-        <!-- Visor PDF -->
+        <!-- Reemplazamos iframe3 por un visor PDF -->
         <embed id="pdfViewer" src="CRONOGRAMA.pdf" type="application/pdf" />
-        <!-- Botón para el visor PDF -->
+        <!-- Botón para el cronograma (PDF) -->
         <div id="togglePdfButton"></div>
         <!-- Botón para mostrar/ocultar el formulario -->
         <div id="toggleFormButton"></div>
@@ -65,49 +65,26 @@
         </div>
     </div>
 
-    <!-- Contenedor de los formularios y botones A y B -->
-    <div id="formContainer" style="display: none;">
-        <!-- Botones A y B colocados uno encima del otro al lado izquierdo -->
-        <div id="formButtons">
-            <button id="buttonA"></button>
-            <button id="buttonB"></button>
-        </div>
+    <!-- Formulario para agregar, editar y eliminar enlaces -->
+    <div id="addLinkFormContainer">
+        <h3>Gestionar Enlaces</h3>
+        <form id="addLinkForm">
+            <label for="linkText">Texto del Enlace:</label>
+            <input type="text" id="linkText" name="linkText" required>
 
-        <!-- Contenedor para los formularios -->
-        <div id="formsContent">
-            <!-- Formulario de gestión de enlaces -->
-            <div id="addLinkFormContainer">
-                <h3>Gestionar Enlaces</h3>
-                <form id="addLinkForm">
-                    <label for="linkText">Texto del Enlace:</label>
-                    <input type="text" id="linkText" name="linkText" required>
+            <label for="linkURL">URL del Enlace:</label>
+            <input type="url" id="linkURL" name="linkURL" required>
 
-                    <label for="linkURL">URL del Enlace:</label>
-                    <input type="url" id="linkURL" name="linkURL" required>
+            <button type="submit">Agregar Enlace</button>
+            <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
+            <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
+        </form>
+        <p id="addLinkMessage"></p>
 
-                    <button type="submit">Agregar Enlace</button>
-                    <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
-                    <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
-                </form>
-                <p id="addLinkMessage"></p>
-
-                <!-- Lista de enlaces existentes -->
-                <div id="linkListContainer">
-                    <h4>Enlaces Existentes</h4>
-                    <ul id="linkList"></ul>
-                </div>
-            </div>
-
-            <!-- Nuevo formulario para subir PDF -->
-            <div id="uploadPdfFormContainer" style="display: none;">
-                <h3>Actualizar PDF</h3>
-                <form id="uploadPdfForm">
-                    <label for="pdfFile">Selecciona un archivo PDF:</label>
-                    <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
-                    <button type="submit">Subir PDF</button>
-                </form>
-                <p id="uploadPdfMessage"></p>
-            </div>
+        <!-- Lista de enlaces existentes -->
+        <div id="linkListContainer">
+            <h4>Enlaces Existentes</h4>
+            <ul id="linkList"></ul>
         </div>
     </div>
 
