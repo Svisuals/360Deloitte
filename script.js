@@ -317,34 +317,40 @@ addLinkForm.addEventListener('submit', (event) => {
     saveLinks();
 });
 
-// Resto del código para manejar enlaces (sin cambios)
+// Funciones para manejar enlaces (agregar, actualizar, eliminar)
 // ... (mantener el resto del código JavaScript existente) ...
 
-// Función para agregar un nuevo enlace
-function addNewLink(linkText, linkURL) {
-    // Crear nuevos elementos de enlace
-    const newLink1 = document.createElement('a');
-    newLink1.href = linkURL;
-    newLink1.textContent = linkText;
+// Función para cargar los enlaces desde localStorage
+function loadLinks() {
+    const linksData = JSON.parse(localStorage.getItem('menuLinks'));
 
-    const newLink2 = newLink1.cloneNode(true);
+    if (linksData) {
+        // Limpiar menús y lista existentes
+        iframe1MenuContent.innerHTML = '';
+        iframe2MenuContent.innerHTML = '';
+        linkList.innerHTML = '';
 
-    // Agregar el enlace a ambos menús
-    iframe1MenuContent.appendChild(newLink1);
-    iframe2MenuContent.appendChild(newLink2);
+        // Cargar enlaces en los menús y en la lista
+        linksData.iframe1Links.forEach(linkData => {
+            // Agregar a los menús
+            const link1 = document.createElement('a');
+            link1.href = linkData.href;
+            link1.textContent = linkData.text;
+            iframe1MenuContent.appendChild(link1);
 
-    // Actualizar los event listeners
-    updateMenuEventListeners();
+            const link2 = document.createElement('a');
+            link2.href = linkData.href;
+            link2.textContent = linkData.text;
+            iframe2MenuContent.appendChild(link2);
 
-    // Agregar a la lista de enlaces
-    addLinkToList(linkText, linkURL);
+            // Agregar a la lista
+            addLinkToList(linkData.text, linkData.href);
+        });
 
-    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
-    addLinkMessage.style.color = 'green';
+        // Actualizar event listeners
+        updateMenuEventListeners();
+    }
 }
-
-// Resto del código para manejar la edición y eliminación de enlaces
-// ... (mantener el resto del código JavaScript existente) ...
 
 // Llamar a loadLinks() al cargar la página
 loadLinks();
