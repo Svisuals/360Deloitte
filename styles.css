@@ -83,8 +83,8 @@ iframe, embed {
 #leftButtons {
     position: fixed;
     top: 50%;
-    left: 50%;
-    transform: translate(-150%, -50%); /* 50% del formulario + 50px a la izquierda */
+    left: calc(50% - 250px); /* 50% de la ventana menos 250px para posicionarlo a 5cm (50px) a la izquierda del formulario */
+    transform: translateY(-50%);
     display: flex;
     flex-direction: column;
     z-index: 2000;
@@ -213,22 +213,17 @@ iframe, embed {
         height: 50%;
     }
 
-    /* Posicionar menú del iframe2 */
-    #iframe2Menu {
-        top: calc(50% + 10px);
+    /* Posicionar menú del iframe1 */
+    #iframe1Menu {
+        top: 10px;
         left: 10px;
     }
 
-    /* Ajustar dimensiones del botón del menú del iframe2 */
-    #iframe2Menu button {
-        padding: 8px;
-        font-size: 16px;
-    }
-
-    /* Ajustar posición del contenido del menú del iframe2 */
-    #iframe2Menu .dropdown-content {
-        left: 0;
-        right: auto;
+    /* Posicionar menú del iframe2 */
+    #iframe2Menu {
+        top: calc(50% + 10px);
+        right: 10px;
+        left: auto;
     }
 
     /* Posicionar botón */
