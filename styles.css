@@ -16,7 +16,7 @@ body, html {
     flex-direction: row;
 }
 
-iframe {
+iframe, embed {
     width: 100%;
     height: 100%;
     border: none;
@@ -27,7 +27,7 @@ iframe {
     display: block;
 }
 
-#iframe2, #iframe3 {
+#iframe2, #pdfViewer {
     display: none;
 }
 
@@ -49,13 +49,14 @@ iframe {
     display: none;
 }
 
-#toggleIframe3Button {
+/* Botón para alternar el visor PDF */
+#togglePdfButton {
     position: fixed;
     top: 10px;
     left: 55px;
     width: 32px;
     height: 32px;
-    background: url('CRO.png') no-repeat center center;
+    background: url('PDF.png') no-repeat center center; /* Debes proporcionar esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -70,7 +71,7 @@ iframe {
     left: 100px;
     width: 32px;
     height: 32px;
-    background: url('FORM.png') no-repeat center center;
+    background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -226,11 +227,11 @@ iframe {
         display: block;
     }
 
-    #toggleIframe3Button {
+    #togglePdfButton {
         display: none;
     }
 
-    #iframe3 {
+    #pdfViewer {
         display: none;
     }
 
