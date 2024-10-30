@@ -64,7 +64,7 @@ iframe, embed {
     display: block;
 }
 
-/* Botón para alternar el formulario */
+/* Botón para alternar el formulario de enlaces */
 #toggleFormButton {
     position: fixed;
     top: 10px;
@@ -72,6 +72,21 @@ iframe, embed {
     width: 32px;
     height: 32px;
     background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    display: none; /* Oculto por defecto */
+}
+
+/* Botón para alternar el formulario de subir PDF */
+#toggleUploadFormButton {
+    position: fixed;
+    top: 10px;
+    left: 145px;
+    width: 32px;
+    height: 32px;
+    background: url('UPLOAD.png') no-repeat center center; /* Debes proporcionar esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -503,4 +518,66 @@ iframe, embed {
 
 #linkList li button:hover {
     opacity: 0.8;
+}
+
+/* Estilos para el formulario de subir PDFs */
+#uploadPdfFormContainer {
+    /* Mismos estilos que #addLinkFormContainer */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    z-index: 2001;
+    max-width: 400px;
+    width: 90%;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#uploadPdfFormContainer h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #0c7a20;
+}
+
+#uploadPdfForm label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+#uploadPdfForm input[type="file"] {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+#uploadPdfForm button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0c7a20;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+}
+
+#uploadPdfForm button:hover {
+    background-color: #095c16;
+}
+
+#uploadMessage {
+    margin-top: 10px;
+    font-size: 0.9em;
+    text-align: center;
 }
