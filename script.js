@@ -139,13 +139,15 @@ togglePdfButton.addEventListener('click', () => {
 
 // Event listener para el botón que alterna el formulario de enlaces
 toggleFormButton.addEventListener('click', () => {
-    // Ocultar el formulario de subir PDF si está visible
+    // Ocultar el otro formulario si está visible
     uploadPdfFormContainer.style.display = 'none';
 
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
+        toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
     } else {
         addLinkFormContainer.style.display = 'none';
+        toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
     }
 });
 
