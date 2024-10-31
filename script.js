@@ -142,6 +142,7 @@ toggleFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
         toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
+        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
     } else {
         addLinkFormContainer.style.display = 'none';
         toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
@@ -159,6 +160,7 @@ const cancelUploadButton = document.getElementById('cancelUploadButton');
 toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
+        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
     } else {
         uploadPdfFormContainer.style.display = 'none';
     }
