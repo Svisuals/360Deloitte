@@ -26,10 +26,10 @@ authForm.addEventListener('submit', (event) => {
         // Mostrar u ocultar los botones según el usuario
         if (loggedInUser === 'deloitte') {
             toggleFormButton.style.display = 'block';
-            toggleUploadFormButton.style.display = 'block'; // Mostrar el botón del formulario de subir PDF
+            // El botón UPLOAD.png está oculto por defecto y solo se mostrará al interactuar con FORM.png
         } else {
             toggleFormButton.style.display = 'none';
-            toggleUploadFormButton.style.display = 'none'; // Ocultar el botón del formulario de subir PDF
+            toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto
         }
     } else {
         // Mostrar mensaje de error
@@ -62,9 +62,9 @@ pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
 // Ocultar menú del iframe2 inicialmente
 iframe2Menu.style.display = 'none';
 
-// Ocultar los botones del formulario por defecto
+// Ocultar los botones del formulario por defecto (solo 'deloitte' los verá después de iniciar sesión)
 toggleFormButton.style.display = 'none';
-toggleUploadFormButton.style.display = 'none';
+toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto por defecto
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -139,9 +139,6 @@ togglePdfButton.addEventListener('click', () => {
 
 // Event listener para el botón que alterna el formulario de enlaces
 toggleFormButton.addEventListener('click', () => {
-    // Ocultar el otro formulario si está visible
-    uploadPdfFormContainer.style.display = 'none';
-
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
         toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
@@ -160,9 +157,6 @@ const cancelUploadButton = document.getElementById('cancelUploadButton');
 
 // Event listener para alternar la visibilidad del formulario de subir PDF
 toggleUploadFormButton.addEventListener('click', () => {
-    // Ocultar el otro formulario si está visible
-    addLinkFormContainer.style.display = 'none';
-
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
     } else {
