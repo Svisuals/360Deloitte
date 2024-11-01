@@ -116,7 +116,7 @@ function updateMenuEventListeners() {
 // Llamar a la función inicialmente
 updateMenuEventListeners();
 
-// Event listener para el botón 'DUP'
+// Event listener para el botón 'DUP' (toggleButton)
 toggleButton.addEventListener('click', () => {
     if (window.getComputedStyle(iframe2).display === 'none') {
         iframe2.style.display = 'block';
@@ -139,7 +139,7 @@ toggleButton.addEventListener('click', () => {
     adjustLayout(); // Ajustar layout después de mostrar u ocultar iframe2
 });
 
-// Event listener para el botón del visor PDF
+// Event listener para el botón del visor PDF (togglePdfButton)
 togglePdfButton.addEventListener('click', () => {
     if (window.getComputedStyle(pdfViewer).display === 'none') {
         pdfViewer.style.display = 'block';
@@ -161,7 +161,7 @@ togglePdfButton.addEventListener('click', () => {
     adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
 });
 
-// Event listener para el botón que alterna la visibilidad de los botones UPLOAD y MANAGE
+// Event listener para el botón que alterna la visibilidad de los botones UPLOAD y MANAGE (toggleFormButton)
 toggleFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(formButtonsContainer).display === 'none') {
         formButtonsContainer.style.display = 'flex';
@@ -174,7 +174,7 @@ toggleFormButton.addEventListener('click', () => {
     }
 });
 
-// Event listener para el botón MANAGE.png
+// Event listener para el botón MANAGE.png (toggleManageFormButton)
 toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
@@ -184,7 +184,7 @@ toggleManageFormButton.addEventListener('click', () => {
     }
 });
 
-// Event listener para el botón UPLOAD.png
+// Event listener para el botón UPLOAD.png (toggleUploadFormButton)
 toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
@@ -194,14 +194,14 @@ toggleUploadFormButton.addEventListener('click', () => {
     }
 });
 
-// Event listener para el botón de cancelar en el formulario de subir PDF
+// Event listener para el botón de cancelar en el formulario de subir PDF (cancelUploadButton)
 cancelUploadButton.addEventListener('click', () => {
     uploadPdfFormContainer.style.display = 'none';
     pdfFileInput.value = '';
     uploadMessage.textContent = '';
 });
 
-// Manejar el envío del formulario de subir PDF
+// Manejar el envío del formulario de subir PDF (uploadPdfForm)
 uploadPdfForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
@@ -305,7 +305,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Manejar el envío del formulario para agregar o actualizar enlaces
+// Manejar el envío del formulario para agregar o actualizar enlaces (addLinkForm)
 addLinkForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Evitar el comportamiento por defecto del formulario
 
@@ -420,12 +420,12 @@ function editLink(li, linkText, linkURL) {
     cancelEditButton.style.display = 'block';
 }
 
-// Event listener para el botón de actualizar enlace
+// Event listener para el botón de actualizar enlace (updateLinkButton)
 updateLinkButton.addEventListener('click', () => {
     addLinkForm.dispatchEvent(new Event('submit'));
 });
 
-// Event listener para cancelar la edición
+// Event listener para cancelar la edición (cancelEditButton)
 cancelEditButton.addEventListener('click', () => {
     linkTextInput.value = '';
     linkURLInput.value = '';
