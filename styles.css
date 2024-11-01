@@ -35,14 +35,15 @@ iframe, embed {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: 10px; /* Posicionado a la izquierda */
+    left: 10px; /* Posición original */
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
     background-size: cover;
     border: none;
     cursor: pointer;
-    z-index: 1000;
+    z-index: 1001; /* Mayor que otros elementos */
+    display: block; /* Asegura que esté visible */
 }
 
 #togglePdfButton {
