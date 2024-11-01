@@ -35,7 +35,7 @@ iframe, embed {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: 10px; /* Ajustado para evitar solapamiento */
+    left: 10px; /* Posicionado a la izquierda */
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
@@ -81,7 +81,7 @@ iframe, embed {
     display: none; /* Oculto por defecto */
     flex-direction: column;
     gap: 10px; /* Espacio entre botones */
-    z-index: 999; /* Asegura que los botones estén debajo de FORM.png */
+    z-index: 999; /* Asegura que los botones estén debajo de otros elementos */
 }
 
 /* Botón para alternar el formulario de subir PDF */
@@ -241,6 +241,12 @@ iframe, embed {
     #toggleButton {
         top: 10px;
     }
+
+    #formButtonsContainer {
+        left: auto;
+        right: 10px;
+        top: 50px;
+    }
 }
 
 /* Orientación horizontal en dispositivos móviles */
@@ -288,6 +294,12 @@ iframe, embed {
         top: 10px;
         right: 10px;
         left: calc(49%);
+    }
+
+    #formButtonsContainer {
+        top: 50px;
+        right: 10px;
+        left: auto;
     }
 }
 
@@ -543,7 +555,6 @@ iframe, embed {
 
 /* Estilos para el formulario de subir PDFs */
 #uploadPdfFormContainer {
-    /* Mismos estilos que #addLinkFormContainer */
     position: fixed;
     top: 50%;
     left: 50%;
