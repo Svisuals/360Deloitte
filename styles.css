@@ -35,7 +35,7 @@ iframe, embed {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: 10px;
+    left: calc(49%);
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
@@ -45,6 +45,11 @@ iframe, embed {
     z-index: 1000;
 }
 
+#toggleIframe2ButtonMobile {
+    display: none;
+}
+
+/* Botón para alternar el visor PDF */
 #togglePdfButton {
     position: fixed;
     top: 10px;
@@ -59,6 +64,7 @@ iframe, embed {
     display: block;
 }
 
+/* Botón para alternar el formulario de enlaces */
 #toggleFormButton {
     position: fixed;
     top: 10px;
@@ -73,6 +79,7 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
+/* Botón para alternar el formulario de subir PDF */
 #toggleUploadFormButton {
     position: fixed;
     top: 10px;
@@ -87,6 +94,7 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
+/* Nuevo Botón para alternar el formulario de gestionar enlaces */
 #toggleManageFormButton {
     position: fixed;
     top: 10px;
@@ -109,7 +117,7 @@ iframe, embed {
 }
 
 #iframe1Menu {
-    left: 240px; /* Ajustado para no superponerse con los botones */
+    left: 10px;
 }
 
 #iframe2Menu {
@@ -190,7 +198,8 @@ iframe, embed {
         flex-direction: column;
     }
 
-    iframe, embed {
+    #iframe1,
+    #iframe2 {
         width: 100%;
     }
 
@@ -233,13 +242,6 @@ iframe, embed {
 
     #toggleButton {
         left: auto;
-    }
-
-    /* Ajustar menús desplegables para no superponerse con los botones */
-    #iframe1Menu {
-        left: auto;
-        right: 10px;
-        top: 50px; /* Ajuste para evitar superposición */
     }
 }
 
@@ -287,7 +289,7 @@ iframe, embed {
     #toggleButton {
         top: 10px;
         right: 10px;
-        left: auto;
+        left: calc(49%);
     }
 }
 
@@ -375,6 +377,7 @@ iframe, embed {
     font-size: 1em;
     transition: background-color 0.3s ease;
     margin-top: 10px;
+    margin-left: 18%;
     text-align: center;
 }
 
