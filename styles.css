@@ -35,7 +35,7 @@ iframe, embed {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: calc(49%);
+    left: 10px; /* Ajustado para evitar solapamiento */
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
@@ -45,15 +45,10 @@ iframe, embed {
     z-index: 1000;
 }
 
-#toggleIframe2ButtonMobile {
-    display: none;
-}
-
-/* Botón para alternar el visor PDF */
 #togglePdfButton {
     position: fixed;
     top: 10px;
-    left: 55px;
+    left: 55px; /* Ajustado para alinearse con toggleButton */
     width: 32px;
     height: 32px;
     background: url('PDF.png') no-repeat center center; /* Debes proporcionar esta imagen */
@@ -64,11 +59,10 @@ iframe, embed {
     display: block;
 }
 
-/* Botón para alternar el formulario de enlaces */
 #toggleFormButton {
     position: fixed;
     top: 10px;
-    left: 100px;
+    left: 100px; /* Ajustado para alinearse con los demás botones */
     width: 32px;
     height: 32px;
     background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
@@ -79,11 +73,19 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
+/* Contenedor para los botones UPLOAD y MANAGE */
+#formButtonsContainer {
+    position: fixed;
+    top: 50px; /* Posicionado debajo de FORM.png */
+    left: 100px; /* Mismo alineamiento que FORM.png */
+    display: none; /* Oculto por defecto */
+    flex-direction: column;
+    gap: 10px; /* Espacio entre botones */
+    z-index: 999; /* Asegura que los botones estén debajo de FORM.png */
+}
+
 /* Botón para alternar el formulario de subir PDF */
 #toggleUploadFormButton {
-    position: fixed;
-    top: 10px;
-    left: 145px;
     width: 32px;
     height: 32px;
     background: url('UPLOAD.png') no-repeat center center; /* Debes proporcionar esta imagen */
@@ -91,14 +93,10 @@ iframe, embed {
     border: none;
     cursor: pointer;
     z-index: 1000;
-    display: none; /* Oculto por defecto */
 }
 
-/* Nuevo Botón para alternar el formulario de gestionar enlaces */
+/* Botón para alternar el formulario de gestionar enlaces */
 #toggleManageFormButton {
-    position: fixed;
-    top: 10px;
-    left: 190px; /* Posicionado a la derecha de UPLOAD.png */
     width: 32px;
     height: 32px;
     background: url('MANAGE.png') no-repeat center center; /* Debes proporcionar esta imagen */
@@ -106,7 +104,6 @@ iframe, embed {
     border: none;
     cursor: pointer;
     z-index: 1000;
-    display: none; /* Oculto por defecto */
 }
 
 /* Menús desplegables */
@@ -234,14 +231,15 @@ iframe, embed {
     #togglePdfButton,
     #toggleFormButton,
     #toggleUploadFormButton,
-    #toggleManageFormButton {
-        top: 10px;
+    #toggleManageFormButton,
+    #formButtonsContainer {
+        top: auto;
         left: auto;
         right: 10px;
     }
 
     #toggleButton {
-        left: auto;
+        top: 10px;
     }
 }
 
