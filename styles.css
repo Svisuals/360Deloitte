@@ -77,12 +77,12 @@ iframe, embed {
 #formButtonsContainer {
     position: fixed;
     top: 50%; /* Centrado verticalmente */
-    left: 10px; /* Espacio desde el borde izquierdo */
+    left: 20px; /* Espacio desde el borde izquierdo aumentado a 20px */
     transform: translateY(-50%); /* Centrado exacto */
     display: none; /* Oculto por defecto */
     flex-direction: column;
     gap: 10px; /* Espacio entre botones */
-    z-index: 999; /* Asegura que los botones estén debajo de otros elementos si es necesario */
+    z-index: 999; /* Asegura que los botones estén por encima de otros elementos si es necesario */
 }
 
 /* Botón para alternar el formulario de subir PDF */
@@ -300,7 +300,7 @@ iframe, embed {
 
     #formButtonsContainer {
         top: 50%;
-        left: 10px;
+        left: 20px;
         transform: translateY(-50%);
     }
 }
