@@ -26,11 +26,10 @@ authForm.addEventListener('submit', (event) => {
         // Mostrar u ocultar los botones según el usuario
         if (loggedInUser === 'deloitte') {
             toggleFormButton.style.display = 'block';
-            // El botón UPLOAD.png y MANAGE.png están ocultos por defecto y solo se mostrarán al interactuar con FORM.png
+            // El contenedor de botones está oculto por defecto y solo se mostrará al interactuar con FORM.png
         } else {
             toggleFormButton.style.display = 'none';
-            toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto
-            toggleManageFormButton.style.display = 'none'; // Asegurar que esté oculto
+            formButtonsContainer.style.display = 'none'; // Asegurar que esté oculto
         }
     } else {
         // Mostrar mensaje de error
@@ -47,7 +46,7 @@ const pdfViewer = document.getElementById('pdfViewer');
 const togglePdfButton = document.getElementById('togglePdfButton');
 const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
-const toggleManageFormButton = document.getElementById('toggleManageFormButton'); // Nuevo Botón
+const toggleManageFormButton = document.getElementById('toggleManageFormButton'); // Botón MANAGE.png
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -55,6 +54,7 @@ const iframe2MenuButton = document.getElementById('iframe2MenuButton');
 const iframe1MenuContent = document.getElementById('iframe1MenuContent');
 const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
+const formButtonsContainer = document.getElementById('formButtonsContainer'); // Contenedor de botones
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -66,8 +66,7 @@ iframe2Menu.style.display = 'none';
 
 // Ocultar los botones del formulario por defecto (solo 'deloitte' los verá después de iniciar sesión)
 toggleFormButton.style.display = 'none';
-toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto por defecto
-toggleManageFormButton.style.display = 'none'; // Asegurar que esté oculto por defecto
+formButtonsContainer.style.display = 'none'; // Asegurar que esté oculto por defecto
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -112,6 +111,7 @@ toggleButton.addEventListener('click', () => {
         togglePdfButton.style.display = 'none';
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de gestionar enlaces si está visible
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        formButtonsContainer.style.display = 'none'; // Ocultar botones adicionales si están visibles
         document.getElementById('container').classList.remove('horizontal-split');
     } else {
         iframe2.style.display = 'none';
@@ -134,6 +134,7 @@ togglePdfButton.addEventListener('click', () => {
         togglePdfButton.style.display = 'block';
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de gestionar enlaces si está visible
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        formButtonsContainer.style.display = 'none'; // Ocultar botones adicionales si están visibles
         document.getElementById('container').classList.add('horizontal-split');
     } else {
         pdfViewer.style.display = 'none';
@@ -144,46 +145,46 @@ togglePdfButton.addEventListener('click', () => {
     adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
 });
 
-// Event listener para el botón que alterna el formulario de enlaces
+// Event listener para el botón que alterna la visibilidad de los botones UPLOAD y MANAGE
 toggleFormButton.addEventListener('click', () => {
-    if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
-        addLinkFormContainer.style.display = 'block';
-        toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
-        toggleManageFormButton.style.display = 'block'; // Mostrar el botón MANAGE.png al abrir el formulario de enlaces
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+    if (window.getComputedStyle(formButtonsContainer).display === 'none') {
+        formButtonsContainer.style.display = 'flex';
     } else {
-        addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
-        toggleManageFormButton.style.display = 'none'; // Ocultar el botón MANAGE.png al cerrar el formulario de enlaces
+        formButtonsContainer.style.display = 'none';
     }
 });
 
-// Event listener para el botón que alterna el formulario de gestionar enlaces
+// Event listener para el botón MANAGE.png
 toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
-        toggleUploadFormButton.style.display = 'block';
-        toggleManageFormButton.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
     } else {
         addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none';
-        toggleManageFormButton.style.display = 'none';
     }
 });
 
-// Obtener elementos relacionados con el nuevo formulario de subir PDF
+// Obtener elementos relacionados con el formulario de gestionar enlaces
+const addLinkForm = document.getElementById('addLinkForm');
+const linkTextInput = document.getElementById('linkText');
+const linkURLInput = document.getElementById('linkURL');
+const addLinkMessage = document.getElementById('addLinkMessage');
+const linkList = document.getElementById('linkList');
+const updateLinkButton = document.getElementById('updateLinkButton');
+const cancelEditButton = document.getElementById('cancelEditButton');
+
+// Obtener elementos relacionados con el formulario de subir PDF
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
 const uploadPdfForm = document.getElementById('uploadPdfForm');
 const pdfFileInput = document.getElementById('pdfFile');
 const uploadMessage = document.getElementById('uploadMessage');
 const cancelUploadButton = document.getElementById('cancelUploadButton');
 
-// Event listener para alternar la visibilidad del formulario de subir PDF
+// Obtener elementos relacionados con el botón UPLOAD.png
 toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
+        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de gestionar enlaces si está visible
     } else {
         uploadPdfFormContainer.style.display = 'none';
     }
@@ -300,13 +301,6 @@ window.addEventListener('click', function(event) {
 });
 
 // Obtener elementos del formulario de agregar enlaces
-const addLinkForm = document.getElementById('addLinkForm');
-const linkTextInput = document.getElementById('linkText');
-const linkURLInput = document.getElementById('linkURL');
-const addLinkMessage = document.getElementById('addLinkMessage');
-const linkList = document.getElementById('linkList');
-const updateLinkButton = document.getElementById('updateLinkButton');
-const cancelEditButton = document.getElementById('cancelEditButton');
 
 let editIndex = null; // Variable para saber si estamos editando un enlace
 
