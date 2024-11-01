@@ -4,8 +4,7 @@ body, html {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
+    font-family: 'Open Sans', sans-serif;
 }
 
 #container {
@@ -31,13 +30,14 @@ iframe, embed {
     display: none;
 }
 
-/* Botones */
+/* Botones Principales */
 #toggleButton {
     position: fixed;
-    top: 10px;
-    left: 10px; /* Posicionado a la izquierda */
-    width: 32px;
-    height: 32px;
+    top: 50%;
+    left: 20px; /* Espacio desde el borde izquierdo */
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
     background: url('DUP.png') no-repeat center center;
     background-size: cover;
     border: none;
@@ -47,25 +47,27 @@ iframe, embed {
 
 #togglePdfButton {
     position: fixed;
-    top: 10px;
-    left: 55px; /* Ajustado para alinearse con toggleButton */
-    width: 32px;
-    height: 32px;
-    background: url('PDF.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    top: 50%;
+    left: 80px; /* Espacio entre DUP.png y PDF.png */
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: url('PDF.png') no-repeat center center; /* Proporciona esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
     z-index: 1000;
-    display: block;
+    display: none; /* Oculto por defecto */
 }
 
 #toggleFormButton {
     position: fixed;
-    top: 10px;
-    left: 100px; /* Ajustado para alinearse con los demás botones */
-    width: 32px;
-    height: 32px;
-    background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    top: 50%;
+    left: 140px; /* Espacio entre PDF.png y FORM.png */
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: url('FORM.png') no-repeat center center; /* Proporciona esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -73,52 +75,55 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
-/* Contenedor para los botones UPLOAD y MANAGE */
+/* Contenedor para los botones UPLOAD.png y MANAGE.png */
 #formButtonsContainer {
     position: fixed;
-    top: 50px; /* Posicionado debajo de FORM.png */
-    left: 100px; /* Mismo alineamiento que FORM.png */
+    top: 50%; /* Centrado verticalmente */
+    left: 200px; /* Ajusta según el ancho de los botones principales y espacio deseado */
+    transform: translateY(-50%); /* Centrado exacto vertical */
     display: none; /* Oculto por defecto */
     flex-direction: column;
-    gap: 10px; /* Espacio entre botones */
-    z-index: 999; /* Asegura que los botones estén debajo de otros elementos */
+    gap: 15px; /* Espacio entre botones */
+    z-index: 999; /* Asegura que los botones estén por encima de otros elementos si es necesario */
 }
 
-/* Botón para alternar el formulario de subir PDF */
+/* Botón UPLOAD */
 #toggleUploadFormButton {
-    width: 32px;
-    height: 32px;
-    background: url('UPLOAD.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    width: 40px;
+    height: 40px;
+    background: url('UPLOAD.png') no-repeat center center; /* Proporciona esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
-    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Botón para alternar el formulario de gestionar enlaces */
+/* Botón MANAGE */
 #toggleManageFormButton {
-    width: 32px;
-    height: 32px;
-    background: url('MANAGE.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    width: 40px;
+    height: 40px;
+    background: url('MANAGE.png') no-repeat center center; /* Proporciona esta imagen */
     background-size: cover;
     border: none;
     cursor: pointer;
-    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Menús desplegables */
 .dropdown {
     position: fixed;
-    top: 10px;
+    top: 20px;
     z-index: 1001;
 }
 
 #iframe1Menu {
-    left: 10px;
+    left: 260px; /* Ajusta según la posición de los botones */
 }
 
 #iframe2Menu {
-    right: 10px;
+    right: 20px;
     left: auto;
 }
 
@@ -129,6 +134,12 @@ iframe, embed {
     font-size: 16px;
     border: none;
     cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown button:hover {
+    background-color: #095c16;
 }
 
 .dropdown button::after {
@@ -154,7 +165,7 @@ iframe, embed {
     z-index: 1;
     padding: 10px 0;
 
-    /* Añadido para scrollbar vertical */
+    /* Scrollbar vertical si excede el tamaño */
     max-height: 300px;
     overflow-y: auto;
 }
@@ -187,120 +198,121 @@ iframe, embed {
     left: auto;
 }
 
-/* Media Queries */
+/* Formularios */
+#addLinkFormContainer, #uploadPdfFormContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    z-index: 2001;
+    max-width: 400px;
+    width: 90%;
+    display: none;
 
-/* Orientación vertical en dispositivos móviles */
-@media (max-width: 1300px) and (orientation: portrait) {
-    #container {
-        flex-direction: column;
-    }
-
-    #iframe1,
-    #iframe2 {
-        width: 100%;
-    }
-
-    #iframe1 {
-        height: 50%;
-    }
-
-    #iframe2 {
-        height: 50%;
-    }
-
-    /* Posicionar menú del iframe2 */
-    #iframe2Menu {
-        top: calc(50% + 10px);
-        left: 10px;
-    }
-
-    /* Ajustar dimensiones del botón del menú del iframe2 */
-    #iframe2Menu button {
-        padding: 8px;
-        font-size: 16px;
-    }
-
-    /* Ajustar posición del contenido del menú del iframe2 */
-    #iframe2Menu .dropdown-content {
-        left: 0;
-        right: auto;
-    }
-
-    /* Posicionar botones */
-    #toggleButton,
-    #togglePdfButton,
-    #toggleFormButton,
-    #toggleUploadFormButton,
-    #toggleManageFormButton,
-    #formButtonsContainer {
-        top: auto;
-        left: auto;
-        right: 10px;
-    }
-
-    #toggleButton {
-        top: 10px;
-    }
-
-    #formButtonsContainer {
-        left: auto;
-        right: 10px;
-        top: 50px;
-    }
+    /* Scrollbar vertical si excede el tamaño */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-/* Orientación horizontal en dispositivos móviles */
-@media (max-width: 1300px) and (orientation: landscape) {
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
+#addLinkFormContainer h3, #uploadPdfFormContainer h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #0c7a20;
+}
 
-    #container {
-        height: 100%;
-        width: 100%;
-        flex-direction: row;
-    }
+#addLinkForm label, #uploadPdfForm label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 0.9em;
+    color: #333;
+}
 
-    #iframe1, #iframe2 {
-        width: 50%;
-        height: 100%;
-        display: block;
-    }
+#addLinkForm input, #uploadPdfForm input[type="file"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
 
-    #togglePdfButton {
-        display: none;
-    }
+#addLinkForm button, #uploadPdfForm button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0c7a20;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
 
-    #pdfViewer {
-        display: none;
-    }
+#addLinkForm button:hover, #uploadPdfForm button:hover {
+    background-color: #095c16;
+}
 
-    /* Posicionar menús */
-    #iframe1Menu {
-        top: 10px;
-        left: 10px;
-    }
+#addLinkMessage, #uploadMessage {
+    margin-top: 10px;
+    font-size: 0.9em;
+    text-align: center;
+}
 
-    #iframe2Menu {
-        top: 10px;
-        right: 10px;
-        left: auto;
-    }
+/* Lista de Enlaces */
+#linkListContainer {
+    margin-top: 20px;
 
-    /* Posicionar botones */
-    #toggleButton {
-        top: 10px;
-        right: 10px;
-        left: calc(49%);
-    }
+    /* Scrollbar vertical si excede el tamaño */
+    max-height: 200px;
+    overflow-y: auto;
+}
 
-    #formButtonsContainer {
-        top: 50px;
-        right: 10px;
-        left: auto;
-    }
+#linkListContainer h4 {
+    margin-bottom: 10px;
+    color: #0c7a20;
+}
+
+#linkList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#linkList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+#linkList li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+#linkList li button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: opacity 0.3s ease;
+}
+
+#linkList li button.edit-button {
+    background-color: #3498db;
+}
+
+#linkList li button:hover {
+    opacity: 0.8;
 }
 
 /* Estilos para la pantalla de inicio de sesión */
@@ -339,7 +351,6 @@ iframe, embed {
     padding: 20px 30px;
     max-width: 350px;
     width: 100%;
-    font-family: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -387,7 +398,6 @@ iframe, embed {
     font-size: 1em;
     transition: background-color 0.3s ease;
     margin-top: 10px;
-    margin-left: 18%;
     text-align: center;
 }
 
@@ -395,221 +405,79 @@ iframe, embed {
     background-color: #095c16;
 }
 
-#errorMessage {
+#loginForm .error {
     color: red;
     margin-top: 10px;
     display: none;
 }
 
-/* Media Query para pantallas más pequeñas */
-@media (max-width: 768px), (max-height: 768px) {
-    #loginForm {
-        padding: 10px 15px;
+/* Media Queries */
+
+/* Media Query para pantallas con ancho máximo de 1300px */
+@media (max-width: 1300px) {
+    /* Ajustar la posición de los botones principales y contenedor de botones */
+    #toggleButton {
+        left: 10px;
+    }
+
+    #togglePdfButton {
+        left: 60px;
+    }
+
+    #toggleFormButton {
+        left: 110px;
+    }
+
+    #formButtonsContainer {
+        left: 160px; /* Espacio entre FORM.png y los botones UPLOAD y MANAGE */
+    }
+}
+
+/* Media Query para pantallas con ancho máximo de 768px */
+@media (max-width: 768px) {
+    /* Ajustar tamaños de botones */
+    #toggleButton, #togglePdfButton, #toggleFormButton, #toggleUploadFormButton, #toggleManageFormButton {
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Ajustar contenedor de botones */
+    #formButtonsContainer {
+        left: 140px;
+        gap: 10px;
+    }
+
+    /* Ajustar formularios para pantallas pequeñas */
+    #addLinkFormContainer, #uploadPdfFormContainer {
+        padding: 15px;
         max-width: 300px;
     }
 
-    #loginForm h2 {
+    /* Ajustar textos y botones en formularios */
+    #addLinkFormContainer h3, #uploadPdfFormContainer h3 {
         font-size: 1.2em;
     }
 
-    #loginForm label,
-    #loginForm input,
-    #loginForm button {
+    #addLinkForm label, #uploadPdfForm label {
+        font-size: 0.85em;
+    }
+
+    #addLinkForm input, #uploadPdfForm input[type="file"] {
+        padding: 6px;
+        font-size: 0.85em;
+    }
+
+    #addLinkForm button, #uploadPdfForm button {
+        padding: 8px;
         font-size: 0.9em;
     }
 
-    #loginForm input {
-        padding: 4px;
+    #linkListContainer h4 {
+        font-size: 1em;
     }
 
-    #loginForm button {
-        padding: 5px;
+    #linkList li button {
+        padding: 4px 8px;
+        font-size: 0.8em;
     }
-
-    /* Media Query para pantallas más pequeñas en orientación vertical */
-    @media (max-width: 768px) and (orientation: portrait) {
-        #loginForm button {
-            width: 100%;
-            max-width: 200px;
-            margin-top: 10px;
-            margin-left: 10%;
-            text-align: center;
-        }
-    }
-}
-
-/* Estilos para el formulario de agregar enlaces */
-#addLinkFormContainer {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-    z-index: 2001;
-    max-width: 400px;
-    width: 90%;
-    display: none;
-
-    /* Añadido para scrollbar vertical */
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-#addLinkFormContainer h3 {
-    margin-top: 0;
-    text-align: center;
-    color: #0c7a20;
-}
-
-#addLinkForm label {
-    display: block;
-    margin: 10px 0 5px;
-    font-size: 0.9em;
-    color: #333;
-}
-
-#addLinkForm input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.9em;
-}
-
-#addLinkForm button {
-    width: 100%;
-    padding: 10px;
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 10px;
-}
-
-#addLinkForm button:hover {
-    background-color: #095c16;
-}
-
-#addLinkMessage {
-    margin-top: 10px;
-    font-size: 0.9em;
-    text-align: center;
-}
-
-/* Estilos para la lista de enlaces */
-#linkListContainer {
-    margin-top: 20px;
-
-    /* Añadido para scrollbar vertical */
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-#linkListContainer h4 {
-    margin-bottom: 10px;
-    color: #0c7a20;
-}
-
-#linkList {
-    list-style-type: none;
-    padding: 0;
-}
-
-#linkList li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    background-color: #f9f9f9;
-    padding: 8px;
-    border-radius: 6px;
-}
-
-#linkList li span {
-    flex-grow: 1;
-    margin-right: 10px;
-}
-
-#linkList li button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-left: 5px;
-}
-
-#linkList li button.edit-button {
-    background-color: #3498db;
-}
-
-#linkList li button:hover {
-    opacity: 0.8;
-}
-
-/* Estilos para el formulario de subir PDFs */
-#uploadPdfFormContainer {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-    z-index: 2001;
-    max-width: 400px;
-    width: 90%;
-    display: none;
-    max-height: 80vh;
-    overflow-y: auto;
-}
-
-#uploadPdfFormContainer h3 {
-    margin-top: 0;
-    text-align: center;
-    color: #0c7a20;
-}
-
-#uploadPdfForm label {
-    display: block;
-    margin: 10px 0 5px;
-    font-size: 0.9em;
-    color: #333;
-}
-
-#uploadPdfForm input[type="file"] {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.9em;
-}
-
-#uploadPdfForm button {
-    width: 100%;
-    padding: 10px;
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
-    margin-top: 10px;
-}
-
-#uploadPdfForm button:hover {
-    background-color: #095c16;
-}
-
-#uploadMessage {
-    margin-top: 10px;
-    font-size: 0.9em;
-    text-align: center;
 }
