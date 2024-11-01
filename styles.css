@@ -64,11 +64,26 @@ iframe, embed {
     display: block;
 }
 
+/* Botón para alternar el formulario de enlaces */
+#toggleFormButton {
+    position: fixed;
+    top: 10px;
+    left: 100px;
+    width: 32px;
+    height: 32px;
+    background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background-size: cover;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+    display: none; /* Oculto por defecto */
+}
+
 /* Botón para alternar el formulario de subir PDF */
 #toggleUploadFormButton {
     position: fixed;
     top: 10px;
-    left: 100px; /* Ajustado para dejar espacio para el nuevo botón */
+    left: 145px;
     width: 32px;
     height: 32px;
     background: url('UPLOAD.png') no-repeat center center; /* Debes proporcionar esta imagen */
@@ -79,11 +94,11 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
-/* Nuevo botón para alternar el formulario de gestionar enlaces */
+/* Nuevo Botón para alternar el formulario de gestionar enlaces */
 #toggleManageFormButton {
     position: fixed;
     top: 10px;
-    left: 145px; /* Al lado derecho de UPLOAD.png */
+    left: 190px; /* Posicionado a la derecha de UPLOAD.png */
     width: 32px;
     height: 32px;
     background: url('MANAGE.png') no-repeat center center; /* Debes proporcionar esta imagen */
@@ -215,9 +230,17 @@ iframe, embed {
     }
 
     /* Posicionar botones */
-    #toggleButton {
+    #toggleButton,
+    #togglePdfButton,
+    #toggleFormButton,
+    #toggleUploadFormButton,
+    #toggleManageFormButton {
         top: 10px;
+        left: auto;
         right: 10px;
+    }
+
+    #toggleButton {
         left: auto;
     }
 }
