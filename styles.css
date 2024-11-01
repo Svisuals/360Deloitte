@@ -35,7 +35,7 @@ iframe, embed {
 #toggleButton {
     position: fixed;
     top: 10px;
-    left: calc(49%);
+    left: 10px;
     width: 32px;
     height: 32px;
     background: url('DUP.png') no-repeat center center;
@@ -45,11 +45,6 @@ iframe, embed {
     z-index: 1000;
 }
 
-#toggleIframe2ButtonMobile {
-    display: none;
-}
-
-/* Botón para alternar el visor PDF */
 #togglePdfButton {
     position: fixed;
     top: 10px;
@@ -61,10 +56,9 @@ iframe, embed {
     border: none;
     cursor: pointer;
     z-index: 1000;
-    display: block;
+    display: none; /* Oculto por defecto */
 }
 
-/* Botón para alternar el formulario de enlaces */
 #toggleFormButton {
     position: fixed;
     top: 10px;
@@ -79,7 +73,6 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
-/* Botón para alternar el formulario de subir PDF */
 #toggleUploadFormButton {
     position: fixed;
     top: 10px;
@@ -94,7 +87,6 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
-/* Nuevo Botón para alternar el formulario de gestionar enlaces */
 #toggleManageFormButton {
     position: fixed;
     top: 10px;
@@ -377,7 +369,6 @@ iframe, embed {
     font-size: 1em;
     transition: background-color 0.3s ease;
     margin-top: 10px;
-    margin-left: 18%;
     text-align: center;
 }
 
