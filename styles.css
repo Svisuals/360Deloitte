@@ -76,8 +76,9 @@ iframe, embed {
 /* Contenedor para los botones UPLOAD y MANAGE */
 #formButtonsContainer {
     position: fixed;
-    top: 10px; /* Posicionado al inicio */
-    left: 140px; /* Ajustado para dejar espacio entre FORM.png y este contenedor */
+    top: 50%; /* Centrado verticalmente */
+    left: 10px; /* Espacio desde el borde izquierdo */
+    transform: translateY(-50%); /* Centrado exacto */
     display: none; /* Oculto por defecto */
     flex-direction: column;
     gap: 10px; /* Espacio entre botones */
@@ -246,6 +247,7 @@ iframe, embed {
         left: auto;
         right: 10px;
         top: 50px;
+        transform: translateY(0); /* Eliminar el centrado vertical */
     }
 }
 
@@ -297,9 +299,9 @@ iframe, embed {
     }
 
     #formButtonsContainer {
-        top: 50px;
-        right: 10px;
-        left: auto;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
     }
 }
 
