@@ -26,7 +26,7 @@ authForm.addEventListener('submit', (event) => {
         // Mostrar u ocultar los botones según el usuario
         if (loggedInUser === 'deloitte') {
             toggleFormButton.style.display = 'block';
-            // El botón UPLOAD.png y MANAGE.png están ocultos por defecto y solo se mostrarán al interactuar con FORM.png
+            // Los botones UPLOAD.png y MANAGE.png están ocultos por defecto y solo se mostrarán al interactuar con FORM.png
         } else {
             toggleFormButton.style.display = 'none';
             toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto
@@ -162,13 +162,13 @@ toggleFormButton.addEventListener('click', () => {
 toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
-        toggleUploadFormButton.style.display = 'block';
-        toggleManageFormButton.style.display = 'block';
+        toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
+        toggleManageFormButton.style.display = 'block'; // Mostrar el botón MANAGE.png al abrir el formulario de enlaces
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
     } else {
         addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none';
-        toggleManageFormButton.style.display = 'none';
+        toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
+        toggleManageFormButton.style.display = 'none'; // Ocultar el botón MANAGE.png al cerrar el formulario de enlaces
     }
 });
 
