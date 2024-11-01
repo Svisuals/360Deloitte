@@ -101,7 +101,7 @@ function updateMenuEventListeners() {
 // Llamar a la función inicialmente
 updateMenuEventListeners();
 
-// Event listener para el botón 'DUP'
+// Event listener para el botón 'DUP.png'
 toggleButton.addEventListener('click', () => {
     if (window.getComputedStyle(iframe2).display === 'none') {
         iframe2.style.display = 'block';
@@ -110,8 +110,9 @@ toggleButton.addEventListener('click', () => {
         iframe2.style.width = '50%';
         pdfViewer.style.display = 'none';
         togglePdfButton.style.display = 'none';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de gestionar enlaces si está visible
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        // Ocultar cualquier formulario visible
+        addLinkFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none';
         document.getElementById('container').classList.remove('horizontal-split');
     } else {
         iframe2.style.display = 'none';
@@ -132,8 +133,9 @@ togglePdfButton.addEventListener('click', () => {
         iframe2.style.display = 'none';
         iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
         togglePdfButton.style.display = 'block';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de gestionar enlaces si está visible
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        // Ocultar cualquier formulario visible
+        addLinkFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none';
         document.getElementById('container').classList.add('horizontal-split');
     } else {
         pdfViewer.style.display = 'none';
@@ -144,46 +146,52 @@ togglePdfButton.addEventListener('click', () => {
     adjustLayout(); // Ajustar layout después de mostrar u ocultar el visor PDF
 });
 
-// Event listener para el botón que alterna el formulario de enlaces
+// Event listener para el botón que alterna el formulario de enlaces (FORM.png)
 toggleFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
+        // Mostrar los botones UPLOAD.png y MANAGE.png
+        toggleUploadFormButton.style.display = 'block';
+        toggleManageFormButton.style.display = 'block';
+        // Mostrar el formulario de gestión de enlaces por defecto
         addLinkFormContainer.style.display = 'block';
-        toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
-        toggleManageFormButton.style.display = 'block'; // Mostrar el botón MANAGE.png al abrir el formulario de enlaces
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        // Ocultar el formulario de subir PDF si está visible
+        uploadPdfFormContainer.style.display = 'none';
     } else {
+        // Ocultar los botones UPLOAD.png y MANAGE.png
+        toggleUploadFormButton.style.display = 'none';
+        toggleManageFormButton.style.display = 'none';
+        // Ocultar ambos formularios
         addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
-        toggleManageFormButton.style.display = 'none'; // Ocultar el botón MANAGE.png al cerrar el formulario de enlaces
+        uploadPdfFormContainer.style.display = 'none';
     }
 });
 
-// Event listener para el botón que alterna el formulario de gestionar enlaces
+// Event listener para el botón que alterna el formulario de subir PDF (MANAGE.png)
 toggleManageFormButton.addEventListener('click', () => {
-    if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
-        addLinkFormContainer.style.display = 'block';
-        toggleUploadFormButton.style.display = 'block'; // Mostrar el botón UPLOAD.png al abrir el formulario de enlaces
-        toggleManageFormButton.style.display = 'block'; // Mostrar el botón MANAGE.png al abrir el formulario de enlaces
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
-    } else {
+    if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
+        // Mostrar el formulario de subir PDF
+        uploadPdfFormContainer.style.display = 'block';
+        // Ocultar el formulario de gestión de enlaces si está visible
         addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
-        toggleManageFormButton.style.display = 'none'; // Ocultar el botón MANAGE.png al cerrar el formulario de enlaces
+    } else {
+        // Ocultar el formulario de subir PDF
+        uploadPdfFormContainer.style.display = 'none';
     }
 });
 
-// Obtener elementos relacionados con el nuevo formulario de subir PDF
+// Obtener elementos relacionados con el formulario de subir PDF
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
 const uploadPdfForm = document.getElementById('uploadPdfForm');
 const pdfFileInput = document.getElementById('pdfFile');
 const uploadMessage = document.getElementById('uploadMessage');
 const cancelUploadButton = document.getElementById('cancelUploadButton');
 
-// Event listener para alternar la visibilidad del formulario de subir PDF
+// Event listener para alternar la visibilidad del formulario de subir PDF (UPLOAD.png)
 toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
+        // Ocultar el formulario de gestión de enlaces si está visible
+        addLinkFormContainer.style.display = 'none';
     } else {
         uploadPdfFormContainer.style.display = 'none';
     }
@@ -240,9 +248,9 @@ function adjustLayout() {
         if (isPortrait) {
             // En orientación vertical, iframes dividen la altura
             iframe1.style.width = '100%';
-            iframe1.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '100%';
+            iframe1.style.height = (window.getComputedStyle(iframe2).display === 'block') ? '50%' : '100%';
             iframe2.style.width = '100%';
-            iframe2.style.height = window.getComputedStyle(iframe2).display === 'block' ? '50%' : '0';
+            iframe2.style.height = (window.getComputedStyle(iframe2).display === 'block') ? '50%' : '0';
         } else {
             // En orientación horizontal, mostrar u ocultar iframe2 según su estado actual
             if (window.getComputedStyle(iframe2).display === 'block') {
