@@ -109,7 +109,7 @@ iframe, embed {
 }
 
 #iframe1Menu {
-    left: 10px;
+    left: 240px; /* Ajusta según necesidad */
 }
 
 #iframe2Menu {
@@ -536,7 +536,6 @@ iframe, embed {
 
 /* Estilos para el formulario de subir PDFs */
 #uploadPdfFormContainer {
-    /* Mismos estilos que #addLinkFormContainer */
     position: fixed;
     top: 50%;
     left: 50%;
