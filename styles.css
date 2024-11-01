@@ -76,12 +76,12 @@ iframe, embed {
 /* Contenedor para los botones UPLOAD y MANAGE */
 #formButtonsContainer {
     position: fixed;
-    top: 50px; /* Posicionado debajo de FORM.png */
-    left: 100px; /* Mismo alineamiento que FORM.png */
+    top: 10px; /* Posicionado al inicio */
+    left: 140px; /* Ajustado para dejar espacio entre FORM.png y este contenedor */
     display: none; /* Oculto por defecto */
     flex-direction: column;
     gap: 10px; /* Espacio entre botones */
-    z-index: 999; /* Asegura que los botones estén debajo de otros elementos */
+    z-index: 999; /* Asegura que los botones estén debajo de otros elementos si es necesario */
 }
 
 /* Botón para alternar el formulario de subir PDF */
