@@ -56,7 +56,7 @@ iframe, embed {
     border: none;
     cursor: pointer;
     z-index: 1000;
-    display: none; /* Oculto por defecto */
+    display: block;
 }
 
 #toggleFormButton {
@@ -109,7 +109,7 @@ iframe, embed {
 }
 
 #iframe1Menu {
-    left: 240px; /* Ajusta según necesidad */
+    left: 240px; /* Ajustado para no superponerse con los botones */
 }
 
 #iframe2Menu {
@@ -190,8 +190,7 @@ iframe, embed {
         flex-direction: column;
     }
 
-    #iframe1,
-    #iframe2 {
+    iframe, embed {
         width: 100%;
     }
 
@@ -234,6 +233,13 @@ iframe, embed {
 
     #toggleButton {
         left: auto;
+    }
+
+    /* Ajustar menús desplegables para no superponerse con los botones */
+    #iframe1Menu {
+        left: auto;
+        right: 10px;
+        top: 50px; /* Ajuste para evitar superposición */
     }
 }
 
@@ -281,7 +287,7 @@ iframe, embed {
     #toggleButton {
         top: 10px;
         right: 10px;
-        left: calc(49%);
+        left: auto;
     }
 }
 
@@ -536,6 +542,7 @@ iframe, embed {
 
 /* Estilos para el formulario de subir PDFs */
 #uploadPdfFormContainer {
+    /* Mismos estilos que #addLinkFormContainer */
     position: fixed;
     top: 50%;
     left: 50%;
