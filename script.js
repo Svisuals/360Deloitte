@@ -305,6 +305,8 @@ window.addEventListener('click', function(event) {
     }
 });
 
+// Obtener elementos del formulario de agregar enlaces
+
 // Manejar el envío del formulario para agregar o actualizar enlaces
 addLinkForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Evitar el comportamiento por defecto del formulario
@@ -460,13 +462,8 @@ function saveLinks() {
         text: link.textContent,
         href: link.href
     }));
-    const iframe2Links = Array.from(iframe2MenuContent.querySelectorAll('a')).map(link => ({
-        text: link.textContent,
-        href: link.href
-    }));
     const linksData = {
-        iframe1Links,
-        iframe2Links
+        iframe1Links
     };
 
     localStorage.setItem('menuLinks', JSON.stringify(linksData));
