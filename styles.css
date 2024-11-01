@@ -76,13 +76,12 @@ iframe, embed {
 /* Contenedor para los botones UPLOAD y MANAGE */
 #formButtonsContainer {
     position: fixed;
-    top: 50%; /* Centrado verticalmente */
-    left: 20px; /* Espacio desde el borde izquierdo aumentado a 20px */
-    transform: translateY(-50%); /* Centrado exacto */
+    top: 50px; /* Posicionado debajo de FORM.png */
+    left: 100px; /* Mismo alineamiento que FORM.png */
     display: none; /* Oculto por defecto */
     flex-direction: column;
     gap: 10px; /* Espacio entre botones */
-    z-index: 999; /* Asegura que los botones estén por encima de otros elementos si es necesario */
+    z-index: 999; /* Asegura que los botones estén debajo de otros elementos */
 }
 
 /* Botón para alternar el formulario de subir PDF */
@@ -247,7 +246,6 @@ iframe, embed {
         left: auto;
         right: 10px;
         top: 50px;
-        transform: translateY(0); /* Eliminar el centrado vertical */
     }
 }
 
@@ -299,9 +297,9 @@ iframe, embed {
     }
 
     #formButtonsContainer {
-        top: 50%;
-        left: 20px;
-        transform: translateY(-50%);
+        top: 50px;
+        right: 10px;
+        left: auto;
     }
 }
 
