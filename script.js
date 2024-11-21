@@ -707,28 +707,33 @@ function deleteUser(li) {
 
 // Función para guardar los usuarios en localStorage
 function saveUsers() {
-    const users = Array.from(userList.querySelectorAll('li')).map(li => {
-        const [usernameWithEmail, role] = li.querySelector('span').textContent.split(' - ');
+    const users = [];
+
+    const listItems = userList.querySelectorAll('li');
+
+    listItems.forEach((li, index) => {
+        const span = li.querySelector('span');
+        const [usernameWithEmail, role] = span.textContent.split(' - ');
         const usernameMatch = usernameWithEmail.match(/^(.+?) \((.+?)\)$/);
         const username = usernameMatch[1];
         const email = usernameMatch[2];
 
-        return {
+        // Obtener la contraseña del usuario desde el almacenamiento o desde el formulario
+        const storedUsers = JSON.parse(localStorage.getItem('userList')) || [];
+        let password = '';
+
+        if (storedUsers[index]) {
+            password = storedUsers[index].password;
+        } else {
+            password = userPasswordInput.value;
+        }
+
+        users.push({
             email,
             username,
-            password: '', // No almacenamos la contraseña aquí para evitar problemas
+            password,
             role
-        };
-    });
-
-    // Actualizar contraseñas y roles
-    const storedUsers = JSON.parse(localStorage.getItem('userList')) || [];
-
-    users.forEach((user) => {
-        const storedUser = storedUsers.find(u => u.username === user.username);
-        if (storedUser) {
-            user.password = storedUser.password;
-        }
+        });
     });
 
     localStorage.setItem('userList', JSON.stringify(users));
@@ -741,7 +746,7 @@ function loadUsers() {
     // Limpiar lista existente
     userList.innerHTML = '';
 
-    usersData.forEach(userData => {
+    usersData.forEach((userData, index) => {
         // Agregar a la lista
         const li = document.createElement('li');
         const span = document.createElement('span');
