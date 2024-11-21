@@ -26,7 +26,7 @@ authForm.addEventListener('submit', (event) => {
         // Mostrar u ocultar los botones según el usuario
         if (loggedInUser === 'deloitte') {
             toggleFormButton.style.display = 'block';
-            // El botón UPLOAD.png y MANAGE.png están ocultos por defecto y solo se mostrarán al interactuar con FORM.png
+            // Los botones UPLOAD.png y MANAGE.png están ocultos por defecto y se mostrarán al interactuar con FORM.png
         } else {
             toggleFormButton.style.display = 'none';
             toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto
@@ -152,9 +152,10 @@ toggleFormButton.addEventListener('click', () => {
         toggleManageFormButton.style.display = 'block'; // Mostrar el botón MANAGE.png al abrir el formulario de enlaces
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
     } else {
-        addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none'; // Ocultar el botón UPLOAD.png al cerrar el formulario de enlaces
-        toggleManageFormButton.style.display = 'none'; // Ocultar el botón MANAGE.png al cerrar el formulario de enlaces
+        // Mantener el formulario visible según tus indicaciones
+        addLinkFormContainer.style.display = 'block';
+        toggleUploadFormButton.style.display = 'block';
+        toggleManageFormButton.style.display = 'block';
     }
 });
 
@@ -166,9 +167,8 @@ toggleManageFormButton.addEventListener('click', () => {
         toggleManageFormButton.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
     } else {
-        addLinkFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none';
-        toggleManageFormButton.style.display = 'none';
+        // Mantener el formulario visible según tus indicaciones
+        addLinkFormContainer.style.display = 'block';
     }
 });
 
@@ -185,7 +185,8 @@ toggleUploadFormButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
     } else {
-        uploadPdfFormContainer.style.display = 'none';
+        // Mantener el formulario visible según tus indicaciones
+        uploadPdfFormContainer.style.display = 'block';
     }
 });
 
