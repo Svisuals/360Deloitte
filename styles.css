@@ -6,107 +6,157 @@ body, html {
     font-family: Arial, sans-serif;
 }
 
+/* Contenedor principal */
 #container {
     position: relative;
-    width: 100%;
     height: 100%;
 }
 
-iframe {
-    border: none;
-}
-
-#iframe1, #iframe2, #pdfViewer {
-    position: absolute;
+/* Menús de los iframes */
+#iframe1Menu, #iframe2Menu {
+    position: fixed;
     top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
+    background-color: #0c7a20;
+    color: white;
+    padding: 10px;
+    z-index: 1000;
 }
 
+#iframe1Menu {
+    left: 0;
+}
+
+#iframe2Menu {
+    right: 0;
+}
+
+#iframe1MenuButton, #iframe2MenuButton {
+    background-color: #0c7a20;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    top: 40px;
+    left: 0;
+    border: 1px solid #ccc;
+    z-index: 1001;
+}
+
+.menu-content a {
+    color: black;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+}
+
+.menu-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.show {
+    display: block;
+}
+
+/* Botones principales */
 #mainButtons {
     position: fixed;
     top: 10px;
-    left: 10px;
-    z-index: 2000;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
 }
 
 #mainButtons button {
+    margin: 0 5px;
+    padding: 10px;
     background-color: #0c7a20;
     color: white;
     border: none;
-    padding: 10px;
     cursor: pointer;
-    border-radius: 6px;
-    margin-right: 5px;
+    font-size: 1em;
 }
 
-#toggleFormButton {
-    background-color: #2c3e50;
+#mainButtons button:hover {
+    background-color: #095c16;
 }
 
-#toggleIssueFormButton {
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-left: 5px;
-}
-
-#toggleIssueFormButton img {
-    vertical-align: middle;
-}
-
-#toggleManageFormButton,
-#toggleUploadFormButton,
-#toggleUserFormButton {
+/* Botones de formularios */
+#formButtonsContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 60px;
     position: fixed;
     top: 50px;
-    left: 10px;
-    z-index: 2000;
-    background-color: #16a085;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1002;
+}
+
+#formButtonsContainer button {
+    margin: 0 5px;
+    padding: 10px;
+    background-color: #0c7a20;
     color: white;
     border: none;
-    padding: 8px;
     cursor: pointer;
-    border-radius: 6px;
-    margin-top: 5px;
+    font-size: 1em;
 }
 
+#formButtonsContainer button:hover {
+    background-color: #095c16;
+}
+
+/* Formularios */
 #addLinkFormContainer,
 #uploadPdfFormContainer,
-#userFormContainer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 30%;
-    height: 100%;
+#userFormContainer,
+#issueFormContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, 0.95);
     padding: 20px;
-    overflow-y: auto;
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
     z-index: 2001;
+    max-width: 500px;
+    width: 90%;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
-.formContainer h3 {
+#addLinkFormContainer h3,
+#uploadPdfFormContainer h3,
+#userFormContainer h3,
+#issueFormContainer h3 {
     margin-top: 0;
     text-align: center;
     color: #0c7a20;
 }
 
-.formContainer label {
+form label {
     display: block;
     margin: 10px 0 5px;
     font-size: 0.9em;
     color: #333;
 }
 
-.formContainer input[type="text"],
-.formContainer input[type="password"],
-.formContainer input[type="date"],
-.formContainer textarea,
-.formContainer select {
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form input[type="file"],
+form input[type="date"],
+form select,
+form textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -114,13 +164,12 @@ iframe {
     font-size: 0.9em;
 }
 
-.formContainer textarea {
-    height: 100px;
+form textarea {
     resize: vertical;
 }
 
-.formContainer button {
-    width: 48%;
+form button {
+    width: 100%;
     padding: 10px;
     background-color: #0c7a20;
     color: white;
@@ -131,33 +180,111 @@ iframe {
     margin-top: 10px;
 }
 
-.formContainer button:hover {
-    opacity: 0.8;
+form button:hover {
+    background-color: #095c16;
 }
 
+#addLinkMessage,
+#uploadMessage,
+#userMessage,
+#issueMessage {
+    margin-top: 10px;
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/* Listas */
+#linkList,
+#userList,
+#issueList {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+#linkList li,
+#userList li,
+#issueList li {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+#linkList li button,
+#userList li button,
+#issueList li .issue-actions button {
+    margin-left: 5px;
+}
+
+#issueListContainer h4 {
+    margin-bottom: 10px;
+    color: #0c7a20;
+}
+
+#issueList li .issue-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#issueList li .issue-details {
+    margin-bottom: 10px;
+}
+
+#issueList li .issue-description {
+    font-size: 0.9em;
+    color: #555;
+}
+
+#issueList li img {
+    max-width: 100%;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+/* Iframes y visor PDF */
+#iframe1,
+#iframe2,
+#pdfViewer {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+#iframe2 {
+    display: none;
+}
+
+#pdfViewer {
+    display: none;
+}
+
+/* Pantalla de inicio de sesión */
 #loginOverlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(12, 122, 32, 0.8);
+    right: 0;
+    bottom: 0;
+    background-color: rgba(12, 122, 32, 0.9);
+    z-index: 3000;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 3000;
 }
 
 #authForm {
     background-color: white;
     padding: 20px;
-    border-radius: 6px;
+    border-radius: 8px;
     width: 300px;
 }
 
 #authForm h2 {
-    margin-top: 0;
     text-align: center;
+    margin-top: 0;
     color: #0c7a20;
 }
 
@@ -168,6 +295,7 @@ iframe {
     margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    font-size: 0.9em;
 }
 
 #authForm button {
@@ -178,204 +306,17 @@ iframe {
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    margin-top: 15px;
-}
-
-#iframe1Menu,
-#iframe2Menu {
-    position: fixed;
-    top: 10px;
-    z-index: 2000;
-}
-
-#iframe1Menu {
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-#iframe2Menu {
-    right: 50%;
-    transform: translateX(50%);
-}
-
-#iframe1MenuButton,
-#iframe2MenuButton {
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 6px;
-}
-
-.iframeMenuContent {
-    display: none;
-    position: absolute;
-    top: 40px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    padding: 10px;
-    z-index: 2000;
-}
-
-.iframeMenuContent.show {
-    display: block;
-}
-
-.iframeMenuContent a {
-    display: block;
-    color: #0c7a20;
-    text-decoration: none;
-    margin-bottom: 5px;
-}
-
-.iframeMenuContent a:hover {
-    text-decoration: underline;
-}
-
-/* Estilos para el formulario de incidencias */
-#issueFormContainer {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.2);
-    overflow-y: auto;
-    z-index: 2001;
-}
-
-#issueFormContainer h3 {
-    margin-top: 0;
-    text-align: center;
-    color: #0c7a20;
-}
-
-#issueForm label {
-    display: block;
-    margin: 10px 0 5px;
-    font-size: 0.9em;
-    color: #333;
-}
-
-#issueForm input[type="text"],
-#issueForm input[type="date"],
-#issueForm textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 0.9em;
-}
-
-#issueForm textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-#issueForm button {
-    width: 48%;
-    padding: 10px;
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
     font-size: 1em;
-    margin-top: 10px;
-}
-
-#issueForm button#cancelIssueButton {
-    background-color: #e74c3c;
-    margin-left: 4%;
-}
-
-#issueForm button:hover {
-    opacity: 0.8;
-}
-
-#issueListContainer {
     margin-top: 20px;
 }
 
-#issueListContainer h4 {
-    margin-bottom: 10px;
-    color: #0c7a20;
+#authForm button:hover {
+    background-color: #095c16;
 }
 
-#issueList {
-    list-style-type: none;
-    padding: 0;
-}
-
-#issueList li {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    position: relative;
-}
-
-#issueList li .issue-actions {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-#issueList li .issue-actions button {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 10px;
-    cursor: pointer;
-    margin-left: 5px;
-}
-
-#issueList li .issue-actions button.delete-button {
-    background-color: #e74c3c;
-}
-
-#issueList li .issue-actions button:hover {
-    opacity: 0.8;
-}
-
-/* Estilos para el área de captura de pantalla */
-#dropArea {
-    border: 2px dashed #ccc;
-    border-radius: 6px;
-    padding: 20px;
+#errorMessage {
+    color: red;
     text-align: center;
-    cursor: pointer;
-    color: #666;
-    position: relative;
-}
-
-#dropArea p {
-    margin: 0;
-}
-
-#dropArea.hover {
-    border-color: #0c7a20;
-    color: #0c7a20;
-}
-
-#dropArea input[type="file"] {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-}
-
-#screenshotPreview {
-    display: block;
     margin-top: 10px;
-    max-width: 100%;
-    height: auto;
+    font-size: 0.9em;
 }
