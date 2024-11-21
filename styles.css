@@ -56,7 +56,7 @@ iframe, embed {
     left: 55px;
     width: 32px;
     height: 32px;
-    background: url('PDF.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background: url('PDF.png') no-repeat center center;
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -71,7 +71,7 @@ iframe, embed {
     left: 100px;
     width: 32px;
     height: 32px;
-    background: url('FORM.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background: url('FORM.png') no-repeat center center;
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -86,7 +86,7 @@ iframe, embed {
     left: 145px;
     width: 32px;
     height: 32px;
-    background: url('UPLOAD.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background: url('UPLOAD.png') no-repeat center center;
     background-size: cover;
     border: none;
     cursor: pointer;
@@ -98,10 +98,10 @@ iframe, embed {
 #toggleManageFormButton {
     position: fixed;
     top: 10px;
-    left: 190px; /* Posicionado a la derecha de UPLOAD.png */
+    left: 190px;
     width: 32px;
     height: 32px;
-    background: url('MANAGE.png') no-repeat center center; /* Debes proporcionar esta imagen */
+    background: url('MANAGE.png') no-repeat center center;
     background-size: cover;
     border: none;
     cursor: pointer;
