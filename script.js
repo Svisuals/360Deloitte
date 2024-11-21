@@ -8,6 +8,9 @@ const errorMessage = document.getElementById('errorMessage');
 // Variable para almacenar el usuario autenticado
 let loggedInUser = null;
 
+// Variables para recordar el estado previo
+let previouslyVisibleForm = null;
+
 // Manejar el envío del formulario de autenticación
 authForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
@@ -111,7 +114,8 @@ toggleButton.addEventListener('click', () => {
         iframe2.style.width = '50%';
         pdfViewer.style.display = 'none';
         togglePdfButton.style.display = 'none';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formularios si están visibles
+        // Ocultar formularios si están visibles
+        addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
@@ -135,7 +139,8 @@ togglePdfButton.addEventListener('click', () => {
         iframe2.style.display = 'none';
         iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
         togglePdfButton.style.display = 'block';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formularios si están visibles
+        // Ocultar formularios si están visibles
+        addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
@@ -155,14 +160,25 @@ toggleFormButton.addEventListener('click', () => {
         // Mostrar los botones
         toggleUploadFormButton.style.display = 'block';
         toggleManageFormButton.style.display = 'block';
-        // Ocultar formularios si están visibles
-        addLinkFormContainer.style.display = 'none';
-        uploadPdfFormContainer.style.display = 'none';
+        // Restaurar el formulario que estaba visible anteriormente
+        if (previouslyVisibleForm === 'addLink') {
+            addLinkFormContainer.style.display = 'block';
+        } else if (previouslyVisibleForm === 'uploadPdf') {
+            uploadPdfFormContainer.style.display = 'block';
+        }
     } else {
         // Ocultar los botones
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
-        // Ocultar formularios si están visibles
+        // Recordar qué formulario estaba visible antes de ocultarlos
+        if (addLinkFormContainer.style.display === 'block') {
+            previouslyVisibleForm = 'addLink';
+        } else if (uploadPdfFormContainer.style.display === 'block') {
+            previouslyVisibleForm = 'uploadPdf';
+        } else {
+            previouslyVisibleForm = null;
+        }
+        // Ocultar formularios
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
     }
@@ -173,6 +189,7 @@ toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        previouslyVisibleForm = 'addLink';
     } else {
         // Mantener el formulario visible según tus indicaciones
         addLinkFormContainer.style.display = 'block';
@@ -184,6 +201,7 @@ toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
+        previouslyVisibleForm = 'uploadPdf';
     } else {
         // Mantener el formulario visible según tus indicaciones
         uploadPdfFormContainer.style.display = 'block';
@@ -201,6 +219,7 @@ cancelUploadButton.addEventListener('click', () => {
     uploadPdfFormContainer.style.display = 'none';
     pdfFileInput.value = '';
     uploadMessage.textContent = '';
+    previouslyVisibleForm = null;
 });
 
 // Manejar el envío del formulario de subir PDF
@@ -231,6 +250,7 @@ uploadPdfForm.addEventListener('submit', (event) => {
     setTimeout(() => {
         uploadPdfFormContainer.style.display = 'none';
         uploadMessage.textContent = '';
+        previouslyVisibleForm = null;
     }, 2000);
 });
 
