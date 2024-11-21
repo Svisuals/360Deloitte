@@ -11,6 +11,13 @@ let loggedInUser = null;
 // Variables para recordar el estado previo
 let previouslyVisibleForm = null;
 
+// Función para cargar los usuarios desde localStorage
+function loadUsers() {
+    const usersData = JSON.parse(localStorage.getItem('userList')) || [];
+
+    return usersData;
+}
+
 // Manejar el envío del formulario de autenticación
 authForm.addEventListener('submit', (event) => {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
@@ -18,23 +25,38 @@ authForm.addEventListener('submit', (event) => {
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
 
-    // Verificar las credenciales
-    if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
+    // Obtener usuarios almacenados
+    const users = loadUsers();
+
+    // Buscar el usuario en la lista
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (user) {
         // Establecer el usuario autenticado
+        loggedInUser = user.username;
+
+        // Ocultar la pantalla de inicio de sesión
+        loginOverlay.style.display = 'none';
+
+        // Mostrar u ocultar los botones según el rol del usuario
+        if (user.role === 'administrador') {
+            toggleFormButton.style.display = 'block';
+            // Los botones están ocultos por defecto
+        } else {
+            toggleFormButton.style.display = 'none';
+            toggleUploadFormButton.style.display = 'none';
+            toggleManageFormButton.style.display = 'none';
+            toggleUserFormButton.style.display = 'none';
+        }
+    } else if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
+        // Usuarios predefinidos
         loggedInUser = username;
 
         // Ocultar la pantalla de inicio de sesión
         loginOverlay.style.display = 'none';
 
-        // Mostrar u ocultar los botones según el usuario
-        if (loggedInUser === 'deloitte') {
-            toggleFormButton.style.display = 'block';
-            // Los botones UPLOAD.png y MANAGE.png están ocultos por defecto
-        } else {
-            toggleFormButton.style.display = 'none';
-            toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto
-            toggleManageFormButton.style.display = 'none'; // Asegurar que esté oculto
-        }
+        // Mostrar botones de administrador
+        toggleFormButton.style.display = 'block';
     } else {
         // Mostrar mensaje de error
         errorMessage.textContent = 'Usuário ou senha incorretos.';
@@ -50,7 +72,8 @@ const pdfViewer = document.getElementById('pdfViewer');
 const togglePdfButton = document.getElementById('togglePdfButton');
 const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
-const toggleManageFormButton = document.getElementById('toggleManageFormButton'); // Nuevo Botón
+const toggleManageFormButton = document.getElementById('toggleManageFormButton');
+const toggleUserFormButton = document.getElementById('toggleUserFormButton'); // Nuevo botón
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -59,6 +82,7 @@ const iframe1MenuContent = document.getElementById('iframe1MenuContent');
 const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
+const userFormContainer = document.getElementById('userFormContainer'); // Nuevo formulario
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -68,10 +92,11 @@ pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
 // Ocultar menú del iframe2 inicialmente
 iframe2Menu.style.display = 'none';
 
-// Ocultar los botones del formulario por defecto (solo 'deloitte' los verá después de iniciar sesión)
+// Ocultar los botones del formulario por defecto
 toggleFormButton.style.display = 'none';
-toggleUploadFormButton.style.display = 'none'; // Asegurar que esté oculto por defecto
-toggleManageFormButton.style.display = 'none'; // Asegurar que esté oculto por defecto
+toggleUserFormButton.style.display = 'none'; // Nuevo botón
+toggleUploadFormButton.style.display = 'none';
+toggleManageFormButton.style.display = 'none';
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -146,50 +171,39 @@ togglePdfButton.addEventListener('click', () => {
 
 // Event listener para el botón que alterna los botones de formularios
 toggleFormButton.addEventListener('click', () => {
-    if (toggleUploadFormButton.style.display === 'none' && toggleManageFormButton.style.display === 'none') {
+    if (toggleUploadFormButton.style.display === 'none' && toggleManageFormButton.style.display === 'none' && toggleUserFormButton.style.display === 'none') {
         // Mostrar los botones
         toggleUploadFormButton.style.display = 'block';
         toggleManageFormButton.style.display = 'block';
+        toggleUserFormButton.style.display = 'block';
         // Mostrar el formulario de gestión de enlaces por defecto
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none';
-        // Establecer el formulario visible actual como 'addLink'
+        userFormContainer.style.display = 'none';
         previouslyVisibleForm = 'addLink';
     } else {
         // Ocultar los botones
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
+        toggleUserFormButton.style.display = 'none';
         // Ocultar formularios
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
-        // Restablecer el formulario visible actual
+        userFormContainer.style.display = 'none';
         previouslyVisibleForm = null;
     }
 });
 
-// Event listener para el botón que alterna el formulario de gestionar enlaces
-toggleManageFormButton.addEventListener('click', () => {
-    if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
-        addLinkFormContainer.style.display = 'block';
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
-        previouslyVisibleForm = 'addLink';
+// Event listener para el botón que alterna el formulario de gestionar usuarios
+toggleUserFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(userFormContainer).display === 'none') {
+        userFormContainer.style.display = 'block';
+        addLinkFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none';
+        previouslyVisibleForm = 'userForm';
     } else {
-        // Mantener el formulario visible
-        addLinkFormContainer.style.display = 'block';
-        previouslyVisibleForm = 'addLink';
-    }
-});
-
-// Event listener para el botón que alterna el formulario de subir PDF
-toggleUploadFormButton.addEventListener('click', () => {
-    if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
-        uploadPdfFormContainer.style.display = 'block';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
-        previouslyVisibleForm = 'uploadPdf';
-    } else {
-        // Mantener el formulario visible
-        uploadPdfFormContainer.style.display = 'block';
-        previouslyVisibleForm = 'uploadPdf';
+        userFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'userForm';
     }
 });
 
@@ -518,3 +532,201 @@ function loadLinks() {
 
 // Llamar a loadLinks() al cargar la página
 loadLinks();
+
+// Obtener elementos del formulario de gestionar usuarios
+const userForm = document.getElementById('userForm');
+const userEmailInput = document.getElementById('userEmail');
+const userUsernameInput = document.getElementById('userUsername');
+const userPasswordInput = document.getElementById('userPassword');
+const userRoleSelect = document.getElementById('userRole');
+const userMessage = document.getElementById('userMessage');
+const userList = document.getElementById('userList');
+const updateUserButton = document.getElementById('updateUserButton');
+const cancelUserEditButton = document.getElementById('cancelUserEditButton');
+
+let editUserIndex = null; // Variable para saber si estamos editando un usuario
+
+// Manejar el envío del formulario de usuarios
+userForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const userEmail = userEmailInput.value.trim();
+    const userUsername = userUsernameInput.value.trim();
+    const userPassword = userPasswordInput.value.trim();
+    const userRole = userRoleSelect.value;
+
+    if (userEmail === '' || userUsername === '' || userPassword === '' || userRole === '') {
+        userMessage.textContent = 'Por favor, completa todos los campos.';
+        userMessage.style.color = 'red';
+        return;
+    }
+
+    if (editUserIndex !== null) {
+        // Actualizar el usuario existente
+        updateExistingUser(userEmail, userUsername, userPassword, userRole);
+    } else {
+        // Agregar un nuevo usuario
+        addNewUser(userEmail, userUsername, userPassword, userRole);
+    }
+
+    // Limpiar los campos del formulario
+    userEmailInput.value = '';
+    userUsernameInput.value = '';
+    userPasswordInput.value = '';
+    userRoleSelect.value = 'miembro';
+    editUserIndex = null;
+    updateUserButton.style.display = 'none';
+    cancelUserEditButton.style.display = 'none';
+    userForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar los usuarios en localStorage
+    saveUsers();
+});
+
+// Función para agregar un nuevo usuario
+function addNewUser(userEmail, userUsername, userPassword, userRole) {
+    // Crear elementos para la lista
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = `${userUsername} (${userEmail}) - ${userRole}`;
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.classList.add('edit-user-button');
+    editButton.addEventListener('click', () => editUser(li, userEmail, userUsername, userPassword, userRole));
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.addEventListener('click', () => deleteUser(li));
+
+    li.appendChild(span);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
+
+    userList.appendChild(li);
+
+    userMessage.textContent = 'Usuario agregado exitosamente.';
+    userMessage.style.color = 'green';
+
+    // Guardar el usuario en localStorage
+    saveUsers();
+}
+
+// Función para editar un usuario
+function editUser(li, userEmail, userUsername, userPassword, userRole) {
+    const index = Array.from(userList.children).indexOf(li);
+    editUserIndex = index;
+
+    userEmailInput.value = userEmail;
+    userUsernameInput.value = userUsername;
+    userPasswordInput.value = userPassword;
+    userRoleSelect.value = userRole;
+
+    userForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateUserButton.style.display = 'block';
+    cancelUserEditButton.style.display = 'block';
+}
+
+// Función para actualizar un usuario existente
+function updateExistingUser(userEmail, userUsername, userPassword, userRole) {
+    const listItems = userList.querySelectorAll('li');
+    const span = listItems[editUserIndex].querySelector('span');
+    span.textContent = `${userUsername} (${userEmail}) - ${userRole}`;
+
+    // Actualizar en el almacenamiento
+    saveUsers();
+
+    userMessage.textContent = 'Usuario actualizado exitosamente.';
+    userMessage.style.color = 'green';
+}
+
+// Event listener para el botón de actualizar usuario
+updateUserButton.addEventListener('click', () => {
+    userForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición de usuario
+cancelUserEditButton.addEventListener('click', () => {
+    userEmailInput.value = '';
+    userUsernameInput.value = '';
+    userPasswordInput.value = '';
+    userRoleSelect.value = 'miembro';
+    editUserIndex = null;
+    updateUserButton.style.display = 'none';
+    cancelUserEditButton.style.display = 'none';
+    userForm.querySelector('button[type="submit"]').style.display = 'block';
+    userMessage.textContent = '';
+});
+
+// Función para eliminar un usuario
+function deleteUser(li) {
+    const index = Array.from(userList.children).indexOf(li);
+    userList.removeChild(li);
+
+    // Eliminar del almacenamiento
+    saveUsers();
+}
+
+// Función para guardar los usuarios en localStorage
+function saveUsers() {
+    const users = Array.from(userList.querySelectorAll('li')).map(li => {
+        const [usernameWithEmail, role] = li.querySelector('span').textContent.split(' - ');
+        const usernameMatch = usernameWithEmail.match(/^(.+?) \((.+?)\)$/);
+        const username = usernameMatch[1];
+        const email = usernameMatch[2];
+
+        return {
+            email,
+            username,
+            password: '', // No almacenamos la contraseña aquí para evitar problemas
+            role
+        };
+    });
+
+    // Actualizar contraseñas y roles
+    const storedUsers = JSON.parse(localStorage.getItem('userList')) || [];
+
+    users.forEach((user) => {
+        const storedUser = storedUsers.find(u => u.username === user.username);
+        if (storedUser) {
+            user.password = storedUser.password;
+        }
+    });
+
+    localStorage.setItem('userList', JSON.stringify(users));
+}
+
+// Función para cargar los usuarios desde localStorage
+function loadUsers() {
+    const usersData = JSON.parse(localStorage.getItem('userList')) || [];
+
+    // Limpiar lista existente
+    userList.innerHTML = '';
+
+    usersData.forEach(userData => {
+        // Agregar a la lista
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = `${userData.username} (${userData.email}) - ${userData.role}`;
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.classList.add('edit-user-button');
+        editButton.addEventListener('click', () => editUser(li, userData.email, userData.username, userData.password, userData.role));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.addEventListener('click', () => deleteUser(li));
+
+        li.appendChild(span);
+        li.appendChild(editButton);
+        li.appendChild(deleteButton);
+
+        userList.appendChild(li);
+    });
+
+    return usersData;
+}
+
+// Llamar a loadUsers() al cargar la página
+loadUsers();
