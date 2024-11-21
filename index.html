@@ -2,162 +2,139 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Aplicación con Formularios</title>
+    <title>Aplicación de Incidencias</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Contenedor principal -->
     <div id="container">
-        <!-- Menú y botones -->
-        <button id="iframe1MenuButton">Menú 1</button>
-        <button id="iframe2MenuButton">Menú 2</button>
-        <button id="toggleButton">DUP</button>
-        <button id="togglePdfButton">PDF</button>
+        <!-- Botones principales -->
+        <div id="mainButtons">
+            <button id="toggleButton">DUP</button>
+            <button id="togglePdfButton">PDF</button>
+            <button id="toggleFormButton">Admin</button>
+            <!-- Nuevo botón con imagen PNG -->
+            <button id="toggleIssueFormButton">
+                <img src="ruta/a/tu/imagen.png" alt="Formulario de Incidencias" width="20" height="20">
+            </button>
+        </div>
 
-        <!-- Botón para alternar los botones de formularios -->
-        <button id="toggleFormButton">Formularios</button>
-
-        <!-- Botones de formularios -->
+        <!-- Formularios de administración -->
         <button id="toggleManageFormButton" style="display: none;">Gestionar Enlaces</button>
         <button id="toggleUploadFormButton" style="display: none;">Subir PDF</button>
         <button id="toggleUserFormButton" style="display: none;">Gestionar Usuarios</button>
 
-        <!-- Nuevo botón para el formulario personalizado -->
-        <button id="toggleCustomFormButton">Nuevo Formulario</button>
-
-        <!-- Iframes y visor PDF -->
-        <iframe id="iframe1" src="" frameborder="0"></iframe>
-        <iframe id="iframe2" src="" frameborder="0"></iframe>
-        <iframe id="pdfViewer" src="" frameborder="0"></iframe>
-
-        <!-- Menú del iframe1 -->
-        <div id="iframe1Menu" class="menu">
-            <div id="iframe1MenuContent"></div>
+        <!-- Menús y iframes -->
+        <div id="iframe1Menu" class="iframeMenu">
+            <button id="iframe1MenuButton">Menú</button>
+            <div id="iframe1MenuContent" class="iframeMenuContent">
+                <!-- Enlaces dinámicos -->
+            </div>
         </div>
 
-        <!-- Menú del iframe2 -->
-        <div id="iframe2Menu" class="menu">
-            <div id="iframe2MenuContent"></div>
+        <div id="iframe2Menu" class="iframeMenu">
+            <button id="iframe2MenuButton">Menú</button>
+            <div id="iframe2MenuContent" class="iframeMenuContent">
+                <!-- Enlaces dinámicos -->
+            </div>
         </div>
-    </div>
 
-    <!-- Contenedor del formulario de agregar enlaces -->
-    <div id="addLinkFormContainer" style="display: none;">
-        <form id="addLinkForm">
-            <h3>Gestionar Enlaces</h3>
-            <label for="linkText">Texto del Enlace:</label>
-            <input type="text" id="linkText" name="linkText" required>
-            <label for="linkURL">URL del Enlace:</label>
-            <input type="text" id="linkURL" name="linkURL" required>
-            <button type="submit">Agregar Enlace</button>
-            <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
-            <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
-            <p id="addLinkMessage"></p>
-        </form>
-        <ul id="linkList"></ul>
-    </div>
+        <iframe id="iframe1"></iframe>
+        <iframe id="iframe2"></iframe>
+        <iframe id="pdfViewer"></iframe>
 
-    <!-- Contenedor del formulario de subir PDF -->
-    <div id="uploadPdfFormContainer" style="display: none;">
-        <form id="uploadPdfForm">
-            <h3>Subir PDF</h3>
-            <label for="pdfFile">Seleccionar PDF:</label>
-            <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
-            <button type="submit">Cargar PDF</button>
-            <button type="button" id="cancelUploadButton">Cancelar</button>
-            <p id="uploadMessage"></p>
-        </form>
-    </div>
+        <!-- Formularios de gestión -->
+        <div id="addLinkFormContainer" style="display: none;">
+            <!-- Formulario para agregar enlaces -->
+            <!-- ... [Contenido del formulario de enlaces] ... -->
+        </div>
 
-    <!-- Contenedor del formulario de gestionar usuarios -->
-    <div id="userFormContainer" style="display: none;">
-        <form id="userForm">
-            <h3>Gestionar Usuarios</h3>
-            <label for="userEmail">Correo Electrónico:</label>
-            <input type="email" id="userEmail" name="userEmail" required>
-            <label for="userUsername">Nombre de Usuario:</label>
-            <input type="text" id="userUsername" name="userUsername" required>
-            <label for="userPassword">Contraseña:</label>
-            <input type="password" id="userPassword" name="userPassword" required>
-            <label for="userRole">Rol:</label>
-            <select id="userRole" name="userRole" required>
-                <option value="miembro">Miembro</option>
-                <option value="administrador">Administrador</option>
-            </select>
-            <button type="submit">Agregar Usuario</button>
-            <button type="button" id="updateUserButton" style="display: none;">Actualizar Usuario</button>
-            <button type="button" id="cancelUserEditButton" style="display: none;">Cancelar</button>
-            <p id="userMessage"></p>
-        </form>
-        <ul id="userList"></ul>
-    </div>
+        <div id="uploadPdfFormContainer" style="display: none;">
+            <!-- Formulario para subir PDF -->
+            <!-- ... [Contenido del formulario de subir PDF] ... -->
+        </div>
 
-    <!-- Contenedor del nuevo formulario personalizado -->
-    <div id="customFormContainer" style="display: none;">
-        <form id="customForm">
-            <h3>Formulario Personalizado</h3>
+        <div id="userFormContainer" style="display: none;">
+            <!-- Formulario para gestionar usuarios -->
+            <!-- ... [Contenido del formulario de usuarios] ... -->
+        </div>
 
-            <label for="titulo">Título:</label>
-            <input type="text" id="titulo" name="titulo" required>
+        <!-- Nuevo formulario de incidencias -->
+        <div id="issueFormContainer" style="display: none;">
+            <form id="issueForm">
+                <h3>Crear Incidencia</h3>
 
-            <label for="tipo">Tipo:</label>
-            <input type="text" id="tipo" name="tipo" required>
+                <label for="issueTitle">Título:</label>
+                <input type="text" id="issueTitle" name="issueTitle" required>
 
-            <label for="status">Status:</label>
-            <input type="text" id="status" name="status" required>
+                <label for="issueType">Tipo:</label>
+                <input type="text" id="issueType" name="issueType" required>
 
-            <label for="prioridad">Prioridad:</label>
-            <input type="text" id="prioridad" name="prioridad" required>
+                <label for="issueStatus">Estado:</label>
+                <input type="text" id="issueStatus" name="issueStatus" required>
 
-            <label for="creador">Creador:</label>
-            <input type="text" id="creador" name="creador" required>
+                <label for="issuePriority">Prioridad:</label>
+                <input type="text" id="issuePriority" name="issuePriority" required>
 
-            <label for="responsable">Responsable:</label>
-            <input type="text" id="responsable" name="responsable" required>
+                <label for="issueCreator">Creador:</label>
+                <input type="text" id="issueCreator" name="issueCreator" required>
 
-            <label for="fechaCreacion">Fecha de Creación:</label>
-            <input type="date" id="fechaCreacion" name="fechaCreacion" required>
+                <label for="issueResponsible">Responsable:</label>
+                <input type="text" id="issueResponsible" name="issueResponsible" required>
 
-            <label for="fechaVencimiento">Fecha de Vencimiento:</label>
-            <input type="date" id="fechaVencimiento" name="fechaVencimiento" required>
+                <label for="issueCreationDate">Fecha de Creación:</label>
+                <input type="date" id="issueCreationDate" name="issueCreationDate" required>
 
-            <label for="disciplinas">Disciplinas:</label>
-            <input type="text" id="disciplinas" name="disciplinas" required>
+                <label for="issueDueDate">Fecha de Vencimiento:</label>
+                <input type="date" id="issueDueDate" name="issueDueDate" required>
 
-            <label for="causas">Causas:</label>
-            <input type="text" id="causas" name="causas" required>
+                <label for="issueDisciplines">Disciplinas:</label>
+                <input type="text" id="issueDisciplines" name="issueDisciplines" required>
 
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+                <label for="issueCauses">Causas:</label>
+                <input type="text" id="issueCauses" name="issueCauses" required>
 
-            <label for="capturaPantalla">Captura de Pantalla:</label>
-            <input type="file" id="capturaPantalla" name="capturaPantalla" accept="image/*">
+                <label for="issueDescription">Descripción:</label>
+                <textarea id="issueDescription" name="issueDescription" required></textarea>
 
-            <button type="submit">Guardar</button>
-            <button type="button" id="cancelCustomFormButton">Cancelar</button>
-        </form>
+                <!-- Campo de captura de pantalla modificado -->
+                <label for="issueScreenshot">Captura de Pantalla:</label>
+                <div id="screenshotContainer">
+                    <div id="dropArea">
+                        <p>Pegue la imagen aquí o haga clic para seleccionar un archivo</p>
+                        <input type="file" id="issueScreenshot" name="issueScreenshot" accept="image/*">
+                    </div>
+                    <!-- Vista previa de la imagen pegada -->
+                    <img id="screenshotPreview" src="" alt="Vista previa de la captura" style="display: none; max-width: 100%; height: auto; margin-top: 10px;">
+                </div>
 
-        <!-- Lista de entradas guardadas -->
-        <div id="customListContainer">
-            <h4>Entradas Guardadas</h4>
-            <ul id="customList"></ul>
+                <!-- Canvas oculto para procesar la imagen -->
+                <canvas id="screenshotCanvas" style="display: none;"></canvas>
+
+                <button type="submit">Guardar</button>
+                <button type="button" id="cancelIssueButton">Cancelar</button>
+            </form>
+
+            <!-- Lista de incidencias -->
+            <div id="issueListContainer">
+                <h4>Incidencias</h4>
+                <ul id="issueList"></ul>
+            </div>
         </div>
     </div>
 
-    <!-- Overlay de inicio de sesión -->
+    <!-- Pantalla de inicio de sesión -->
     <div id="loginOverlay">
         <form id="authForm">
-            <h3>Iniciar Sesión</h3>
-            <label for="username">Nombre de Usuario:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Ingresar</button>
-            <p id="errorMessage" style="color: red;"></p>
+            <h2>Iniciar Sesión</h2>
+            <input type="text" id="username" placeholder="Usuario" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Entrar</button>
+            <p id="errorMessage" style="display: none; color: red;"></p>
         </form>
     </div>
 
-    <!-- Archivo JavaScript -->
+    <!-- Scripts -->
     <script src="script.js"></script>
 </body>
 </html>
