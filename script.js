@@ -11,11 +11,39 @@ let loggedInUser = null;
 // Variables para recordar el estado previo
 let previouslyVisibleForm = null;
 
+// Variable global para almacenar los usuarios en memoria
+let usersData = [];
+
 // Función para cargar los usuarios desde localStorage
 function loadUsers() {
-    const usersData = JSON.parse(localStorage.getItem('userList')) || [];
+    usersData = JSON.parse(localStorage.getItem('userList')) || [];
+    renderUserList();
+}
 
-    return usersData;
+// Función para renderizar la lista de usuarios en la interfaz
+function renderUserList() {
+    userList.innerHTML = '';
+    usersData.forEach((userData, index) => {
+        // Agregar a la lista
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = `${userData.username} (${userData.email}) - ${userData.role}`;
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.classList.add('edit-user-button');
+        editButton.addEventListener('click', () => editUser(index));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.addEventListener('click', () => deleteUser(index));
+
+        li.appendChild(span);
+        li.appendChild(editButton);
+        li.appendChild(deleteButton);
+
+        userList.appendChild(li);
+    });
 }
 
 // Manejar el envío del formulario de autenticación
@@ -25,11 +53,8 @@ authForm.addEventListener('submit', (event) => {
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
 
-    // Obtener usuarios almacenados
-    const users = loadUsers();
-
     // Buscar el usuario en la lista
-    const user = users.find(u => u.username === username && u.password === password);
+    const user = usersData.find(u => u.username === username && u.password === password);
 
     if (user) {
         // Establecer el usuario autenticado
@@ -605,48 +630,36 @@ userForm.addEventListener('submit', (event) => {
     cancelUserEditButton.style.display = 'none';
     userForm.querySelector('button[type="submit"]').style.display = 'block';
 
-    // Guardar los usuarios en localStorage
-    saveUsers();
+    userMessage.textContent = '';
 });
 
 // Función para agregar un nuevo usuario
 function addNewUser(userEmail, userUsername, userPassword, userRole) {
-    // Crear elementos para la lista
-    const li = document.createElement('li');
-    const span = document.createElement('span');
-    span.textContent = `${userUsername} (${userEmail}) - ${userRole}`;
+    // Agregar el usuario a la lista en memoria
+    usersData.push({
+        email: userEmail,
+        username: userUsername,
+        password: userPassword,
+        role: userRole
+    });
 
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Editar';
-    editButton.classList.add('edit-user-button');
-    editButton.addEventListener('click', () => editUser(li, userEmail, userUsername, userPassword, userRole));
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Eliminar';
-    deleteButton.addEventListener('click', () => deleteUser(li));
-
-    li.appendChild(span);
-    li.appendChild(editButton);
-    li.appendChild(deleteButton);
-
-    userList.appendChild(li);
+    // Guardar y actualizar la interfaz
+    saveUsers();
+    renderUserList();
 
     userMessage.textContent = 'Usuario agregado exitosamente.';
     userMessage.style.color = 'green';
-
-    // Guardar el usuario en localStorage
-    saveUsers();
 }
 
 // Función para editar un usuario
-function editUser(li, userEmail, userUsername, userPassword, userRole) {
-    const index = Array.from(userList.children).indexOf(li);
+function editUser(index) {
     editUserIndex = index;
+    const userData = usersData[index];
 
-    userEmailInput.value = userEmail;
-    userUsernameInput.value = userUsername;
-    userPasswordInput.value = userPassword;
-    userRoleSelect.value = userRole;
+    userEmailInput.value = userData.email;
+    userUsernameInput.value = userData.username;
+    userPasswordInput.value = userData.password;
+    userRoleSelect.value = userData.role;
 
     userForm.querySelector('button[type="submit"]').style.display = 'none';
     updateUserButton.style.display = 'block';
@@ -655,19 +668,17 @@ function editUser(li, userEmail, userUsername, userPassword, userRole) {
 
 // Función para actualizar un usuario existente
 function updateExistingUser(userEmail, userUsername, userPassword, userRole) {
-    const listItems = userList.querySelectorAll('li');
-    const span = listItems[editUserIndex].querySelector('span');
-    span.textContent = `${userUsername} (${userEmail}) - ${userRole}`;
-
-    // Actualizar en el almacenamiento
-    const users = loadUsers();
-    users[editUserIndex] = {
+    // Actualizar en la lista en memoria
+    usersData[editUserIndex] = {
         email: userEmail,
         username: userUsername,
         password: userPassword,
         role: userRole
     };
-    localStorage.setItem('userList', JSON.stringify(users));
+
+    // Guardar y actualizar la interfaz
+    saveUsers();
+    renderUserList();
 
     userMessage.textContent = 'Usuario actualizado exitosamente.';
     userMessage.style.color = 'green';
@@ -692,14 +703,13 @@ cancelUserEditButton.addEventListener('click', () => {
 });
 
 // Función para eliminar un usuario
-function deleteUser(li) {
-    const index = Array.from(userList.children).indexOf(li);
-    userList.removeChild(li);
+function deleteUser(index) {
+    // Eliminar del almacenamiento en memoria
+    usersData.splice(index, 1);
 
-    // Eliminar del almacenamiento
-    const users = loadUsers();
-    users.splice(index, 1);
-    localStorage.setItem('userList', JSON.stringify(users));
+    // Guardar y actualizar la interfaz
+    saveUsers();
+    renderUserList();
 
     userMessage.textContent = 'Usuario eliminado exitosamente.';
     userMessage.style.color = 'green';
@@ -707,68 +717,7 @@ function deleteUser(li) {
 
 // Función para guardar los usuarios en localStorage
 function saveUsers() {
-    const users = [];
-
-    const listItems = userList.querySelectorAll('li');
-
-    listItems.forEach((li, index) => {
-        const span = li.querySelector('span');
-        const [usernameWithEmail, role] = span.textContent.split(' - ');
-        const usernameMatch = usernameWithEmail.match(/^(.+?) \((.+?)\)$/);
-        const username = usernameMatch[1];
-        const email = usernameMatch[2];
-
-        // Obtener la contraseña del usuario desde el almacenamiento o desde el formulario
-        const storedUsers = JSON.parse(localStorage.getItem('userList')) || [];
-        let password = '';
-
-        if (storedUsers[index]) {
-            password = storedUsers[index].password;
-        } else {
-            password = userPasswordInput.value;
-        }
-
-        users.push({
-            email,
-            username,
-            password,
-            role
-        });
-    });
-
-    localStorage.setItem('userList', JSON.stringify(users));
-}
-
-// Función para cargar los usuarios desde localStorage
-function loadUsers() {
-    const usersData = JSON.parse(localStorage.getItem('userList')) || [];
-
-    // Limpiar lista existente
-    userList.innerHTML = '';
-
-    usersData.forEach((userData, index) => {
-        // Agregar a la lista
-        const li = document.createElement('li');
-        const span = document.createElement('span');
-        span.textContent = `${userData.username} (${userData.email}) - ${userData.role}`;
-
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Editar';
-        editButton.classList.add('edit-user-button');
-        editButton.addEventListener('click', () => editUser(li, userData.email, userData.username, userData.password, userData.role));
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', () => deleteUser(li));
-
-        li.appendChild(span);
-        li.appendChild(editButton);
-        li.appendChild(deleteButton);
-
-        userList.appendChild(li);
-    });
-
-    return usersData;
+    localStorage.setItem('userList', JSON.stringify(usersData));
 }
 
 // Llamar a loadUsers() al cargar la página
