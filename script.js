@@ -114,12 +114,6 @@ toggleButton.addEventListener('click', () => {
         iframe2.style.width = '50%';
         pdfViewer.style.display = 'none';
         togglePdfButton.style.display = 'none';
-        // Ocultar formularios si están visibles
-        addLinkFormContainer.style.display = 'none';
-        uploadPdfFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none';
-        toggleManageFormButton.style.display = 'none';
-        previouslyVisibleForm = null;
         document.getElementById('container').classList.remove('horizontal-split');
     } else {
         iframe2.style.display = 'none';
@@ -140,12 +134,6 @@ togglePdfButton.addEventListener('click', () => {
         iframe2.style.display = 'none';
         iframe2Menu.style.display = 'none'; // Ocultar menú del iframe2
         togglePdfButton.style.display = 'block';
-        // Ocultar formularios si están visibles
-        addLinkFormContainer.style.display = 'none';
-        uploadPdfFormContainer.style.display = 'none';
-        toggleUploadFormButton.style.display = 'none';
-        toggleManageFormButton.style.display = 'none';
-        previouslyVisibleForm = null;
         document.getElementById('container').classList.add('horizontal-split');
     } else {
         pdfViewer.style.display = 'none';
