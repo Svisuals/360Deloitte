@@ -72,6 +72,7 @@ authForm.addEventListener('submit', (event) => {
             toggleUploadFormButton.style.display = 'none';
             toggleManageFormButton.style.display = 'none';
             toggleUserFormButton.style.display = 'none';
+            toggleIssueFormButton.style.display = 'none'; // Ocultar el nuevo botón para miembros
         }
     } else if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
         // Usuarios predefinidos
@@ -99,6 +100,7 @@ const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
 const toggleManageFormButton = document.getElementById('toggleManageFormButton');
 const toggleUserFormButton = document.getElementById('toggleUserFormButton');
+const toggleIssueFormButton = document.getElementById('toggleIssueFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -108,6 +110,7 @@ const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
 const userFormContainer = document.getElementById('userFormContainer');
+const issueFormContainer = document.getElementById('issueFormContainer');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -122,6 +125,7 @@ toggleFormButton.style.display = 'none';
 toggleUserFormButton.style.display = 'none'; // Nuevo botón
 toggleUploadFormButton.style.display = 'none';
 toggleManageFormButton.style.display = 'none';
+toggleIssueFormButton.style.display = 'none'; // Nuevo botón
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -196,25 +200,29 @@ togglePdfButton.addEventListener('click', () => {
 
 // Event listener para el botón que alterna los botones de formularios
 toggleFormButton.addEventListener('click', () => {
-    if (toggleUploadFormButton.style.display === 'none' && toggleManageFormButton.style.display === 'none' && toggleUserFormButton.style.display === 'none') {
+    if (toggleUploadFormButton.style.display === 'none' && toggleManageFormButton.style.display === 'none' && toggleUserFormButton.style.display === 'none' && toggleIssueFormButton.style.display === 'none') {
         // Mostrar los botones
         toggleUploadFormButton.style.display = 'block';
         toggleManageFormButton.style.display = 'block';
         toggleUserFormButton.style.display = 'block';
+        toggleIssueFormButton.style.display = 'block'; // Mostrar el nuevo botón
         // Mostrar el formulario de gestión de enlaces por defecto
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
+        issueFormContainer.style.display = 'none';
         previouslyVisibleForm = 'addLink';
     } else {
         // Ocultar los botones
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
         toggleUserFormButton.style.display = 'none';
+        toggleIssueFormButton.style.display = 'none'; // Ocultar el nuevo botón
         // Ocultar formularios
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
+        issueFormContainer.style.display = 'none';
         previouslyVisibleForm = null;
     }
 });
@@ -225,6 +233,7 @@ toggleManageFormButton.addEventListener('click', () => {
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
         userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
+        issueFormContainer.style.display = 'none'; // Ocultar formulario de incidencias si está visible
         previouslyVisibleForm = 'addLink';
     } else {
         addLinkFormContainer.style.display = 'block';
@@ -238,6 +247,7 @@ toggleUploadFormButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
         userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
+        issueFormContainer.style.display = 'none'; // Ocultar formulario de incidencias si está visible
         previouslyVisibleForm = 'uploadPdf';
     } else {
         uploadPdfFormContainer.style.display = 'block';
@@ -251,10 +261,25 @@ toggleUserFormButton.addEventListener('click', () => {
         userFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
+        issueFormContainer.style.display = 'none'; // Ocultar formulario de incidencias si está visible
         previouslyVisibleForm = 'userForm';
     } else {
         userFormContainer.style.display = 'block';
         previouslyVisibleForm = 'userForm';
+    }
+});
+
+// Event listener para el botón que alterna el formulario de gestionar incidencias
+toggleIssueFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(issueFormContainer).display === 'none') {
+        issueFormContainer.style.display = 'block';
+        addLinkFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none';
+        userFormContainer.style.display = 'none';
+        previouslyVisibleForm = 'issueForm';
+    } else {
+        issueFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'issueForm';
     }
 });
 
@@ -722,3 +747,200 @@ function saveUsers() {
 
 // Llamar a loadUsers() al cargar la página
 loadUsers();
+
+// Variables para gestionar incidencias
+let issuesData = [];
+
+// Función para cargar las incidencias desde localStorage
+function loadIssues() {
+    issuesData = JSON.parse(localStorage.getItem('issueList')) || [];
+    renderIssueList();
+}
+
+// Función para renderizar la lista de incidencias en la interfaz
+function renderIssueList() {
+    issueList.innerHTML = '';
+    issuesData.forEach((issueData, index) => {
+        const li = document.createElement('li');
+
+        const detailsDiv = document.createElement('div');
+        detailsDiv.classList.add('issue-details');
+        detailsDiv.innerHTML = `
+            <strong>${issueData.title}</strong><br>
+            Tipo: ${issueData.type}<br>
+            Estado: ${issueData.status}<br>
+            Prioridad: ${issueData.priority}<br>
+            Creador: ${issueData.creator}<br>
+            Responsable: ${issueData.responsible}<br>
+            Fecha de Creación: ${issueData.creationDate}<br>
+            Fecha de Vencimiento: ${issueData.dueDate}<br>
+            Disciplinas: ${issueData.discipline}<br>
+            Causas: ${issueData.cause}<br>
+            Descripción: ${issueData.description}
+        `;
+
+        if (issueData.screenshot) {
+            const img = document.createElement('img');
+            img.src = issueData.screenshot;
+            img.alt = 'Captura de pantalla';
+            img.style.maxWidth = '100%';
+            img.style.marginTop = '10px';
+            detailsDiv.appendChild(img);
+        }
+
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.style.display = 'flex';
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.classList.add('edit-issue-button');
+        editButton.addEventListener('click', () => editIssue(index));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.addEventListener('click', () => deleteIssue(index));
+
+        buttonsDiv.appendChild(editButton);
+        buttonsDiv.appendChild(deleteButton);
+
+        li.appendChild(detailsDiv);
+        li.appendChild(buttonsDiv);
+
+        issueList.appendChild(li);
+    });
+}
+
+// Obtener elementos del formulario de incidencias
+const issueForm = document.getElementById('issueForm');
+const issueTitleInput = document.getElementById('issueTitle');
+const issueTypeInput = document.getElementById('issueType');
+const issueStatusInput = document.getElementById('issueStatus');
+const issuePriorityInput = document.getElementById('issuePriority');
+const issueCreatorInput = document.getElementById('issueCreator');
+const issueResponsibleInput = document.getElementById('issueResponsible');
+const issueCreationDateInput = document.getElementById('issueCreationDate');
+const issueDueDateInput = document.getElementById('issueDueDate');
+const issueDisciplineInput = document.getElementById('issueDiscipline');
+const issueCauseInput = document.getElementById('issueCause');
+const issueDescriptionInput = document.getElementById('issueDescription');
+const issueScreenshotInput = document.getElementById('issueScreenshot');
+const issueMessage = document.getElementById('issueMessage');
+const issueList = document.getElementById('issueList');
+const updateIssueButton = document.getElementById('updateIssueButton');
+const cancelIssueEditButton = document.getElementById('cancelIssueEditButton');
+
+let editIssueIndex = null; // Variable para saber si estamos editando una incidencia
+
+// Manejar el envío del formulario de incidencias
+issueForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const issueData = {
+        title: issueTitleInput.value.trim(),
+        type: issueTypeInput.value.trim(),
+        status: issueStatusInput.value.trim(),
+        priority: issuePriorityInput.value.trim(),
+        creator: issueCreatorInput.value.trim(),
+        responsible: issueResponsibleInput.value.trim(),
+        creationDate: issueCreationDateInput.value,
+        dueDate: issueDueDateInput.value,
+        discipline: issueDisciplineInput.value.trim(),
+        cause: issueCauseInput.value.trim(),
+        description: issueDescriptionInput.value.trim(),
+        screenshot: null
+    };
+
+    if (issueScreenshotInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            issueData.screenshot = e.target.result;
+            processIssueData(issueData);
+        };
+        reader.readAsDataURL(issueScreenshotInput.files[0]);
+    } else {
+        processIssueData(issueData);
+    }
+});
+
+function processIssueData(issueData) {
+    if (editIssueIndex !== null) {
+        // Actualizar la incidencia existente
+        issuesData[editIssueIndex] = issueData;
+        issueMessage.textContent = 'Incidencia actualizada exitosamente.';
+        issueMessage.style.color = 'green';
+    } else {
+        // Agregar una nueva incidencia
+        issuesData.push(issueData);
+        issueMessage.textContent = 'Incidencia agregada exitosamente.';
+        issueMessage.style.color = 'green';
+    }
+
+    // Limpiar los campos del formulario
+    issueForm.reset();
+    editIssueIndex = null;
+    updateIssueButton.style.display = 'none';
+    cancelIssueEditButton.style.display = 'none';
+    issueForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar y actualizar la interfaz
+    saveIssues();
+    renderIssueList();
+}
+
+// Event listener para el botón de actualizar incidencia
+updateIssueButton.addEventListener('click', () => {
+    issueForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición de incidencia
+cancelIssueEditButton.addEventListener('click', () => {
+    issueForm.reset();
+    editIssueIndex = null;
+    updateIssueButton.style.display = 'none';
+    cancelIssueEditButton.style.display = 'none';
+    issueForm.querySelector('button[type="submit"]').style.display = 'block';
+    issueMessage.textContent = '';
+});
+
+// Función para editar una incidencia
+function editIssue(index) {
+    editIssueIndex = index;
+    const issueData = issuesData[index];
+
+    issueTitleInput.value = issueData.title;
+    issueTypeInput.value = issueData.type;
+    issueStatusInput.value = issueData.status;
+    issuePriorityInput.value = issueData.priority;
+    issueCreatorInput.value = issueData.creator;
+    issueResponsibleInput.value = issueData.responsible;
+    issueCreationDateInput.value = issueData.creationDate;
+    issueDueDateInput.value = issueData.dueDate;
+    issueDisciplineInput.value = issueData.discipline;
+    issueCauseInput.value = issueData.cause;
+    issueDescriptionInput.value = issueData.description;
+
+    issueForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateIssueButton.style.display = 'block';
+    cancelIssueEditButton.style.display = 'block';
+
+    // Mostrar el formulario si no está visible
+    issueFormContainer.style.display = 'block';
+    previouslyVisibleForm = 'issueForm';
+}
+
+// Función para eliminar una incidencia
+function deleteIssue(index) {
+    issuesData.splice(index, 1);
+    saveIssues();
+    renderIssueList();
+    issueMessage.textContent = 'Incidencia eliminada exitosamente.';
+    issueMessage.style.color = 'green';
+}
+
+// Función para guardar las incidencias en localStorage
+function saveIssues() {
+    localStorage.setItem('issueList', JSON.stringify(issuesData));
+}
+
+// Llamar a loadIssues() al cargar la página
+loadIssues();
