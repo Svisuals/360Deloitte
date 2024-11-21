@@ -2,80 +2,78 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Plataforma de Gestión</title>
+    <title>Aplicación con Formularios</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Incluir jsPDF para exportar a PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-
-<!-- Superposición de inicio de sesión -->
-<div id="loginOverlay">
-    <form id="authForm">
-        <h2>Iniciar Sesión</h2>
-        <input type="text" id="username" placeholder="Usuario" required>
-        <input type="password" id="password" placeholder="Contraseña" required>
-        <button type="submit">Entrar</button>
-        <p id="errorMessage"></p>
-    </form>
-</div>
-
-<!-- Contenedor principal -->
-<div id="container">
-
-    <!-- Botones y menús -->
-    <button id="toggleButton">DUP</button>
-    <button id="togglePdfButton">PDF</button>
-    <button id="toggleFormButton">Gestionar</button>
-    <!-- Nuevo botón para el formulario de tareas -->
-    <button id="toggleTaskFormButton" style="display: none;">Gestionar Tareas</button>
-
-    <!-- Menú del iframe1 -->
-    <div id="iframe1Menu">
+    <!-- Contenedor principal -->
+    <div id="container">
+        <!-- Menú y botones -->
         <button id="iframe1MenuButton">Menú 1</button>
-        <div id="iframe1MenuContent">
-            <!-- Enlaces dinámicos -->
-        </div>
-    </div>
-
-    <!-- Menú del iframe2 -->
-    <div id="iframe2Menu" style="display: none;">
         <button id="iframe2MenuButton">Menú 2</button>
-        <div id="iframe2MenuContent">
-            <!-- Enlaces dinámicos -->
+        <button id="toggleButton">DUP</button>
+        <button id="togglePdfButton">PDF</button>
+
+        <!-- Botón para alternar los botones de formularios -->
+        <button id="toggleFormButton">Formularios</button>
+
+        <!-- Botones de formularios -->
+        <button id="toggleManageFormButton" style="display: none;">Gestionar Enlaces</button>
+        <button id="toggleUploadFormButton" style="display: none;">Subir PDF</button>
+        <button id="toggleUserFormButton" style="display: none;">Gestionar Usuarios</button>
+
+        <!-- Nuevo botón para el formulario personalizado -->
+        <button id="toggleCustomFormButton">Nuevo Formulario</button>
+
+        <!-- Iframes y visor PDF -->
+        <iframe id="iframe1" src="" frameborder="0"></iframe>
+        <iframe id="iframe2" src="" frameborder="0"></iframe>
+        <iframe id="pdfViewer" src="" frameborder="0"></iframe>
+
+        <!-- Menú del iframe1 -->
+        <div id="iframe1Menu" class="menu">
+            <div id="iframe1MenuContent"></div>
+        </div>
+
+        <!-- Menú del iframe2 -->
+        <div id="iframe2Menu" class="menu">
+            <div id="iframe2MenuContent"></div>
         </div>
     </div>
 
-    <!-- Formularios de gestión -->
-    <div id="addLinkFormContainer">
-        <h3>Gestionar Enlaces</h3>
+    <!-- Contenedor del formulario de agregar enlaces -->
+    <div id="addLinkFormContainer" style="display: none;">
         <form id="addLinkForm">
-            <label for="linkText">Texto del enlace:</label>
+            <h3>Gestionar Enlaces</h3>
+            <label for="linkText">Texto del Enlace:</label>
             <input type="text" id="linkText" name="linkText" required>
-            <label for="linkURL">URL del enlace:</label>
+            <label for="linkURL">URL del Enlace:</label>
             <input type="text" id="linkURL" name="linkURL" required>
             <button type="submit">Agregar Enlace</button>
             <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
             <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
+            <p id="addLinkMessage"></p>
         </form>
-        <div id="addLinkMessage"></div>
         <ul id="linkList"></ul>
     </div>
 
-    <div id="uploadPdfFormContainer">
-        <h3>Subir PDF</h3>
+    <!-- Contenedor del formulario de subir PDF -->
+    <div id="uploadPdfFormContainer" style="display: none;">
         <form id="uploadPdfForm">
-            <input type="file" id="pdfFile" accept="application/pdf" required>
+            <h3>Subir PDF</h3>
+            <label for="pdfFile">Seleccionar PDF:</label>
+            <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
             <button type="submit">Cargar PDF</button>
             <button type="button" id="cancelUploadButton">Cancelar</button>
+            <p id="uploadMessage"></p>
         </form>
-        <div id="uploadMessage"></div>
     </div>
 
-    <div id="userFormContainer">
-        <h3>Gestionar Usuarios</h3>
+    <!-- Contenedor del formulario de gestionar usuarios -->
+    <div id="userFormContainer" style="display: none;">
         <form id="userForm">
-            <label for="userEmail">Email:</label>
+            <h3>Gestionar Usuarios</h3>
+            <label for="userEmail">Correo Electrónico:</label>
             <input type="email" id="userEmail" name="userEmail" required>
             <label for="userUsername">Nombre de Usuario:</label>
             <input type="text" id="userUsername" name="userUsername" required>
@@ -89,73 +87,77 @@
             <button type="submit">Agregar Usuario</button>
             <button type="button" id="updateUserButton" style="display: none;">Actualizar Usuario</button>
             <button type="button" id="cancelUserEditButton" style="display: none;">Cancelar</button>
+            <p id="userMessage"></p>
         </form>
-        <div id="userMessage"></div>
         <ul id="userList"></ul>
     </div>
 
-    <!-- Contenedor del formulario de tareas -->
-    <div id="taskFormContainer" style="display: none;">
-        <h3>Gestionar Tareas</h3>
-        <form id="taskForm">
-            <label for="taskTitle">Título:</label>
-            <input type="text" id="taskTitle" name="taskTitle" required>
+    <!-- Contenedor del nuevo formulario personalizado -->
+    <div id="customFormContainer" style="display: none;">
+        <form id="customForm">
+            <h3>Formulario Personalizado</h3>
 
-            <label for="taskType">Tipo:</label>
-            <input type="text" id="taskType" name="taskType" required>
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
 
-            <label for="taskStatus">Estado:</label>
-            <input type="text" id="taskStatus" name="taskStatus" required>
+            <label for="tipo">Tipo:</label>
+            <input type="text" id="tipo" name="tipo" required>
 
-            <label for="taskPriority">Prioridad:</label>
-            <input type="text" id="taskPriority" name="taskPriority" required>
+            <label for="status">Status:</label>
+            <input type="text" id="status" name="status" required>
 
-            <label for="taskCreator">Creador:</label>
-            <input type="text" id="taskCreator" name="taskCreator" required>
+            <label for="prioridad">Prioridad:</label>
+            <input type="text" id="prioridad" name="prioridad" required>
 
-            <label for="taskResponsible">Responsable:</label>
-            <input type="text" id="taskResponsible" name="taskResponsible" required>
+            <label for="creador">Creador:</label>
+            <input type="text" id="creador" name="creador" required>
 
-            <label for="taskCreationDate">Fecha de creación:</label>
-            <input type="date" id="taskCreationDate" name="taskCreationDate" required>
+            <label for="responsable">Responsable:</label>
+            <input type="text" id="responsable" name="responsable" required>
 
-            <label for="taskDueDate">Fecha de vencimiento:</label>
-            <input type="date" id="taskDueDate" name="taskDueDate" required>
+            <label for="fechaCreacion">Fecha de Creación:</label>
+            <input type="date" id="fechaCreacion" name="fechaCreacion" required>
 
-            <label for="taskDisciplines">Disciplinas:</label>
-            <input type="text" id="taskDisciplines" name="taskDisciplines" required>
+            <label for="fechaVencimiento">Fecha de Vencimiento:</label>
+            <input type="date" id="fechaVencimiento" name="fechaVencimiento" required>
 
-            <label for="taskCauses">Causas:</label>
-            <input type="text" id="taskCauses" name="taskCauses" required>
+            <label for="disciplinas">Disciplinas:</label>
+            <input type="text" id="disciplinas" name="disciplinas" required>
 
-            <label for="taskDescription">Descripción:</label>
-            <textarea id="taskDescription" name="taskDescription" rows="5" required></textarea>
+            <label for="causas">Causas:</label>
+            <input type="text" id="causas" name="causas" required>
 
-            <label for="taskScreenshot">Captura de pantalla:</label>
-            <input type="file" id="taskScreenshot" name="taskScreenshot" accept="image/*">
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
 
-            <!-- Botones del formulario -->
+            <label for="capturaPantalla">Captura de Pantalla:</label>
+            <input type="file" id="capturaPantalla" name="capturaPantalla" accept="image/*">
+
             <button type="submit">Guardar</button>
-            <button type="button" id="updateTaskButton" style="display: none;">Actualizar</button>
-            <button type="button" id="cancelTaskEditButton" style="display: none;">Cancelar</button>
+            <button type="button" id="cancelCustomFormButton">Cancelar</button>
         </form>
 
-        <div id="taskMessage"></div>
-
-        <!-- Lista de tareas -->
-        <div id="taskListContainer">
-            <h4>Lista de Tareas</h4>
-            <ul id="taskList"></ul>
+        <!-- Lista de entradas guardadas -->
+        <div id="customListContainer">
+            <h4>Entradas Guardadas</h4>
+            <ul id="customList"></ul>
         </div>
     </div>
 
-    <!-- Iframes y visor PDF -->
-    <iframe id="iframe1" src=""></iframe>
-    <iframe id="iframe2" src=""></iframe>
-    <iframe id="pdfViewer" src=""></iframe>
+    <!-- Overlay de inicio de sesión -->
+    <div id="loginOverlay">
+        <form id="authForm">
+            <h3>Iniciar Sesión</h3>
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Ingresar</button>
+            <p id="errorMessage" style="color: red;"></p>
+        </form>
+    </div>
 
-</div>
-
-<script src="script.js"></script>
+    <!-- Archivo JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
