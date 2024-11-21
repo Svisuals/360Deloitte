@@ -7,57 +7,42 @@
 </head>
 <body>
 
-    <!-- Pantalla de inicio de sesión -->
+    <!-- Overlay de inicio de sesión -->
     <div id="loginOverlay">
         <form id="authForm">
             <h2>Iniciar Sesión</h2>
-            <input type="text" id="username" placeholder="Nombre de usuario" required>
+            <input type="text" id="username" placeholder="Usuario" required>
             <input type="password" id="password" placeholder="Contraseña" required>
             <button type="submit">Ingresar</button>
-            <p id="errorMessage"></p>
+            <div id="errorMessage"></div>
         </form>
     </div>
 
     <!-- Contenedor principal -->
     <div id="container">
-        <!-- Menús de los iframes -->
-        <div id="iframe1Menu">
-            <button id="iframe1MenuButton">Menú</button>
-            <div id="iframe1MenuContent" class="menu-content">
-                <!-- Enlaces se agregarán dinámicamente -->
-            </div>
-        </div>
-        <div id="iframe2Menu">
-            <button id="iframe2MenuButton">Menú</button>
-            <div id="iframe2MenuContent" class="menu-content">
-                <!-- Enlaces se agregarán dinámicamente -->
-            </div>
-        </div>
 
-        <!-- Botones principales -->
-        <div id="mainButtons">
-            <button id="toggleButton">DUP</button>
-            <button id="togglePdfButton">PDF</button>
-            <button id="toggleFormButton">Admin</button>
-        </div>
+        <!-- Botones superiores -->
+        <button id="toggleButton">DUP</button>
+        <button id="togglePdfButton">PDF</button>
 
-        <!-- Botones de formularios -->
-        <div id="formButtonsContainer" style="display: none;">
-            <button id="toggleManageFormButton">Gestionar Enlaces</button>
-            <button id="toggleUploadFormButton">Subir PDF</button>
-            <button id="toggleUserFormButton">Gestionar Usuarios</button>
-            <button id="toggleIssueFormButton">Gestionar Issues</button>
-        </div>
+        <!-- Botones de administración (solo para administradores) -->
+        <button id="toggleFormButton">Admin</button>
+        <button id="toggleManageFormButton" style="display: none;">Gestionar Enlaces</button>
+        <button id="toggleTaskFormButton" style="display: none;">Gestionar Tareas</button>
+        <button id="toggleUploadFormButton" style="display: none;">Subir PDF</button>
+        <button id="toggleUserFormButton" style="display: none;">Gestionar Usuarios</button>
 
-        <!-- Formularios y contenedores -->
+        <!-- Formularios de administración -->
         <!-- Formulario de agregar enlaces -->
         <div id="addLinkFormContainer" style="display: none;">
-            <h3>Gestionar Enlaces</h3>
+            <h3>Gestión de Enlaces</h3>
             <form id="addLinkForm">
                 <label for="linkText">Texto del Enlace:</label>
-                <input type="text" id="linkText" required>
+                <input type="text" id="linkText" name="linkText" required>
+
                 <label for="linkURL">URL del Enlace:</label>
-                <input type="text" id="linkURL" required>
+                <input type="text" id="linkURL" name="linkURL" required>
+
                 <button type="submit">Agregar Enlace</button>
                 <button type="button" id="updateLinkButton" style="display: none;">Actualizar Enlace</button>
                 <button type="button" id="cancelEditButton" style="display: none;">Cancelar</button>
@@ -70,28 +55,34 @@
         <div id="uploadPdfFormContainer" style="display: none;">
             <h3>Subir PDF</h3>
             <form id="uploadPdfForm">
-                <input type="file" id="pdfFile" accept="application/pdf" required>
-                <button type="submit">Cargar PDF</button>
+                <label for="pdfFile">Seleccionar archivo PDF:</label>
+                <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf" required>
+
+                <button type="submit">Subir PDF</button>
                 <button type="button" id="cancelUploadButton">Cancelar</button>
             </form>
             <div id="uploadMessage"></div>
         </div>
 
-        <!-- Formulario de gestionar usuarios -->
+        <!-- Formulario de gestión de usuarios -->
         <div id="userFormContainer" style="display: none;">
-            <h3>Gestionar Usuarios</h3>
+            <h3>Gestión de Usuarios</h3>
             <form id="userForm">
                 <label for="userEmail">Correo Electrónico:</label>
-                <input type="email" id="userEmail" required>
+                <input type="email" id="userEmail" name="userEmail" required>
+
                 <label for="userUsername">Nombre de Usuario:</label>
-                <input type="text" id="userUsername" required>
+                <input type="text" id="userUsername" name="userUsername" required>
+
                 <label for="userPassword">Contraseña:</label>
-                <input type="password" id="userPassword" required>
+                <input type="password" id="userPassword" name="userPassword" required>
+
                 <label for="userRole">Rol:</label>
-                <select id="userRole" required>
+                <select id="userRole" name="userRole">
                     <option value="miembro">Miembro</option>
                     <option value="administrador">Administrador</option>
                 </select>
+
                 <button type="submit">Agregar Usuario</button>
                 <button type="button" id="updateUserButton" style="display: none;">Actualizar Usuario</button>
                 <button type="button" id="cancelUserEditButton" style="display: none;">Cancelar</button>
@@ -100,68 +91,82 @@
             <ul id="userList"></ul>
         </div>
 
-        <!-- Nuevo formulario de issues -->
-        <div id="issueFormContainer" style="display: none;">
-            <h3>Gestionar Issues</h3>
-            <form id="issueForm">
-                <label for="issueTitle">Título:</label>
-                <input type="text" id="issueTitle" name="issueTitle" required>
+        <!-- Nuevo formulario de gestión de tareas -->
+        <div id="taskFormContainer" style="display: none;">
+            <h3>Gestión de Tareas</h3>
+            <form id="taskForm">
+                <label for="taskTitle">Título:</label>
+                <input type="text" id="taskTitle" name="taskTitle" required>
 
-                <label for="issueType">Tipo:</label>
-                <input type="text" id="issueType" name="issueType" required>
+                <label for="taskType">Tipo:</label>
+                <input type="text" id="taskType" name="taskType" required>
 
-                <label for="issueStatus">Status:</label>
-                <input type="text" id="issueStatus" name="issueStatus" required>
+                <label for="taskStatus">Estado:</label>
+                <input type="text" id="taskStatus" name="taskStatus" required>
 
-                <label for="issuePriority">Prioridad:</label>
-                <input type="text" id="issuePriority" name="issuePriority" required>
+                <label for="taskPriority">Prioridad:</label>
+                <input type="text" id="taskPriority" name="taskPriority" required>
 
-                <label for="issueCreator">Creador:</label>
-                <input type="text" id="issueCreator" name="issueCreator" required>
+                <label for="taskCreator">Creador:</label>
+                <input type="text" id="taskCreator" name="taskCreator" required>
 
-                <label for="issueResponsible">Responsable:</label>
-                <input type="text" id="issueResponsible" name="issueResponsible" required>
+                <label for="taskResponsible">Responsable:</label>
+                <input type="text" id="taskResponsible" name="taskResponsible" required>
 
-                <label for="issueCreationDate">Fecha de creación:</label>
-                <input type="date" id="issueCreationDate" name="issueCreationDate" required>
+                <label for="taskCreationDate">Fecha de Creación:</label>
+                <input type="date" id="taskCreationDate" name="taskCreationDate" required>
 
-                <label for="issueDueDate">Fecha de vencimiento:</label>
-                <input type="date" id="issueDueDate" name="issueDueDate" required>
+                <label for="taskDueDate">Fecha de Vencimiento:</label>
+                <input type="date" id="taskDueDate" name="taskDueDate">
 
-                <label for="issueDisciplines">Disciplinas:</label>
-                <input type="text" id="issueDisciplines" name="issueDisciplines" required>
+                <label for="taskDisciplines">Disciplinas:</label>
+                <input type="text" id="taskDisciplines" name="taskDisciplines">
 
-                <label for="issueCauses">Causas:</label>
-                <input type="text" id="issueCauses" name="issueCauses" required>
+                <label for="taskCauses">Causas:</label>
+                <input type="text" id="taskCauses" name="taskCauses">
 
-                <label for="issueDescription">Descripción:</label>
-                <textarea id="issueDescription" name="issueDescription" rows="4" required></textarea>
+                <label for="taskDescription">Descripción:</label>
+                <textarea id="taskDescription" name="taskDescription" rows="4"></textarea>
 
-                <label for="issueScreenshot">Captura de pantalla:</label>
-                <input type="file" id="issueScreenshot" name="issueScreenshot" accept="image/*">
+                <label for="taskScreenshot">Captura de Pantalla:</label>
+                <input type="file" id="taskScreenshot" name="taskScreenshot" accept="image/*">
 
-                <!-- Botones del formulario -->
-                <button type="submit">Agregar Issue</button>
-                <button type="button" id="updateIssueButton" style="display: none;">Actualizar Issue</button>
-                <button type="button" id="cancelIssueEditButton" style="display: none;">Cancelar</button>
+                <button type="submit">Agregar Tarea</button>
+                <button type="button" id="updateTaskButton" style="display: none;">Actualizar Tarea</button>
+                <button type="button" id="cancelTaskEditButton" style="display: none;">Cancelar</button>
             </form>
+            <div id="taskMessage"></div>
 
-            <div id="issueMessage"></div>
-
-            <!-- Lista de issues -->
-            <div id="issueListContainer">
-                <h4>Lista de Issues</h4>
-                <ul id="issueList"></ul>
+            <!-- Lista de tareas -->
+            <div id="taskListContainer">
+                <h4>Tareas</h4>
+                <ul id="taskList"></ul>
             </div>
         </div>
 
-        <!-- Iframes y visor PDF -->
-        <iframe id="iframe1"></iframe>
-        <iframe id="iframe2"></iframe>
-        <iframe id="pdfViewer"></iframe>
+        <!-- Menús de los iframes -->
+        <div id="iframe1Menu">
+            <button id="iframe1MenuButton">Menú</button>
+            <div id="iframe1MenuContent" class="menu-content">
+                <!-- Enlaces dinámicos -->
+            </div>
+        </div>
+
+        <div id="iframe2Menu" style="display: none;">
+            <button id="iframe2MenuButton">Menú</button>
+            <div id="iframe2MenuContent" class="menu-content">
+                <!-- Enlaces dinámicos -->
+            </div>
+        </div>
+
+        <!-- Iframes -->
+        <iframe id="iframe1" src=""></iframe>
+        <iframe id="iframe2" src="" style="display: none;"></iframe>
+        <iframe id="pdfViewer" style="display: none;"></iframe>
+
     </div>
 
-    <!-- Enlace al archivo JavaScript -->
+    <!-- Archivo JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
