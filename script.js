@@ -72,7 +72,6 @@ authForm.addEventListener('submit', (event) => {
             toggleUploadFormButton.style.display = 'none';
             toggleManageFormButton.style.display = 'none';
             toggleUserFormButton.style.display = 'none';
-            toggleTaskFormButton.style.display = 'none';
         }
     } else if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
         // Usuarios predefinidos
@@ -85,7 +84,7 @@ authForm.addEventListener('submit', (event) => {
         toggleFormButton.style.display = 'block';
     } else {
         // Mostrar mensaje de error
-        errorMessage.textContent = 'Usuario o contraseña incorrectos.';
+        errorMessage.textContent = 'Usuário ou senha incorretos.';
         errorMessage.style.display = 'block';
     }
 });
@@ -100,7 +99,6 @@ const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
 const toggleManageFormButton = document.getElementById('toggleManageFormButton');
 const toggleUserFormButton = document.getElementById('toggleUserFormButton');
-const toggleTaskFormButton = document.getElementById('toggleTaskFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -110,7 +108,6 @@ const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
 const userFormContainer = document.getElementById('userFormContainer');
-const taskFormContainer = document.getElementById('taskFormContainer');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -122,10 +119,9 @@ iframe2Menu.style.display = 'none';
 
 // Ocultar los botones del formulario por defecto
 toggleFormButton.style.display = 'none';
-toggleUserFormButton.style.display = 'none';
+toggleUserFormButton.style.display = 'none'; // Nuevo botón
 toggleUploadFormButton.style.display = 'none';
 toggleManageFormButton.style.display = 'none';
-toggleTaskFormButton.style.display = 'none';
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -200,32 +196,25 @@ togglePdfButton.addEventListener('click', () => {
 
 // Event listener para el botón que alterna los botones de formularios
 toggleFormButton.addEventListener('click', () => {
-    if (toggleUploadFormButton.style.display === 'none' &&
-        toggleManageFormButton.style.display === 'none' &&
-        toggleUserFormButton.style.display === 'none' &&
-        toggleTaskFormButton.style.display === 'none') {
+    if (toggleUploadFormButton.style.display === 'none' && toggleManageFormButton.style.display === 'none' && toggleUserFormButton.style.display === 'none') {
         // Mostrar los botones
         toggleUploadFormButton.style.display = 'block';
         toggleManageFormButton.style.display = 'block';
         toggleUserFormButton.style.display = 'block';
-        toggleTaskFormButton.style.display = 'block';
         // Mostrar el formulario de gestión de enlaces por defecto
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
-        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = 'addLink';
     } else {
         // Ocultar los botones
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
         toggleUserFormButton.style.display = 'none';
-        toggleTaskFormButton.style.display = 'none';
         // Ocultar formularios
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
-        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = null;
     }
 });
@@ -234,9 +223,8 @@ toggleFormButton.addEventListener('click', () => {
 toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
-        uploadPdfFormContainer.style.display = 'none';
-        userFormContainer.style.display = 'none';
-        taskFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
         previouslyVisibleForm = 'addLink';
     } else {
         addLinkFormContainer.style.display = 'block';
@@ -248,9 +236,8 @@ toggleManageFormButton.addEventListener('click', () => {
 toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
-        addLinkFormContainer.style.display = 'none';
-        userFormContainer.style.display = 'none';
-        taskFormContainer.style.display = 'none';
+        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
+        userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
         previouslyVisibleForm = 'uploadPdf';
     } else {
         uploadPdfFormContainer.style.display = 'block';
@@ -264,25 +251,10 @@ toggleUserFormButton.addEventListener('click', () => {
         userFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
-        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = 'userForm';
     } else {
         userFormContainer.style.display = 'block';
         previouslyVisibleForm = 'userForm';
-    }
-});
-
-// Event listener para el botón que alterna el formulario de tareas
-toggleTaskFormButton.addEventListener('click', () => {
-    if (window.getComputedStyle(taskFormContainer).display === 'none') {
-        taskFormContainer.style.display = 'block';
-        addLinkFormContainer.style.display = 'none';
-        uploadPdfFormContainer.style.display = 'none';
-        userFormContainer.style.display = 'none';
-        previouslyVisibleForm = 'taskForm';
-    } else {
-        taskFormContainer.style.display = 'block';
-        previouslyVisibleForm = 'taskForm';
     }
 });
 
@@ -750,180 +722,3 @@ function saveUsers() {
 
 // Llamar a loadUsers() al cargar la página
 loadUsers();
-
-/* --- Código para el formulario de tareas --- */
-
-// Variables relacionadas con el formulario de tareas
-const taskForm = document.getElementById('taskForm');
-const taskTitleInput = document.getElementById('taskTitle');
-const taskTypeInput = document.getElementById('taskType');
-const taskStatusInput = document.getElementById('taskStatus');
-const taskPriorityInput = document.getElementById('taskPriority');
-const taskCreatorInput = document.getElementById('taskCreator');
-const taskResponsibleInput = document.getElementById('taskResponsible');
-const taskCreationDateInput = document.getElementById('taskCreationDate');
-const taskDueDateInput = document.getElementById('taskDueDate');
-const taskDisciplinesInput = document.getElementById('taskDisciplines');
-const taskCausesInput = document.getElementById('taskCauses');
-const taskDescriptionInput = document.getElementById('taskDescription');
-const taskScreenshotInput = document.getElementById('taskScreenshot');
-const taskMessage = document.getElementById('taskMessage');
-const taskList = document.getElementById('taskList');
-const updateTaskButton = document.getElementById('updateTaskButton');
-const cancelTaskEditButton = document.getElementById('cancelTaskEditButton');
-
-let editTaskIndex = null; // Variable para saber si estamos editando una tarea
-let tasksData = []; // Lista de tareas
-
-// Manejar el envío del formulario de tareas
-taskForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    // Obtener los valores de los campos
-    const taskData = {
-        title: taskTitleInput.value.trim(),
-        type: taskTypeInput.value.trim(),
-        status: taskStatusInput.value.trim(),
-        priority: taskPriorityInput.value.trim(),
-        creator: taskCreatorInput.value.trim(),
-        responsible: taskResponsibleInput.value.trim(),
-        creationDate: taskCreationDateInput.value,
-        dueDate: taskDueDateInput.value,
-        disciplines: taskDisciplinesInput.value.trim(),
-        causes: taskCausesInput.value.trim(),
-        description: taskDescriptionInput.value.trim(),
-        screenshot: null // Lo manejaremos más adelante
-    };
-
-    // Validar campos obligatorios
-    if (!taskData.title || !taskData.type || !taskData.status || !taskData.priority || !taskData.creator || !taskData.responsible || !taskData.creationDate) {
-        taskMessage.textContent = 'Por favor, completa todos los campos obligatorios.';
-        taskMessage.style.color = 'red';
-        return;
-    }
-
-    // Manejar la captura de pantalla
-    const screenshotFile = taskScreenshotInput.files[0];
-    if (screenshotFile) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            taskData.screenshot = e.target.result;
-            processTaskData(taskData);
-        };
-        reader.readAsDataURL(screenshotFile);
-    } else {
-        processTaskData(taskData);
-    }
-});
-
-function processTaskData(taskData) {
-    if (editTaskIndex !== null) {
-        // Actualizar tarea existente
-        tasksData[editTaskIndex] = taskData;
-        taskMessage.textContent = 'Tarea actualizada exitosamente.';
-    } else {
-        // Agregar nueva tarea
-        tasksData.push(taskData);
-        taskMessage.textContent = 'Tarea agregada exitosamente.';
-    }
-    taskMessage.style.color = 'green';
-
-    // Limpiar formulario
-    taskForm.reset();
-    editTaskIndex = null;
-    updateTaskButton.style.display = 'none';
-    cancelTaskEditButton.style.display = 'none';
-    taskForm.querySelector('button[type="submit"]').style.display = 'block';
-
-    // Guardar y actualizar
-    saveTasks();
-    renderTaskList();
-}
-
-// Función para renderizar la lista de tareas
-function renderTaskList() {
-    taskList.innerHTML = '';
-    tasksData.forEach((task, index) => {
-        const li = document.createElement('li');
-        const span = document.createElement('span');
-        span.textContent = `${task.title} - ${task.status}`;
-
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Editar';
-        editButton.classList.add('edit-task-button');
-        editButton.addEventListener('click', () => editTask(index));
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', () => deleteTask(index));
-
-        li.appendChild(span);
-        li.appendChild(editButton);
-        li.appendChild(deleteButton);
-
-        taskList.appendChild(li);
-    });
-}
-
-// Función para editar una tarea
-function editTask(index) {
-    const task = tasksData[index];
-    editTaskIndex = index;
-
-    // Rellenar los campos del formulario con los datos de la tarea
-    taskTitleInput.value = task.title;
-    taskTypeInput.value = task.type;
-    taskStatusInput.value = task.status;
-    taskPriorityInput.value = task.priority;
-    taskCreatorInput.value = task.creator;
-    taskResponsibleInput.value = task.responsible;
-    taskCreationDateInput.value = task.creationDate;
-    taskDueDateInput.value = task.dueDate;
-    taskDisciplinesInput.value = task.disciplines;
-    taskCausesInput.value = task.causes;
-    taskDescriptionInput.value = task.description;
-
-    // No podemos preestablecer un archivo en un input file por seguridad
-
-    taskForm.querySelector('button[type="submit"]').style.display = 'none';
-    updateTaskButton.style.display = 'block';
-    cancelTaskEditButton.style.display = 'block';
-}
-
-// Event listener para el botón de actualizar tarea
-updateTaskButton.addEventListener('click', () => {
-    taskForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición de tarea
-cancelTaskEditButton.addEventListener('click', () => {
-    taskForm.reset();
-    editTaskIndex = null;
-    updateTaskButton.style.display = 'none';
-    cancelTaskEditButton.style.display = 'none';
-    taskForm.querySelector('button[type="submit"]').style.display = 'block';
-    taskMessage.textContent = '';
-});
-
-// Función para eliminar una tarea
-function deleteTask(index) {
-    tasksData.splice(index, 1);
-    saveTasks();
-    renderTaskList();
-    taskMessage.textContent = 'Tarea eliminada exitosamente.';
-    taskMessage.style.color = 'green';
-}
-
-// Función para guardar las tareas en localStorage
-function saveTasks() {
-    localStorage.setItem('taskList', JSON.stringify(tasksData));
-}
-
-// Función para cargar las tareas desde localStorage
-function loadTasks() {
-    tasksData = JSON.parse(localStorage.getItem('taskList')) || [];
-    renderTaskList();
-}
-
-// Llamar a loadTasks() al cargar la página
-loadTasks();
