@@ -11,9 +11,8 @@ let loggedInUser = null;
 // Variables para recordar el estado previo
 let previouslyVisibleForm = null;
 
-// Variables globales para almacenar datos en memoria
+// Variable global para almacenar los usuarios en memoria
 let usersData = [];
-let issuesData = [];
 
 // Función para cargar los usuarios desde localStorage
 function loadUsers() {
@@ -73,7 +72,7 @@ authForm.addEventListener('submit', (event) => {
             toggleUploadFormButton.style.display = 'none';
             toggleManageFormButton.style.display = 'none';
             toggleUserFormButton.style.display = 'none';
-            toggleIssueFormButton.style.display = 'none';
+            toggleTaskFormButton.style.display = 'none';
         }
     } else if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
         // Usuarios predefinidos
@@ -86,7 +85,7 @@ authForm.addEventListener('submit', (event) => {
         toggleFormButton.style.display = 'block';
     } else {
         // Mostrar mensaje de error
-        errorMessage.textContent = 'Usuário ou senha incorretos.';
+        errorMessage.textContent = 'Usuario o contraseña incorrectos.';
         errorMessage.style.display = 'block';
     }
 });
@@ -101,7 +100,7 @@ const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
 const toggleManageFormButton = document.getElementById('toggleManageFormButton');
 const toggleUserFormButton = document.getElementById('toggleUserFormButton');
-const toggleIssueFormButton = document.getElementById('toggleIssueFormButton');
+const toggleTaskFormButton = document.getElementById('toggleTaskFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -111,7 +110,7 @@ const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
 const userFormContainer = document.getElementById('userFormContainer');
-const issueFormContainer = document.getElementById('issueFormContainer');
+const taskFormContainer = document.getElementById('taskFormContainer');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -123,19 +122,19 @@ iframe2Menu.style.display = 'none';
 
 // Ocultar los botones del formulario por defecto
 toggleFormButton.style.display = 'none';
-toggleUserFormButton.style.display = 'none'; // Nuevo botón
+toggleUserFormButton.style.display = 'none';
 toggleUploadFormButton.style.display = 'none';
 toggleManageFormButton.style.display = 'none';
-toggleIssueFormButton.style.display = 'none';
+toggleTaskFormButton.style.display = 'none';
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
-    iframe1MenuContent.classList.toggle('show');
+    iframe1Menu.classList.toggle('show');
 });
 
 // Event listener para el botón del menú del iframe2
 iframe2MenuButton.addEventListener('click', () => {
-    iframe2MenuContent.classList.toggle('show');
+    iframe2Menu.classList.toggle('show');
 });
 
 // Función para actualizar los event listeners de los menús
@@ -144,7 +143,7 @@ function updateMenuEventListeners() {
         link.onclick = function(event) {
             event.preventDefault();
             iframe1.src = this.href;
-            iframe1MenuContent.classList.remove('show');
+            iframe1Menu.classList.remove('show');
         };
     });
 
@@ -152,7 +151,7 @@ function updateMenuEventListeners() {
         link.onclick = function(event) {
             event.preventDefault();
             iframe2.src = this.href;
-            iframe2MenuContent.classList.remove('show');
+            iframe2Menu.classList.remove('show');
         };
     });
 }
@@ -201,29 +200,32 @@ togglePdfButton.addEventListener('click', () => {
 
 // Event listener para el botón que alterna los botones de formularios
 toggleFormButton.addEventListener('click', () => {
-    if (toggleUploadFormButton.style.display === 'none' && toggleManageFormButton.style.display === 'none' && toggleUserFormButton.style.display === 'none' && toggleIssueFormButton.style.display === 'none') {
+    if (toggleUploadFormButton.style.display === 'none' &&
+        toggleManageFormButton.style.display === 'none' &&
+        toggleUserFormButton.style.display === 'none' &&
+        toggleTaskFormButton.style.display === 'none') {
         // Mostrar los botones
         toggleUploadFormButton.style.display = 'block';
         toggleManageFormButton.style.display = 'block';
         toggleUserFormButton.style.display = 'block';
-        toggleIssueFormButton.style.display = 'block';
+        toggleTaskFormButton.style.display = 'block';
         // Mostrar el formulario de gestión de enlaces por defecto
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
-        issueFormContainer.style.display = 'none';
+        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = 'addLink';
     } else {
         // Ocultar los botones
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
         toggleUserFormButton.style.display = 'none';
-        toggleIssueFormButton.style.display = 'none';
+        toggleTaskFormButton.style.display = 'none';
         // Ocultar formularios
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
-        issueFormContainer.style.display = 'none';
+        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = null;
     }
 });
@@ -232,9 +234,9 @@ toggleFormButton.addEventListener('click', () => {
 toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
-        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
-        userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
-        issueFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none';
+        userFormContainer.style.display = 'none';
+        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = 'addLink';
     } else {
         addLinkFormContainer.style.display = 'block';
@@ -246,9 +248,9 @@ toggleManageFormButton.addEventListener('click', () => {
 toggleUploadFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
         uploadPdfFormContainer.style.display = 'block';
-        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
-        userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
-        issueFormContainer.style.display = 'none';
+        addLinkFormContainer.style.display = 'none';
+        userFormContainer.style.display = 'none';
+        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = 'uploadPdf';
     } else {
         uploadPdfFormContainer.style.display = 'block';
@@ -262,7 +264,7 @@ toggleUserFormButton.addEventListener('click', () => {
         userFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
-        issueFormContainer.style.display = 'none';
+        taskFormContainer.style.display = 'none';
         previouslyVisibleForm = 'userForm';
     } else {
         userFormContainer.style.display = 'block';
@@ -270,17 +272,17 @@ toggleUserFormButton.addEventListener('click', () => {
     }
 });
 
-// Event listener para el botón que alterna el formulario de issues
-toggleIssueFormButton.addEventListener('click', () => {
-    if (window.getComputedStyle(issueFormContainer).display === 'none') {
-        issueFormContainer.style.display = 'block';
+// Event listener para el botón que alterna el formulario de tareas
+toggleTaskFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(taskFormContainer).display === 'none') {
+        taskFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
-        previouslyVisibleForm = 'issueForm';
+        previouslyVisibleForm = 'taskForm';
     } else {
-        issueFormContainer.style.display = 'block';
-        previouslyVisibleForm = 'issueForm';
+        taskFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'taskForm';
     }
 });
 
@@ -395,10 +397,10 @@ adjustLayout();
 // Cerrar el menú si el usuario hace clic fuera de él
 window.addEventListener('click', function(event) {
     if (!event.target.closest('#iframe1MenuButton')) {
-        iframe1MenuContent.classList.remove('show');
+        iframe1Menu.classList.remove('show');
     }
     if (!event.target.closest('#iframe2MenuButton')) {
-        iframe2MenuContent.classList.remove('show');
+        iframe2Menu.classList.remove('show');
     }
 });
 
@@ -749,217 +751,179 @@ function saveUsers() {
 // Llamar a loadUsers() al cargar la página
 loadUsers();
 
-// Obtener referencias a los nuevos elementos del formulario de issues
-const issueForm = document.getElementById('issueForm');
-const issueMessage = document.getElementById('issueMessage');
-const issueList = document.getElementById('issueList');
-const updateIssueButton = document.getElementById('updateIssueButton');
-const cancelIssueEditButton = document.getElementById('cancelIssueEditButton');
+/* --- Código para el formulario de tareas --- */
 
-// Campos del formulario de issues
-const issueTitleInput = document.getElementById('issueTitle');
-const issueTypeInput = document.getElementById('issueType');
-const issueStatusInput = document.getElementById('issueStatus');
-const issuePriorityInput = document.getElementById('issuePriority');
-const issueCreatorInput = document.getElementById('issueCreator');
-const issueResponsibleInput = document.getElementById('issueResponsible');
-const issueCreationDateInput = document.getElementById('issueCreationDate');
-const issueDueDateInput = document.getElementById('issueDueDate');
-const issueDisciplinesInput = document.getElementById('issueDisciplines');
-const issueCausesInput = document.getElementById('issueCauses');
-const issueDescriptionInput = document.getElementById('issueDescription');
-const issueScreenshotInput = document.getElementById('issueScreenshot');
+// Variables relacionadas con el formulario de tareas
+const taskForm = document.getElementById('taskForm');
+const taskTitleInput = document.getElementById('taskTitle');
+const taskTypeInput = document.getElementById('taskType');
+const taskStatusInput = document.getElementById('taskStatus');
+const taskPriorityInput = document.getElementById('taskPriority');
+const taskCreatorInput = document.getElementById('taskCreator');
+const taskResponsibleInput = document.getElementById('taskResponsible');
+const taskCreationDateInput = document.getElementById('taskCreationDate');
+const taskDueDateInput = document.getElementById('taskDueDate');
+const taskDisciplinesInput = document.getElementById('taskDisciplines');
+const taskCausesInput = document.getElementById('taskCauses');
+const taskDescriptionInput = document.getElementById('taskDescription');
+const taskScreenshotInput = document.getElementById('taskScreenshot');
+const taskMessage = document.getElementById('taskMessage');
+const taskList = document.getElementById('taskList');
+const updateTaskButton = document.getElementById('updateTaskButton');
+const cancelTaskEditButton = document.getElementById('cancelTaskEditButton');
 
-let editIssueIndex = null; // Índice del issue que se está editando
+let editTaskIndex = null; // Variable para saber si estamos editando una tarea
+let tasksData = []; // Lista de tareas
 
-// Manejar el envío del formulario de issues
-issueForm.addEventListener('submit', (event) => {
+// Manejar el envío del formulario de tareas
+taskForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
     // Obtener los valores de los campos
-    const issueData = {
-        title: issueTitleInput.value.trim(),
-        type: issueTypeInput.value.trim(),
-        status: issueStatusInput.value.trim(),
-        priority: issuePriorityInput.value.trim(),
-        creator: issueCreatorInput.value.trim(),
-        responsible: issueResponsibleInput.value.trim(),
-        creationDate: issueCreationDateInput.value,
-        dueDate: issueDueDateInput.value,
-        disciplines: issueDisciplinesInput.value.trim(),
-        causes: issueCausesInput.value.trim(),
-        description: issueDescriptionInput.value.trim(),
-        screenshot: null // Aquí almacenaremos la imagen como Data URL
+    const taskData = {
+        title: taskTitleInput.value.trim(),
+        type: taskTypeInput.value.trim(),
+        status: taskStatusInput.value.trim(),
+        priority: taskPriorityInput.value.trim(),
+        creator: taskCreatorInput.value.trim(),
+        responsible: taskResponsibleInput.value.trim(),
+        creationDate: taskCreationDateInput.value,
+        dueDate: taskDueDateInput.value,
+        disciplines: taskDisciplinesInput.value.trim(),
+        causes: taskCausesInput.value.trim(),
+        description: taskDescriptionInput.value.trim(),
+        screenshot: null // Lo manejaremos más adelante
     };
 
-    // Validar campos requeridos
-    if (!issueData.title || !issueData.type || !issueData.status || !issueData.priority || !issueData.creator || !issueData.responsible || !issueData.creationDate || !issueData.dueDate || !issueData.disciplines || !issueData.causes || !issueData.description) {
-        issueMessage.textContent = 'Por favor, completa todos los campos.';
-        issueMessage.style.color = 'red';
+    // Validar campos obligatorios
+    if (!taskData.title || !taskData.type || !taskData.status || !taskData.priority || !taskData.creator || !taskData.responsible || !taskData.creationDate) {
+        taskMessage.textContent = 'Por favor, completa todos los campos obligatorios.';
+        taskMessage.style.color = 'red';
         return;
     }
 
-    // Manejar la captura de pantalla si se proporciona
-    if (issueScreenshotInput.files && issueScreenshotInput.files[0]) {
+    // Manejar la captura de pantalla
+    const screenshotFile = taskScreenshotInput.files[0];
+    if (screenshotFile) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            issueData.screenshot = e.target.result;
-
-            if (editIssueIndex !== null) {
-                updateExistingIssue(issueData);
-            } else {
-                addNewIssue(issueData);
-            }
-
-            resetIssueForm();
+            taskData.screenshot = e.target.result;
+            processTaskData(taskData);
         };
-        reader.readAsDataURL(issueScreenshotInput.files[0]);
+        reader.readAsDataURL(screenshotFile);
     } else {
-        if (editIssueIndex !== null) {
-            // Mantener la captura de pantalla existente si no se selecciona una nueva
-            issueData.screenshot = issuesData[editIssueIndex].screenshot;
-            updateExistingIssue(issueData);
-        } else {
-            addNewIssue(issueData);
-        }
-
-        resetIssueForm();
+        processTaskData(taskData);
     }
 });
 
-// Función para agregar un nuevo issue
-function addNewIssue(issueData) {
-    issuesData.push(issueData);
-    saveIssues();
-    renderIssueList();
-    issueMessage.textContent = 'Issue agregado exitosamente.';
-    issueMessage.style.color = 'green';
+function processTaskData(taskData) {
+    if (editTaskIndex !== null) {
+        // Actualizar tarea existente
+        tasksData[editTaskIndex] = taskData;
+        taskMessage.textContent = 'Tarea actualizada exitosamente.';
+    } else {
+        // Agregar nueva tarea
+        tasksData.push(taskData);
+        taskMessage.textContent = 'Tarea agregada exitosamente.';
+    }
+    taskMessage.style.color = 'green';
+
+    // Limpiar formulario
+    taskForm.reset();
+    editTaskIndex = null;
+    updateTaskButton.style.display = 'none';
+    cancelTaskEditButton.style.display = 'none';
+    taskForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar y actualizar
+    saveTasks();
+    renderTaskList();
 }
 
-// Función para actualizar un issue existente
-function updateExistingIssue(issueData) {
-    issuesData[editIssueIndex] = issueData;
-    saveIssues();
-    renderIssueList();
-    issueMessage.textContent = 'Issue actualizado exitosamente.';
-    issueMessage.style.color = 'green';
-}
-
-// Función para resetear el formulario de issues
-function resetIssueForm() {
-    issueForm.reset();
-    editIssueIndex = null;
-    updateIssueButton.style.display = 'none';
-    cancelIssueEditButton.style.display = 'none';
-    issueForm.querySelector('button[type="submit"]').style.display = 'block';
-}
-
-// Event listener para el botón de actualizar issue
-updateIssueButton.addEventListener('click', () => {
-    issueForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición de issue
-cancelIssueEditButton.addEventListener('click', () => {
-    resetIssueForm();
-    issueMessage.textContent = '';
-});
-
-// Función para renderizar la lista de issues
-function renderIssueList() {
-    issueList.innerHTML = '';
-    issuesData.forEach((issue, index) => {
+// Función para renderizar la lista de tareas
+function renderTaskList() {
+    taskList.innerHTML = '';
+    tasksData.forEach((task, index) => {
         const li = document.createElement('li');
-
-        const detailsDiv = document.createElement('div');
-        detailsDiv.classList.add('issue-details');
-        detailsDiv.innerHTML = `
-            <strong>Título:</strong> ${issue.title}<br>
-            <strong>Tipo:</strong> ${issue.type}<br>
-            <strong>Status:</strong> ${issue.status}<br>
-            <strong>Prioridad:</strong> ${issue.priority}<br>
-            <strong>Creador:</strong> ${issue.creator}<br>
-            <strong>Responsable:</strong> ${issue.responsible}<br>
-            <strong>Fecha de creación:</strong> ${issue.creationDate}<br>
-            <strong>Fecha de vencimiento:</strong> ${issue.dueDate}<br>
-            <strong>Disciplinas:</strong> ${issue.disciplines}<br>
-            <strong>Causas:</strong> ${issue.causes}
-        `;
-
-        const descriptionDiv = document.createElement('div');
-        descriptionDiv.classList.add('issue-description');
-        descriptionDiv.innerHTML = `<strong>Descripción:</strong> ${issue.description}`;
-
-        li.appendChild(detailsDiv);
-        li.appendChild(descriptionDiv);
-
-        if (issue.screenshot) {
-            const img = document.createElement('img');
-            img.src = issue.screenshot;
-            li.appendChild(img);
-        }
-
-        const actionsDiv = document.createElement('div');
-        actionsDiv.classList.add('issue-actions');
+        const span = document.createElement('span');
+        span.textContent = `${task.title} - ${task.status}`;
 
         const editButton = document.createElement('button');
         editButton.textContent = 'Editar';
-        editButton.addEventListener('click', () => editIssue(index));
+        editButton.classList.add('edit-task-button');
+        editButton.addEventListener('click', () => editTask(index));
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', () => deleteIssue(index));
+        deleteButton.addEventListener('click', () => deleteTask(index));
 
-        actionsDiv.appendChild(editButton);
-        actionsDiv.appendChild(deleteButton);
+        li.appendChild(span);
+        li.appendChild(editButton);
+        li.appendChild(deleteButton);
 
-        li.appendChild(actionsDiv);
-
-        issueList.appendChild(li);
+        taskList.appendChild(li);
     });
 }
 
-// Función para editar un issue
-function editIssue(index) {
-    const issueData = issuesData[index];
-    editIssueIndex = index;
+// Función para editar una tarea
+function editTask(index) {
+    const task = tasksData[index];
+    editTaskIndex = index;
 
-    issueTitleInput.value = issueData.title;
-    issueTypeInput.value = issueData.type;
-    issueStatusInput.value = issueData.status;
-    issuePriorityInput.value = issueData.priority;
-    issueCreatorInput.value = issueData.creator;
-    issueResponsibleInput.value = issueData.responsible;
-    issueCreationDateInput.value = issueData.creationDate;
-    issueDueDateInput.value = issueData.dueDate;
-    issueDisciplinesInput.value = issueData.disciplines;
-    issueCausesInput.value = issueData.causes;
-    issueDescriptionInput.value = issueData.description;
+    // Rellenar los campos del formulario con los datos de la tarea
+    taskTitleInput.value = task.title;
+    taskTypeInput.value = task.type;
+    taskStatusInput.value = task.status;
+    taskPriorityInput.value = task.priority;
+    taskCreatorInput.value = task.creator;
+    taskResponsibleInput.value = task.responsible;
+    taskCreationDateInput.value = task.creationDate;
+    taskDueDateInput.value = task.dueDate;
+    taskDisciplinesInput.value = task.disciplines;
+    taskCausesInput.value = task.causes;
+    taskDescriptionInput.value = task.description;
 
-    issueForm.querySelector('button[type="submit"]').style.display = 'none';
-    updateIssueButton.style.display = 'block';
-    cancelIssueEditButton.style.display = 'block';
+    // No podemos preestablecer un archivo en un input file por seguridad
+
+    taskForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateTaskButton.style.display = 'block';
+    cancelTaskEditButton.style.display = 'block';
 }
 
-// Función para eliminar un issue
-function deleteIssue(index) {
-    issuesData.splice(index, 1);
-    saveIssues();
-    renderIssueList();
-    issueMessage.textContent = 'Issue eliminado exitosamente.';
-    issueMessage.style.color = 'green';
+// Event listener para el botón de actualizar tarea
+updateTaskButton.addEventListener('click', () => {
+    taskForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición de tarea
+cancelTaskEditButton.addEventListener('click', () => {
+    taskForm.reset();
+    editTaskIndex = null;
+    updateTaskButton.style.display = 'none';
+    cancelTaskEditButton.style.display = 'none';
+    taskForm.querySelector('button[type="submit"]').style.display = 'block';
+    taskMessage.textContent = '';
+});
+
+// Función para eliminar una tarea
+function deleteTask(index) {
+    tasksData.splice(index, 1);
+    saveTasks();
+    renderTaskList();
+    taskMessage.textContent = 'Tarea eliminada exitosamente.';
+    taskMessage.style.color = 'green';
 }
 
-// Función para guardar los issues en localStorage
-function saveIssues() {
-    localStorage.setItem('issueList', JSON.stringify(issuesData));
+// Función para guardar las tareas en localStorage
+function saveTasks() {
+    localStorage.setItem('taskList', JSON.stringify(tasksData));
 }
 
-// Función para cargar los issues desde localStorage
-function loadIssues() {
-    issuesData = JSON.parse(localStorage.getItem('issueList')) || [];
-    renderIssueList();
+// Función para cargar las tareas desde localStorage
+function loadTasks() {
+    tasksData = JSON.parse(localStorage.getItem('taskList')) || [];
+    renderTaskList();
 }
 
-// Llamar a loadIssues() al cargar la página
-loadIssues();
+// Llamar a loadTasks() al cargar la página
+loadTasks();
