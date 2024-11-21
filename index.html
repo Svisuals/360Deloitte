@@ -32,9 +32,11 @@
     <div id="toggleButton"></div> <!-- Botón DUP.png -->
     <div id="togglePdfButton"></div> <!-- Botón PDF.png -->
     <div id="toggleFormButton"></div> <!-- Botón FORM.png -->
-    <div id="toggleUserFormButton"></div> <!-- Nuevo Botón USER.png (Oculto por defecto) -->
+    <div id="toggleUserFormButton"></div> <!-- Botón USER.png (Oculto por defecto) -->
     <div id="toggleUploadFormButton"></div> <!-- Botón UPLOAD.png (Oculto por defecto) -->
     <div id="toggleManageFormButton"></div> <!-- Botón MANAGE.png (Oculto por defecto) -->
+    <!-- Nuevo botón para el formulario adicional -->
+    <div id="toggleIssueFormButton"></div> <!-- Botón ISSUE.png (Oculto por defecto) -->
 
     <div id="container">
         <iframe id="iframe1" src="https://momento360.com/e/uc/e39b5e2ef7864507b34ca0ee97cebca3?utm_campaign=embed&utm_source=other&size=large&display-plan=true"></iframe>
@@ -130,6 +132,59 @@
         <div id="userListContainer">
             <h4>Usuarios Existentes</h4>
             <ul id="userList"></ul>
+        </div>
+    </div>
+
+    <!-- Nuevo formulario para gestionar incidencias -->
+    <div id="issueFormContainer" style="display: none;">
+        <h3>Gestionar Incidencias</h3>
+        <form id="issueForm">
+            <label for="issueTitle">Título:</label>
+            <input type="text" id="issueTitle" name="issueTitle" required>
+
+            <label for="issueType">Tipo:</label>
+            <input type="text" id="issueType" name="issueType" required>
+
+            <label for="issueStatus">Estado:</label>
+            <input type="text" id="issueStatus" name="issueStatus" required>
+
+            <label for="issuePriority">Prioridad:</label>
+            <input type="text" id="issuePriority" name="issuePriority" required>
+
+            <label for="issueCreator">Creador:</label>
+            <input type="text" id="issueCreator" name="issueCreator" required>
+
+            <label for="issueResponsible">Responsable:</label>
+            <input type="text" id="issueResponsible" name="issueResponsible" required>
+
+            <label for="issueCreationDate">Fecha de Creación:</label>
+            <input type="date" id="issueCreationDate" name="issueCreationDate" required>
+
+            <label for="issueDueDate">Fecha de Vencimiento:</label>
+            <input type="date" id="issueDueDate" name="issueDueDate" required>
+
+            <label for="issueDiscipline">Disciplinas:</label>
+            <input type="text" id="issueDiscipline" name="issueDiscipline" required>
+
+            <label for="issueCause">Causas:</label>
+            <input type="text" id="issueCause" name="issueCause" required>
+
+            <label for="issueDescription">Descripción:</label>
+            <textarea id="issueDescription" name="issueDescription" rows="4" required></textarea>
+
+            <label for="issueScreenshot">Captura de Pantalla:</label>
+            <input type="file" id="issueScreenshot" name="issueScreenshot" accept="image/*">
+
+            <button type="submit">Agregar Incidencia</button>
+            <button type="button" id="updateIssueButton" style="display: none;">Actualizar Incidencia</button>
+            <button type="button" id="cancelIssueEditButton" style="display: none;">Cancelar</button>
+        </form>
+        <p id="issueMessage"></p>
+
+        <!-- Lista de incidencias existentes -->
+        <div id="issueListContainer">
+            <h4>Incidencias Existentes</h4>
+            <ul id="issueList"></ul>
         </div>
     </div>
 
