@@ -64,7 +64,7 @@ iframe, embed {
     display: block;
 }
 
-/* Botón para alternar el formulario de enlaces */
+/* Botón para alternar los botones de formularios */
 #toggleFormButton {
     position: fixed;
     top: 10px;
@@ -94,7 +94,7 @@ iframe, embed {
     display: none; /* Oculto por defecto */
 }
 
-/* Nuevo Botón para alternar el formulario de gestionar enlaces */
+/* Botón para alternar el formulario de gestionar enlaces */
 #toggleManageFormButton {
     position: fixed;
     top: 10px;
