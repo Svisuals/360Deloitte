@@ -3,55 +3,162 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow: hidden;
     font-family: Arial, sans-serif;
 }
 
-/* Contenedor principal */
 #container {
     position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+/* Estilos de los iframes */
+#iframe1, #iframe2, #pdfViewer {
+    border: none;
+}
+
+#iframe1 {
+    width: 100%;
     height: 100%;
 }
 
-/* Menús de los iframes */
-#iframe1Menu, #iframe2Menu {
+#iframe2 {
+    width: 50%;
+    height: 100%;
+}
+
+#pdfViewer {
+    width: 50%;
+    height: 100%;
+}
+
+/* Estilos de los botones superiores */
+#toggleButton, #togglePdfButton, #toggleFormButton, #toggleManageFormButton, #toggleUploadFormButton, #toggleUserFormButton, #toggleTaskFormButton {
     position: fixed;
-    top: 0;
-    background-color: #0c7a20;
-    color: white;
+    top: 10px;
+    right: 10px;
     padding: 10px;
-    z-index: 1000;
-}
-
-#iframe1Menu {
-    left: 0;
-}
-
-#iframe2Menu {
-    right: 0;
-}
-
-#iframe1MenuButton, #iframe2MenuButton {
     background-color: #0c7a20;
     color: white;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1em;
+    z-index: 2000;
+}
+
+#togglePdfButton {
+    right: 70px;
+}
+
+#toggleFormButton {
+    right: 130px;
+}
+
+#toggleManageFormButton {
+    right: 190px;
+}
+
+#toggleTaskFormButton {
+    right: 250px;
+}
+
+#toggleUploadFormButton {
+    right: 310px;
+}
+
+#toggleUserFormButton {
+    right: 370px;
+}
+
+#toggleButton:hover, #togglePdfButton:hover, #toggleFormButton:hover, #toggleManageFormButton:hover, #toggleUploadFormButton:hover, #toggleUserFormButton:hover, #toggleTaskFormButton:hover {
+    background-color: #095c16;
+}
+
+/* Estilos para el overlay de inicio de sesión */
+#loginOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#authForm {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+#authForm h2 {
+    margin-top: 0;
+    color: #0c7a20;
+}
+
+#authForm input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+#authForm button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0c7a20;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#errorMessage {
+    color: red;
+    margin-top: 10px;
+}
+
+/* Estilos para los menús */
+#iframe1Menu, #iframe2Menu {
+    position: fixed;
+    top: 50px;
+    left: 10px;
+    z-index: 1000;
+}
+
+#iframe1MenuButton, #iframe2MenuButton {
+    padding: 10px;
+    background-color: #0c7a20;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
 .menu-content {
     display: none;
     position: absolute;
-    background-color: white;
-    min-width: 160px;
     top: 40px;
     left: 0;
+    background-color: white;
+    min-width: 160px;
     border: 1px solid #ccc;
-    z-index: 1001;
+    border-radius: 6px;
+    overflow: auto;
+    max-height: 300px;
+    z-index: 1000;
 }
 
 .menu-content a {
     color: black;
-    padding: 8px 12px;
+    padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
@@ -64,60 +171,8 @@ body, html {
     display: block;
 }
 
-/* Botones principales */
-#mainButtons {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1002;
-}
-
-#mainButtons button {
-    margin: 0 5px;
-    padding: 10px;
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-#mainButtons button:hover {
-    background-color: #095c16;
-}
-
-/* Botones de formularios */
-#formButtonsContainer {
-    display: flex;
-    justify-content: center;
-    margin-top: 60px;
-    position: fixed;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1002;
-}
-
-#formButtonsContainer button {
-    margin: 0 5px;
-    padding: 10px;
-    background-color: #0c7a20;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-#formButtonsContainer button:hover {
-    background-color: #095c16;
-}
-
-/* Formularios */
-#addLinkFormContainer,
-#uploadPdfFormContainer,
-#userFormContainer,
-#issueFormContainer {
+/* Estilos para los formularios de administración */
+#addLinkFormContainer, #uploadPdfFormContainer, #userFormContainer, #taskFormContainer {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -134,29 +189,20 @@ body, html {
     overflow-y: auto;
 }
 
-#addLinkFormContainer h3,
-#uploadPdfFormContainer h3,
-#userFormContainer h3,
-#issueFormContainer h3 {
+#addLinkFormContainer h3, #uploadPdfFormContainer h3, #userFormContainer h3, #taskFormContainer h3 {
     margin-top: 0;
     text-align: center;
     color: #0c7a20;
 }
 
-form label {
+#addLinkForm label, #uploadPdfForm label, #userForm label, #taskForm label {
     display: block;
     margin: 10px 0 5px;
     font-size: 0.9em;
     color: #333;
 }
 
-form input[type="text"],
-form input[type="password"],
-form input[type="email"],
-form input[type="file"],
-form input[type="date"],
-form select,
-form textarea {
+#addLinkForm input[type="text"], #uploadPdfForm input[type="file"], #userForm input[type="email"], #userForm input[type="text"], #userForm input[type="password"], #taskForm input[type="text"], #taskForm input[type="date"], #taskForm textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -164,11 +210,7 @@ form textarea {
     font-size: 0.9em;
 }
 
-form textarea {
-    resize: vertical;
-}
-
-form button {
+#addLinkForm button, #uploadPdfForm button, #userForm button, #taskForm button {
     width: 100%;
     padding: 10px;
     background-color: #0c7a20;
@@ -180,125 +222,91 @@ form button {
     margin-top: 10px;
 }
 
-form button:hover {
+#addLinkForm button:hover, #uploadPdfForm button:hover, #userForm button:hover, #taskForm button:hover {
     background-color: #095c16;
 }
 
-#addLinkMessage,
-#uploadMessage,
-#userMessage,
-#issueMessage {
+#addLinkMessage, #uploadMessage, #userMessage, #taskMessage {
     margin-top: 10px;
     font-size: 0.9em;
     text-align: center;
 }
 
-/* Listas */
-#linkList,
-#userList,
-#issueList {
+/* Estilos para las listas */
+#linkList, #userList, #taskList {
     list-style-type: none;
     padding: 0;
     margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-#linkList li,
-#userList li,
-#issueList li {
-    border: 1px solid #ccc;
+#linkList li, #userList li, #taskList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+    padding: 8px;
     border-radius: 6px;
-    padding: 10px;
-    margin-bottom: 10px;
-    position: relative;
 }
 
-#linkList li button,
-#userList li button,
-#issueList li .issue-actions button {
+#linkList li span, #userList li span, #taskList li span {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+#linkList li button, #userList li button, #taskList li button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
     margin-left: 5px;
 }
 
-#issueListContainer h4 {
-    margin-bottom: 10px;
-    color: #0c7a20;
+#linkList li button.edit-button, #userList li button.edit-user-button, #taskList li button.edit-task-button {
+    background-color: #3498db;
 }
 
-#issueList li .issue-actions {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+#linkList li button:hover, #userList li button:hover, #taskList li button:hover {
+    opacity: 0.8;
 }
 
-#issueList li .issue-details {
-    margin-bottom: 10px;
-}
-
-#issueList li .issue-description {
-    font-size: 0.9em;
-    color: #555;
-}
-
-#issueList li img {
-    max-width: 100%;
-    margin-top: 10px;
-    border-radius: 6px;
-}
-
-/* Iframes y visor PDF */
-#iframe1,
-#iframe2,
-#pdfViewer {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-#iframe2 {
-    display: none;
-}
-
-#pdfViewer {
-    display: none;
-}
-
-/* Pantalla de inicio de sesión */
-#loginOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(12, 122, 32, 0.9);
-    z-index: 3000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#authForm {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 300px;
-}
-
-#authForm h2 {
-    text-align: center;
+/* Estilos específicos para el formulario de tareas */
+#taskFormContainer h3 {
     margin-top: 0;
+    text-align: center;
     color: #0c7a20;
 }
 
-#authForm input[type="text"],
-#authForm input[type="password"] {
+#taskForm label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 0.9em;
+    color: #333;
+}
+
+#taskForm input[type="text"],
+#taskForm input[type="date"],
+#taskForm textarea {
     width: 100%;
     padding: 8px;
-    margin-top: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 0.9em;
 }
 
-#authForm button {
+#taskForm input[type="file"] {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+#taskForm button {
     width: 100%;
     padding: 10px;
     background-color: #0c7a20;
@@ -307,16 +315,30 @@ form button:hover {
     border-radius: 6px;
     cursor: pointer;
     font-size: 1em;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
-#authForm button:hover {
+#taskForm button:hover {
     background-color: #095c16;
 }
 
-#errorMessage {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.9em;
+#taskListContainer {
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#taskListContainer h4 {
+    margin-bottom: 10px;
+    color: #0c7a20;
+}
+
+/* Estilos para el botón de gestionar tareas con imagen de fondo */
+#toggleTaskFormButton {
+    background: url('TASKS.png') no-repeat center center;
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    right: 190px; /* Ajusta este valor para posicionar el botón correctamente */
 }
