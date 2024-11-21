@@ -73,7 +73,7 @@ const togglePdfButton = document.getElementById('togglePdfButton');
 const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
 const toggleManageFormButton = document.getElementById('toggleManageFormButton');
-const toggleUserFormButton = document.getElementById('toggleUserFormButton'); // Nuevo botón
+const toggleUserFormButton = document.getElementById('toggleUserFormButton');
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -82,7 +82,7 @@ const iframe1MenuContent = document.getElementById('iframe1MenuContent');
 const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
-const userFormContainer = document.getElementById('userFormContainer'); // Nuevo formulario
+const userFormContainer = document.getElementById('userFormContainer');
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -191,6 +191,32 @@ toggleFormButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'none';
         userFormContainer.style.display = 'none';
         previouslyVisibleForm = null;
+    }
+});
+
+// Event listener para el botón que alterna el formulario de gestionar enlaces
+toggleManageFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
+        addLinkFormContainer.style.display = 'block';
+        uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
+        userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
+        previouslyVisibleForm = 'addLink';
+    } else {
+        addLinkFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'addLink';
+    }
+});
+
+// Event listener para el botón que alterna el formulario de subir PDF
+toggleUploadFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(uploadPdfFormContainer).display === 'none') {
+        uploadPdfFormContainer.style.display = 'block';
+        addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
+        userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
+        previouslyVisibleForm = 'uploadPdf';
+    } else {
+        uploadPdfFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'uploadPdf';
     }
 });
 
@@ -634,7 +660,14 @@ function updateExistingUser(userEmail, userUsername, userPassword, userRole) {
     span.textContent = `${userUsername} (${userEmail}) - ${userRole}`;
 
     // Actualizar en el almacenamiento
-    saveUsers();
+    const users = loadUsers();
+    users[editUserIndex] = {
+        email: userEmail,
+        username: userUsername,
+        password: userPassword,
+        role: userRole
+    };
+    localStorage.setItem('userList', JSON.stringify(users));
 
     userMessage.textContent = 'Usuario actualizado exitosamente.';
     userMessage.style.color = 'green';
@@ -664,7 +697,12 @@ function deleteUser(li) {
     userList.removeChild(li);
 
     // Eliminar del almacenamiento
-    saveUsers();
+    const users = loadUsers();
+    users.splice(index, 1);
+    localStorage.setItem('userList', JSON.stringify(users));
+
+    userMessage.textContent = 'Usuario eliminado exitosamente.';
+    userMessage.style.color = 'green';
 }
 
 // Función para guardar los usuarios en localStorage
