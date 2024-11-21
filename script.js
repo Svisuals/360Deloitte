@@ -119,6 +119,7 @@ toggleButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'none';
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
+        previouslyVisibleForm = null;
         document.getElementById('container').classList.remove('horizontal-split');
     } else {
         iframe2.style.display = 'none';
@@ -144,6 +145,7 @@ togglePdfButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'none';
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
+        previouslyVisibleForm = null;
         document.getElementById('container').classList.add('horizontal-split');
     } else {
         pdfViewer.style.display = 'none';
@@ -160,27 +162,20 @@ toggleFormButton.addEventListener('click', () => {
         // Mostrar los botones
         toggleUploadFormButton.style.display = 'block';
         toggleManageFormButton.style.display = 'block';
-        // Restaurar el formulario que estaba visible anteriormente
-        if (previouslyVisibleForm === 'addLink') {
-            addLinkFormContainer.style.display = 'block';
-        } else if (previouslyVisibleForm === 'uploadPdf') {
-            uploadPdfFormContainer.style.display = 'block';
-        }
+        // Mostrar el formulario de gestión de enlaces por defecto
+        addLinkFormContainer.style.display = 'block';
+        uploadPdfFormContainer.style.display = 'none';
+        // Establecer el formulario visible actual como 'addLink'
+        previouslyVisibleForm = 'addLink';
     } else {
         // Ocultar los botones
         toggleUploadFormButton.style.display = 'none';
         toggleManageFormButton.style.display = 'none';
-        // Recordar qué formulario estaba visible antes de ocultarlos
-        if (addLinkFormContainer.style.display === 'block') {
-            previouslyVisibleForm = 'addLink';
-        } else if (uploadPdfFormContainer.style.display === 'block') {
-            previouslyVisibleForm = 'uploadPdf';
-        } else {
-            previouslyVisibleForm = null;
-        }
         // Ocultar formularios
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
+        // Restablecer el formulario visible actual
+        previouslyVisibleForm = null;
     }
 });
 
@@ -191,8 +186,9 @@ toggleManageFormButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
         previouslyVisibleForm = 'addLink';
     } else {
-        // Mantener el formulario visible según tus indicaciones
+        // Mantener el formulario visible
         addLinkFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'addLink';
     }
 });
 
@@ -203,8 +199,9 @@ toggleUploadFormButton.addEventListener('click', () => {
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
         previouslyVisibleForm = 'uploadPdf';
     } else {
-        // Mantener el formulario visible según tus indicaciones
+        // Mantener el formulario visible
         uploadPdfFormContainer.style.display = 'block';
+        previouslyVisibleForm = 'uploadPdf';
     }
 });
 
