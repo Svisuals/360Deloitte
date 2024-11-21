@@ -66,12 +66,14 @@ authForm.addEventListener('submit', (event) => {
         // Mostrar u ocultar los botones según el rol del usuario
         if (user.role === 'administrador') {
             toggleFormButton.style.display = 'block';
+            toggleTaskFormButton.style.display = 'block'; // Mostrar el botón de tareas
             // Los botones están ocultos por defecto
         } else {
             toggleFormButton.style.display = 'none';
             toggleUploadFormButton.style.display = 'none';
             toggleManageFormButton.style.display = 'none';
             toggleUserFormButton.style.display = 'none';
+            toggleTaskFormButton.style.display = 'none'; // Ocultar el botón de tareas
         }
     } else if ((username === 'ADM' || username === 'deloitte') && password === '1234') {
         // Usuarios predefinidos
@@ -82,9 +84,10 @@ authForm.addEventListener('submit', (event) => {
 
         // Mostrar botones de administrador
         toggleFormButton.style.display = 'block';
+        toggleTaskFormButton.style.display = 'block'; // Mostrar el botón de tareas
     } else {
         // Mostrar mensaje de error
-        errorMessage.textContent = 'Usuário ou senha incorretos.';
+        errorMessage.textContent = 'Usuario o contraseña incorrectos.';
         errorMessage.style.display = 'block';
     }
 });
@@ -99,6 +102,7 @@ const toggleFormButton = document.getElementById('toggleFormButton');
 const toggleUploadFormButton = document.getElementById('toggleUploadFormButton');
 const toggleManageFormButton = document.getElementById('toggleManageFormButton');
 const toggleUserFormButton = document.getElementById('toggleUserFormButton');
+const toggleTaskFormButton = document.getElementById('toggleTaskFormButton'); // Nuevo botón
 const iframe1Menu = document.getElementById('iframe1Menu');
 const iframe2Menu = document.getElementById('iframe2Menu');
 const iframe1MenuButton = document.getElementById('iframe1MenuButton');
@@ -108,6 +112,7 @@ const iframe2MenuContent = document.getElementById('iframe2MenuContent');
 const addLinkFormContainer = document.getElementById('addLinkFormContainer');
 const uploadPdfFormContainer = document.getElementById('uploadPdfFormContainer');
 const userFormContainer = document.getElementById('userFormContainer');
+const taskFormContainer = document.getElementById('taskFormContainer'); // Nuevo contenedor
 
 // Inicialmente mostrar solo iframe1
 iframe1.style.display = 'block';
@@ -122,6 +127,7 @@ toggleFormButton.style.display = 'none';
 toggleUserFormButton.style.display = 'none'; // Nuevo botón
 toggleUploadFormButton.style.display = 'none';
 toggleManageFormButton.style.display = 'none';
+toggleTaskFormButton.style.display = 'none'; // Nuevo botón
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -219,12 +225,28 @@ toggleFormButton.addEventListener('click', () => {
     }
 });
 
+// Event listener para el botón que alterna el formulario de gestionar tareas
+toggleTaskFormButton.addEventListener('click', () => {
+    if (window.getComputedStyle(taskFormContainer).display === 'none') {
+        taskFormContainer.style.display = 'block';
+        // Ocultar otros formularios si es necesario
+        addLinkFormContainer.style.display = 'none';
+        uploadPdfFormContainer.style.display = 'none';
+        userFormContainer.style.display = 'none';
+        previouslyVisibleForm = 'taskForm';
+    } else {
+        taskFormContainer.style.display = 'none';
+        previouslyVisibleForm = null;
+    }
+});
+
 // Event listener para el botón que alterna el formulario de gestionar enlaces
 toggleManageFormButton.addEventListener('click', () => {
     if (window.getComputedStyle(addLinkFormContainer).display === 'none') {
         addLinkFormContainer.style.display = 'block';
         uploadPdfFormContainer.style.display = 'none'; // Ocultar formulario de subir PDF si está visible
         userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
+        taskFormContainer.style.display = 'none'; // Ocultar formulario de tareas
         previouslyVisibleForm = 'addLink';
     } else {
         addLinkFormContainer.style.display = 'block';
@@ -238,6 +260,7 @@ toggleUploadFormButton.addEventListener('click', () => {
         uploadPdfFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none'; // Ocultar formulario de enlaces si está visible
         userFormContainer.style.display = 'none'; // Ocultar formulario de usuarios si está visible
+        taskFormContainer.style.display = 'none'; // Ocultar formulario de tareas
         previouslyVisibleForm = 'uploadPdf';
     } else {
         uploadPdfFormContainer.style.display = 'block';
@@ -251,6 +274,7 @@ toggleUserFormButton.addEventListener('click', () => {
         userFormContainer.style.display = 'block';
         addLinkFormContainer.style.display = 'none';
         uploadPdfFormContainer.style.display = 'none';
+        taskFormContainer.style.display = 'none'; // Ocultar formulario de tareas
         previouslyVisibleForm = 'userForm';
     } else {
         userFormContainer.style.display = 'block';
@@ -722,3 +746,252 @@ function saveUsers() {
 
 // Llamar a loadUsers() al cargar la página
 loadUsers();
+
+// Manejo del formulario de tareas
+
+// Variables para manejar las tareas
+const taskForm = document.getElementById('taskForm');
+const taskTitleInput = document.getElementById('taskTitle');
+const taskTypeInput = document.getElementById('taskType');
+const taskStatusInput = document.getElementById('taskStatus');
+const taskPriorityInput = document.getElementById('taskPriority');
+const taskCreatorInput = document.getElementById('taskCreator');
+const taskResponsibleInput = document.getElementById('taskResponsible');
+const taskCreationDateInput = document.getElementById('taskCreationDate');
+const taskDueDateInput = document.getElementById('taskDueDate');
+const taskDisciplinesInput = document.getElementById('taskDisciplines');
+const taskCausesInput = document.getElementById('taskCauses');
+const taskDescriptionInput = document.getElementById('taskDescription');
+const taskScreenshotInput = document.getElementById('taskScreenshot');
+const taskMessage = document.getElementById('taskMessage');
+const taskList = document.getElementById('taskList');
+const updateTaskButton = document.getElementById('updateTaskButton');
+const cancelTaskEditButton = document.getElementById('cancelTaskEditButton');
+
+let tasksData = [];
+let editTaskIndex = null;
+
+// Función para guardar las tareas en localStorage
+function saveTasks() {
+    localStorage.setItem('tasksData', JSON.stringify(tasksData));
+}
+
+// Función para cargar las tareas desde localStorage
+function loadTasks() {
+    tasksData = JSON.parse(localStorage.getItem('tasksData')) || [];
+    renderTaskList();
+}
+
+// Función para renderizar la lista de tareas
+function renderTaskList() {
+    taskList.innerHTML = '';
+    tasksData.forEach((task, index) => {
+        const li = document.createElement('li');
+
+        const taskDetails = document.createElement('div');
+        taskDetails.classList.add('task-details');
+        taskDetails.innerHTML = `
+            <strong>Título:</strong> ${task.title}<br>
+            <strong>Tipo:</strong> ${task.type}<br>
+            <strong>Estado:</strong> ${task.status}<br>
+            <strong>Prioridad:</strong> ${task.priority}<br>
+            <strong>Creador:</strong> ${task.creator}<br>
+            <strong>Responsable:</strong> ${task.responsible}<br>
+            <strong>Fecha de creación:</strong> ${task.creationDate}<br>
+            <strong>Fecha de vencimiento:</strong> ${task.dueDate}<br>
+            <strong>Disciplinas:</strong> ${task.disciplines}<br>
+            <strong>Causas:</strong> ${task.causes}<br>
+            <strong>Descripción:</strong> ${task.description}<br>
+        `;
+
+        if (task.screenshot) {
+            const img = document.createElement('img');
+            img.src = task.screenshot;
+            img.alt = 'Captura de pantalla';
+            img.style.maxWidth = '100%';
+            img.style.marginTop = '10px';
+            taskDetails.appendChild(img);
+        }
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.addEventListener('click', () => editTask(index));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.classList.add('delete-task-button');
+        deleteButton.addEventListener('click', () => deleteTask(index));
+
+        const exportButton = document.createElement('button');
+        exportButton.textContent = 'Exportar a PDF';
+        exportButton.classList.add('export-task-button');
+        exportButton.addEventListener('click', () => exportTaskToPDF(task));
+
+        li.appendChild(taskDetails);
+        li.appendChild(exportButton);
+        li.appendChild(editButton);
+        li.appendChild(deleteButton);
+
+        taskList.appendChild(li);
+    });
+}
+
+// Manejar el envío del formulario de tareas
+taskForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    // Obtener los valores del formulario
+    const task = {
+        title: taskTitleInput.value.trim(),
+        type: taskTypeInput.value.trim(),
+        status: taskStatusInput.value.trim(),
+        priority: taskPriorityInput.value.trim(),
+        creator: taskCreatorInput.value.trim(),
+        responsible: taskResponsibleInput.value.trim(),
+        creationDate: taskCreationDateInput.value,
+        dueDate: taskDueDateInput.value,
+        disciplines: taskDisciplinesInput.value.trim(),
+        causes: taskCausesInput.value.trim(),
+        description: taskDescriptionInput.value.trim(),
+        screenshot: null,
+    };
+
+    // Manejar la captura de pantalla
+    const file = taskScreenshotInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            task.screenshot = e.target.result;
+            saveOrUpdateTask(task);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        saveOrUpdateTask(task);
+    }
+});
+
+function saveOrUpdateTask(task) {
+    if (editTaskIndex !== null) {
+        // Actualizar tarea existente
+        tasksData[editTaskIndex] = task;
+        taskMessage.textContent = 'Tarea actualizada exitosamente.';
+    } else {
+        // Agregar nueva tarea
+        tasksData.push(task);
+        taskMessage.textContent = 'Tarea agregada exitosamente.';
+    }
+
+    taskMessage.style.color = 'green';
+
+    // Limpiar el formulario
+    taskForm.reset();
+    editTaskIndex = null;
+    updateTaskButton.style.display = 'none';
+    cancelTaskEditButton.style.display = 'none';
+    taskForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar y actualizar la interfaz
+    saveTasks();
+    renderTaskList();
+}
+
+// Función para editar una tarea
+function editTask(index) {
+    const task = tasksData[index];
+    editTaskIndex = index;
+
+    // Cargar los datos en el formulario
+    taskTitleInput.value = task.title;
+    taskTypeInput.value = task.type;
+    taskStatusInput.value = task.status;
+    taskPriorityInput.value = task.priority;
+    taskCreatorInput.value = task.creator;
+    taskResponsibleInput.value = task.responsible;
+    taskCreationDateInput.value = task.creationDate;
+    taskDueDateInput.value = task.dueDate;
+    taskDisciplinesInput.value = task.disciplines;
+    taskCausesInput.value = task.causes;
+    taskDescriptionInput.value = task.description;
+    // Nota: No podemos cargar la captura de pantalla en el input file por seguridad
+
+    taskForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateTaskButton.style.display = 'block';
+    cancelTaskEditButton.style.display = 'block';
+}
+
+// Event listener para el botón de actualizar tarea
+updateTaskButton.addEventListener('click', () => {
+    taskForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición de tarea
+cancelTaskEditButton.addEventListener('click', () => {
+    taskForm.reset();
+    editTaskIndex = null;
+    updateTaskButton.style.display = 'none';
+    cancelTaskEditButton.style.display = 'none';
+    taskForm.querySelector('button[type="submit"]').style.display = 'block';
+    taskMessage.textContent = '';
+});
+
+// Función para eliminar una tarea
+function deleteTask(index) {
+    tasksData.splice(index, 1);
+    saveTasks();
+    renderTaskList();
+    taskMessage.textContent = 'Tarea eliminada exitosamente.';
+    taskMessage.style.color = 'green';
+}
+
+// Función para exportar una tarea a PDF
+function exportTaskToPDF(task) {
+    // Usaremos jsPDF para generar el PDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    let y = 10;
+
+    doc.setFontSize(12);
+    doc.text(`Título: ${task.title}`, 10, y);
+    y += 10;
+    doc.text(`Tipo: ${task.type}`, 10, y);
+    y += 10;
+    doc.text(`Estado: ${task.status}`, 10, y);
+    y += 10;
+    doc.text(`Prioridad: ${task.priority}`, 10, y);
+    y += 10;
+    doc.text(`Creador: ${task.creator}`, 10, y);
+    y += 10;
+    doc.text(`Responsable: ${task.responsible}`, 10, y);
+    y += 10;
+    doc.text(`Fecha de creación: ${task.creationDate}`, 10, y);
+    y += 10;
+    doc.text(`Fecha de vencimiento: ${task.dueDate}`, 10, y);
+    y += 10;
+    doc.text(`Disciplinas: ${task.disciplines}`, 10, y);
+    y += 10;
+    doc.text(`Causas: ${task.causes}`, 10, y);
+    y += 10;
+    doc.text(`Descripción:`, 10, y);
+    y += 10;
+
+    // Manejar texto largo en descripción
+    const descriptionLines = doc.splitTextToSize(task.description, 180);
+    doc.text(descriptionLines, 10, y);
+    y += descriptionLines.length * 10;
+
+    // Agregar captura de pantalla si existe
+    if (task.screenshot) {
+        y += 10;
+        doc.addImage(task.screenshot, 'JPEG', 10, y, 180, 100);
+    }
+
+    // Guardar el PDF
+    doc.save(`Tarea_${task.title}.pdf`);
+}
+
+// Cargar las tareas al iniciar la página
+loadTasks();
+
+// Ajustar el layout inicial
+adjustLayout();
