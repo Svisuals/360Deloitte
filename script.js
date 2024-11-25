@@ -1,3 +1,7 @@
+// =========================
+// Autenticación de Usuarios
+// =========================
+
 // Obtener elementos de inicio de sesión
 const loginOverlay = document.getElementById('loginOverlay');
 const authForm = document.getElementById('authForm');
@@ -7,9 +11,6 @@ const errorMessage = document.getElementById('errorMessage');
 
 // Variable para almacenar el usuario autenticado
 let loggedInUser = null;
-
-// Variables para recordar el estado previo
-let previouslyVisibleForm = null;
 
 // Variable global para almacenar los usuarios en memoria
 let usersData = [];
@@ -90,6 +91,734 @@ authForm.addEventListener('submit', (event) => {
     }
 });
 
+// =========================
+// Gestión de Enlaces
+// =========================
+
+// Obtener elementos relacionados con el formulario de agregar enlaces
+const addLinkForm = document.getElementById('addLinkForm');
+const linkTextInput = document.getElementById('linkText');
+const linkURLInput = document.getElementById('linkURL');
+const addLinkMessage = document.getElementById('addLinkMessage');
+const linkList = document.getElementById('linkList');
+const updateLinkButton = document.getElementById('updateLinkButton');
+const cancelEditButton = document.getElementById('cancelEditButton');
+
+let editIndex = null; // Variable para saber si estamos editando un enlace
+
+// Manejar el envío del formulario para agregar o actualizar enlaces
+addLinkForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
+
+    const linkText = linkTextInput.value.trim();
+    const linkURL = linkURLInput.value.trim();
+
+    if (linkText === '' || linkURL === '') {
+        addLinkMessage.textContent = 'Por favor, completa todos los campos.';
+        addLinkMessage.style.color = 'red';
+        return;
+    }
+
+    if (editIndex !== null) {
+        // Actualizar el enlace existente
+        updateExistingLink(linkText, linkURL);
+    } else {
+        // Agregar un nuevo enlace
+        addNewLink(linkText, linkURL);
+    }
+
+    // Limpiar los campos del formulario
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar los enlaces en localStorage
+    saveLinks();
+});
+
+// Función para agregar un nuevo enlace
+function addNewLink(linkText, linkURL) {
+    // Crear nuevos elementos de enlace
+    const newLink1 = document.createElement('a');
+    newLink1.href = linkURL;
+    newLink1.textContent = linkText;
+
+    const newLink2 = newLink1.cloneNode(true);
+
+    // Agregar el enlace a ambos menús
+    iframe1MenuContent.appendChild(newLink1);
+    iframe2MenuContent.appendChild(newLink2);
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    // Agregar a la lista de enlaces
+    addLinkToList(linkText, linkURL);
+
+    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para actualizar un enlace existente
+function updateExistingLink(linkText, linkURL) {
+    // Actualizar en los menús
+    const links1 = iframe1MenuContent.querySelectorAll('a');
+    const links2 = iframe2MenuContent.querySelectorAll('a');
+
+    if (links1[editIndex] && links2[editIndex]) {
+        links1[editIndex].textContent = linkText;
+        links1[editIndex].href = linkURL;
+
+        links2[editIndex].textContent = linkText;
+        links2[editIndex].href = linkURL;
+    }
+
+    // Actualizar en la lista
+    const listItems = linkList.querySelectorAll('li');
+    if (listItems[editIndex]) {
+        const span = listItems[editIndex].querySelector('span');
+        span.textContent = linkText;
+    }
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    addLinkMessage.textContent = 'Enlace actualizado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para agregar el enlace a la lista de enlaces
+function addLinkToList(linkText, linkURL) {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = linkText;
+
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.classList.add('edit-button');
+    editButton.addEventListener('click', () => editLink(li, linkText, linkURL));
+
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.addEventListener('click', () => deleteLink(li));
+
+    li.appendChild(span);
+    li.appendChild(editButton);
+    li.appendChild(deleteButton);
+
+    linkList.appendChild(li);
+}
+
+// Función para editar un enlace
+function editLink(li, linkText, linkURL) {
+    const index = Array.from(linkList.children).indexOf(li);
+    editIndex = index;
+
+    linkTextInput.value = linkText;
+    linkURLInput.value = linkURL;
+
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateLinkButton.style.display = 'block';
+    cancelEditButton.style.display = 'block';
+}
+
+// Event listener para el botón de actualizar enlace
+updateLinkButton.addEventListener('click', () => {
+    addLinkForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición
+cancelEditButton.addEventListener('click', () => {
+    linkTextInput.value = '';
+    linkURLInput.value = '';
+    editIndex = null;
+    updateLinkButton.style.display = 'none';
+    cancelEditButton.style.display = 'none';
+    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
+    addLinkMessage.textContent = '';
+});
+
+// Función para eliminar un enlace
+function deleteLink(li) {
+    const index = Array.from(linkList.children).indexOf(li);
+
+    // Eliminar de los menús
+    if (iframe1MenuContent.children[index] && iframe2MenuContent.children[index]) {
+        iframe1MenuContent.removeChild(iframe1MenuContent.children[index]);
+        iframe2MenuContent.removeChild(iframe2MenuContent.children[index]);
+    }
+
+    // Eliminar de la lista
+    linkList.removeChild(li);
+
+    // Actualizar los event listeners
+    updateMenuEventListeners();
+
+    // Guardar los enlaces en localStorage
+    saveLinks();
+
+    addLinkMessage.textContent = 'Enlace eliminado exitosamente.';
+    addLinkMessage.style.color = 'green';
+}
+
+// Función para guardar los enlaces en localStorage
+function saveLinks() {
+    const iframe1Links = Array.from(iframe1MenuContent.querySelectorAll('a')).map(link => ({
+        text: link.textContent,
+        href: link.href
+    }));
+    const linksData = {
+        iframe1Links
+    };
+
+    localStorage.setItem('menuLinks', JSON.stringify(linksData));
+}
+
+// Función para cargar los enlaces desde localStorage
+function loadLinks() {
+    const linksData = JSON.parse(localStorage.getItem('menuLinks'));
+
+    if (linksData) {
+        // Limpiar menús y lista existentes
+        iframe1MenuContent.innerHTML = '';
+        iframe2MenuContent.innerHTML = '';
+        linkList.innerHTML = '';
+
+        // Cargar enlaces en los menús y en la lista
+        linksData.iframe1Links.forEach(linkData => {
+            // Agregar a los menús
+            const link1 = document.createElement('a');
+            link1.href = linkData.href;
+            link1.textContent = linkData.text;
+            iframe1MenuContent.appendChild(link1);
+
+            const link2 = link1.cloneNode(true);
+            iframe2MenuContent.appendChild(link2);
+
+            // Agregar a la lista
+            addLinkToList(linkData.text, linkData.href);
+        });
+
+        // Actualizar event listeners
+        updateMenuEventListeners();
+    }
+}
+
+// Llamar a loadLinks() al cargar la página
+loadLinks();
+
+// =========================
+// Gestión de Usuarios
+// =========================
+
+// Obtener elementos del formulario de gestionar usuarios
+const userForm = document.getElementById('userForm');
+const userEmailInput = document.getElementById('userEmail');
+const userUsernameInput = document.getElementById('userUsername');
+const userPasswordInput = document.getElementById('userPassword');
+const userRoleSelect = document.getElementById('userRole');
+const userMessage = document.getElementById('userMessage');
+const userList = document.getElementById('userList');
+const updateUserButton = document.getElementById('updateUserButton');
+const cancelUserEditButton = document.getElementById('cancelUserEditButton');
+
+let editUserIndex = null; // Variable para saber si estamos editando un usuario
+
+// Manejar el envío del formulario de usuarios
+userForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const userEmail = userEmailInput.value.trim();
+    const userUsername = userUsernameInput.value.trim();
+    const userPassword = userPasswordInput.value.trim();
+    const userRole = userRoleSelect.value;
+
+    if (userEmail === '' || userUsername === '' || userPassword === '' || userRole === '') {
+        userMessage.textContent = 'Por favor, completa todos los campos.';
+        userMessage.style.color = 'red';
+        return;
+    }
+
+    if (editUserIndex !== null) {
+        // Actualizar el usuario existente
+        updateExistingUser(userEmail, userUsername, userPassword, userRole);
+    } else {
+        // Agregar un nuevo usuario
+        addNewUser(userEmail, userUsername, userPassword, userRole);
+    }
+
+    // Limpiar los campos del formulario
+    userEmailInput.value = '';
+    userUsernameInput.value = '';
+    userPasswordInput.value = '';
+    userRoleSelect.value = 'miembro';
+    editUserIndex = null;
+    updateUserButton.style.display = 'none';
+    cancelUserEditButton.style.display = 'none';
+    userForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    userMessage.textContent = '';
+});
+
+// Función para agregar un nuevo usuario
+function addNewUser(userEmail, userUsername, userPassword, userRole) {
+    // Agregar el usuario a la lista en memoria
+    usersData.push({
+        email: userEmail,
+        username: userUsername,
+        password: userPassword,
+        role: userRole
+    });
+
+    // Guardar y actualizar la interfaz
+    saveUsers();
+    renderUserList();
+
+    userMessage.textContent = 'Usuario agregado exitosamente.';
+    userMessage.style.color = 'green';
+}
+
+// Función para editar un usuario
+function editUser(index) {
+    editUserIndex = index;
+    const userData = usersData[index];
+
+    userEmailInput.value = userData.email;
+    userUsernameInput.value = userData.username;
+    userPasswordInput.value = userData.password;
+    userRoleSelect.value = userData.role;
+
+    userForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateUserButton.style.display = 'block';
+    cancelUserEditButton.style.display = 'block';
+}
+
+// Función para actualizar un usuario existente
+function updateExistingUser(userEmail, userUsername, userPassword, userRole) {
+    // Actualizar en la lista en memoria
+    usersData[editUserIndex] = {
+        email: userEmail,
+        username: userUsername,
+        password: userPassword,
+        role: userRole
+    };
+
+    // Guardar y actualizar la interfaz
+    saveUsers();
+    renderUserList();
+
+    userMessage.textContent = 'Usuario actualizado exitosamente.';
+    userMessage.style.color = 'green';
+}
+
+// Event listener para el botón de actualizar usuario
+updateUserButton.addEventListener('click', () => {
+    userForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición de usuario
+cancelUserEditButton.addEventListener('click', () => {
+    userEmailInput.value = '';
+    userUsernameInput.value = '';
+    userPasswordInput.value = '';
+    userRoleSelect.value = 'miembro';
+    editUserIndex = null;
+    updateUserButton.style.display = 'none';
+    cancelUserEditButton.style.display = 'none';
+    userForm.querySelector('button[type="submit"]').style.display = 'block';
+    userMessage.textContent = '';
+});
+
+// Función para eliminar un usuario
+function deleteUser(index) {
+    // Eliminar del almacenamiento en memoria
+    usersData.splice(index, 1);
+
+    // Guardar y actualizar la interfaz
+    saveUsers();
+    renderUserList();
+
+    userMessage.textContent = 'Usuario eliminado exitosamente.';
+    userMessage.style.color = 'green';
+}
+
+// Función para guardar los usuarios en localStorage
+function saveUsers() {
+    localStorage.setItem('userList', JSON.stringify(usersData));
+}
+
+// Llamar a loadUsers() al cargar la página
+loadUsers();
+
+// =========================
+// Gestión de Incidencias
+// =========================
+
+// Variables para gestionar incidencias
+let issuesData = [];
+
+// Función para cargar las incidencias desde localStorage
+function loadIssues() {
+    issuesData = JSON.parse(localStorage.getItem('issueList')) || [];
+    renderIssueList();
+}
+
+// Función para renderizar la lista de incidencias en la interfaz
+function renderIssueList() {
+    issueList.innerHTML = '';
+    issuesData.forEach((issueData, index) => {
+        const li = document.createElement('li');
+
+        const detailsDiv = document.createElement('div');
+        detailsDiv.classList.add('issue-details');
+        detailsDiv.innerHTML = `
+            <strong>${issueData.title}</strong><br>
+            Tipo: ${issueData.type}<br>
+            Estado: ${issueData.status}<br>
+            Prioridad: ${issueData.priority}<br>
+            Creador: ${issueData.creator}<br>
+            Responsable: ${issueData.responsible}<br>
+            Fecha de Creación: ${issueData.creationDate}<br>
+            Fecha de Vencimiento: ${issueData.dueDate}<br>
+            Disciplinas: ${issueData.discipline}<br>
+            Causas: ${issueData.cause}<br>
+            Descripción: ${issueData.description}
+        `;
+
+        if (issueData.screenshot) {
+            const img = document.createElement('img');
+            img.src = issueData.screenshot;
+            img.alt = 'Captura de pantalla';
+            img.style.maxWidth = '100%';
+            img.style.marginTop = '10px';
+            detailsDiv.appendChild(img);
+        }
+
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.style.display = 'flex';
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Editar';
+        editButton.classList.add('edit-issue-button');
+        editButton.addEventListener('click', () => editIssue(index));
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Eliminar';
+        deleteButton.addEventListener('click', () => deleteIssue(index));
+
+        buttonsDiv.appendChild(editButton);
+        buttonsDiv.appendChild(deleteButton);
+
+        li.appendChild(detailsDiv);
+        li.appendChild(buttonsDiv);
+
+        issueList.appendChild(li);
+    });
+}
+
+// Obtener elementos del formulario de incidencias
+const issueForm = document.getElementById('issueForm');
+const issueTitleInput = document.getElementById('issueTitle');
+const issueTypeInput = document.getElementById('issueType');
+const issueStatusInput = document.getElementById('issueStatus');
+const issuePriorityInput = document.getElementById('issuePriority');
+const issueCreatorInput = document.getElementById('issueCreator');
+const issueResponsibleInput = document.getElementById('issueResponsible');
+const issueCreationDateInput = document.getElementById('issueCreationDate');
+const issueDueDateInput = document.getElementById('issueDueDate');
+const issueDisciplineInput = document.getElementById('issueDiscipline');
+const issueCauseInput = document.getElementById('issueCause');
+const issueDescriptionInput = document.getElementById('issueDescription');
+const issueScreenshotInput = document.getElementById('issueScreenshot');
+const issueMessage = document.getElementById('issueMessage');
+const issueList = document.getElementById('issueList');
+const updateIssueButton = document.getElementById('updateIssueButton');
+const cancelIssueEditButton = document.getElementById('cancelIssueEditButton');
+
+let editIssueIndex = null; // Variable para saber si estamos editando una incidencia
+
+// Manejar el envío del formulario de incidencias
+issueForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const issueData = {
+        title: issueTitleInput.value.trim(),
+        type: issueTypeInput.value.trim(),
+        status: issueStatusInput.value.trim(),
+        priority: issuePriorityInput.value.trim(),
+        creator: issueCreatorInput.value.trim(),
+        responsible: issueResponsibleInput.value.trim(),
+        creationDate: issueCreationDateInput.value,
+        dueDate: issueDueDateInput.value,
+        discipline: issueDisciplineInput.value.trim(),
+        cause: issueCauseInput.value.trim(),
+        description: issueDescriptionInput.value.trim(),
+        screenshot: null
+    };
+
+    if (issueScreenshotInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            issueData.screenshot = e.target.result;
+            processIssueData(issueData);
+        };
+        reader.readAsDataURL(issueScreenshotInput.files[0]);
+    } else {
+        processIssueData(issueData);
+    }
+});
+
+// Función para procesar y agregar/actualizar la incidencia
+function processIssueData(issueData) {
+    if (editIssueIndex !== null) {
+        // Actualizar la incidencia existente
+        issuesData[editIssueIndex] = issueData;
+        issueMessage.textContent = 'Incidencia actualizada exitosamente.';
+        issueMessage.style.color = 'green';
+    } else {
+        // Agregar una nueva incidencia
+        issuesData.push(issueData);
+        issueMessage.textContent = 'Incidencia agregada exitosamente.';
+        issueMessage.style.color = 'green';
+    }
+
+    // Limpiar los campos del formulario
+    issueForm.reset();
+    editIssueIndex = null;
+    updateIssueButton.style.display = 'none';
+    cancelIssueEditButton.style.display = 'none';
+    issueForm.querySelector('button[type="submit"]').style.display = 'block';
+
+    // Guardar y actualizar la interfaz
+    saveIssues();
+    renderIssueList();
+}
+
+// Event listener para el botón de actualizar incidencia
+updateIssueButton.addEventListener('click', () => {
+    issueForm.dispatchEvent(new Event('submit'));
+});
+
+// Event listener para cancelar la edición de incidencia
+cancelIssueEditButton.addEventListener('click', () => {
+    issueForm.reset();
+    editIssueIndex = null;
+    updateIssueButton.style.display = 'none';
+    cancelIssueEditButton.style.display = 'none';
+    issueForm.querySelector('button[type="submit"]').style.display = 'block';
+    issueMessage.textContent = '';
+});
+
+// Función para editar una incidencia
+function editIssue(index) {
+    editIssueIndex = index;
+    const issueData = issuesData[index];
+
+    issueTitleInput.value = issueData.title;
+    issueTypeInput.value = issueData.type;
+    issueStatusInput.value = issueData.status;
+    issuePriorityInput.value = issueData.priority;
+    issueCreatorInput.value = issueData.creator;
+    issueResponsibleInput.value = issueData.responsible;
+    issueCreationDateInput.value = issueData.creationDate;
+    issueDueDateInput.value = issueData.dueDate;
+    issueDisciplineInput.value = issueData.discipline;
+    issueCauseInput.value = issueData.cause;
+    issueDescriptionInput.value = issueData.description;
+
+    issueForm.querySelector('button[type="submit"]').style.display = 'none';
+    updateIssueButton.style.display = 'block';
+    cancelIssueEditButton.style.display = 'block';
+
+    // Mostrar el formulario si no está visible
+    issueFormContainer.style.display = 'block';
+    previouslyVisibleForm = 'issueForm';
+}
+
+// Función para eliminar una incidencia
+function deleteIssue(index) {
+    issuesData.splice(index, 1);
+    saveIssues();
+    renderIssueList();
+    issueMessage.textContent = 'Incidencia eliminada exitosamente.';
+    issueMessage.style.color = 'green';
+}
+
+// Función para guardar las incidencias en localStorage
+function saveIssues() {
+    localStorage.setItem('issueList', JSON.stringify(issuesData));
+}
+
+// Llamar a loadIssues() al cargar la página
+loadIssues();
+
+// =========================
+// Exportación de Incidencias
+// =========================
+
+// Obtener elementos de los botones de exportación
+const exportExcelButton = document.getElementById('exportExcelButton');
+const exportPdfButton = document.getElementById('exportPdfButton');
+
+// Event Listeners para los botones de exportación
+exportExcelButton.addEventListener('click', exportIssuesToExcel);
+exportPdfButton.addEventListener('click', exportIssuesToPdf);
+
+// Función para Exportar a Excel
+function exportIssuesToExcel() {
+    if (issuesData.length === 0) {
+        alert('No hay incidencias para exportar.');
+        return;
+    }
+
+    // Crear una nueva hoja de cálculo
+    const workbook = XLSX.utils.book_new();
+    const worksheetData = [];
+
+    // Añadir encabezados
+    worksheetData.push([
+        'Título',
+        'Tipo',
+        'Estado',
+        'Prioridad',
+        'Creador',
+        'Responsable',
+        'Fecha de Creación',
+        'Fecha de Vencimiento',
+        'Disciplinas',
+        'Causas',
+        'Descripción'
+    ]);
+
+    // Añadir datos de las incidencias
+    issuesData.forEach(issue => {
+        worksheetData.push([
+            issue.title,
+            issue.type,
+            issue.status,
+            issue.priority,
+            issue.creator,
+            issue.responsible,
+            issue.creationDate,
+            issue.dueDate,
+            issue.discipline,
+            issue.cause,
+            issue.description
+        ]);
+    });
+
+    // Convertir datos a hoja de cálculo
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+    // Opciones de estilo (opcional)
+    const range = XLSX.utils.decode_range(worksheet['!ref']);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+        const address = XLSX.utils.encode_col(C) + '1'; // Primera fila para encabezados
+        if (!worksheet[address]) continue;
+        worksheet[address].s = {
+            font: { bold: true }
+        };
+    }
+
+    // Añadir hoja al libro
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Incidencias');
+
+    // Exportar archivo Excel
+    XLSX.writeFile(workbook, 'incidencias.xlsx');
+}
+
+// Función para Exportar a PDF
+function exportIssuesToPdf() {
+    if (issuesData.length === 0) {
+        alert('No hay incidencias para exportar.');
+        return;
+    }
+
+    // Inicializar jsPDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Añadir título
+    doc.setFontSize(18);
+    doc.text('Reporte de Incidencias', 14, 22);
+
+    // Preparar datos para la tabla
+    const tableColumn = [
+        'Título',
+        'Tipo',
+        'Estado',
+        'Prioridad',
+        'Creador',
+        'Responsable',
+        'Fecha de Creación',
+        'Fecha de Vencimiento',
+        'Disciplinas',
+        'Causas',
+        'Descripción'
+    ];
+    const tableRows = [];
+
+    issuesData.forEach(issue => {
+        const issueData = [
+            issue.title,
+            issue.type,
+            issue.status,
+            issue.priority,
+            issue.creator,
+            issue.responsible,
+            issue.creationDate,
+            issue.dueDate,
+            issue.discipline,
+            issue.cause,
+            issue.description
+        ];
+        tableRows.push(issueData);
+    });
+
+    // Añadir tabla al PDF
+    doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 30,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [12, 122, 32] }, // Color verde para encabezados
+        margin: { horizontal: 14 }
+    });
+
+    // Añadir imágenes si existen
+    let currentY = doc.lastAutoTable.finalY + 10;
+
+    issuesData.forEach((issue, index) => {
+        if (issue.screenshot) {
+            // Verificar si hay espacio suficiente en la página, si no, agregar una nueva página
+            if (currentY + 60 > doc.internal.pageSize.height) {
+                doc.addPage();
+                currentY = 20;
+            }
+
+            // Añadir título de la imagen
+            doc.setFontSize(12);
+            doc.text(`Captura de "${issue.title}"`, 14, currentY);
+
+            // Añadir imagen
+            doc.addImage(issue.screenshot, 'JPEG', 14, currentY + 5, 180, 60);
+
+            // Actualizar posición Y
+            currentY += 70;
+        }
+    });
+
+    // Guardar el PDF
+    doc.save('incidencias.pdf');
+}
+
+// =========================
+// Toggle de Formularios y Botones
+// =========================
+
 // Obtener referencias a los elementos principales
 const toggleButton = document.getElementById('toggleButton');
 const iframe1 = document.getElementById('iframe1');
@@ -120,12 +849,14 @@ pdfViewer.style.display = 'none'; // Ocultar el visor PDF por defecto
 // Ocultar menú del iframe2 inicialmente
 iframe2Menu.style.display = 'none';
 
-// Ocultar los botones del formulario por defecto
-toggleFormButton.style.display = 'none';
-toggleUserFormButton.style.display = 'none'; // Nuevo botón
-toggleUploadFormButton.style.display = 'none';
-toggleManageFormButton.style.display = 'none';
-toggleIssueFormButton.style.display = 'none'; // Nuevo botón
+// Mostrar algunos botones por defecto si el usuario es administrador
+if (loggedInUser) {
+    // Mostrar u ocultar los botones según el rol del usuario
+    const currentUser = usersData.find(u => u.username === loggedInUser);
+    if (currentUser && currentUser.role === 'administrador') {
+        toggleFormButton.style.display = 'block';
+    }
+}
 
 // Event listener para el botón del menú del iframe1
 iframe1MenuButton.addEventListener('click', () => {
@@ -283,6 +1014,10 @@ toggleIssueFormButton.addEventListener('click', () => {
     }
 });
 
+// =========================
+// Formularios de Subir PDF
+// =========================
+
 // Obtener elementos relacionados con el formulario de subir PDF
 const uploadPdfForm = document.getElementById('uploadPdfForm');
 const pdfFileInput = document.getElementById('pdfFile');
@@ -329,7 +1064,10 @@ uploadPdfForm.addEventListener('submit', (event) => {
     }, 2000);
 });
 
-// Función para ajustar el layout
+// =========================
+// Función para Ajustar el Layout
+// =========================
+
 function adjustLayout() {
     const isMobile = window.innerWidth <= 1300;
     const isPortrait = window.innerHeight > window.innerWidth;
@@ -349,12 +1087,10 @@ function adjustLayout() {
             // En orientación horizontal, mostrar u ocultar iframe2 según su estado actual
             if (window.getComputedStyle(iframe2).display === 'block') {
                 iframe1.style.width = '50%';
-                iframe1.style.height = '100%';
                 iframe2.style.width = '50%';
                 iframe2.style.height = '100%';
             } else {
                 iframe1.style.width = '100%';
-                iframe1.style.height = '100%';
                 iframe2.style.width = '0';
                 iframe2.style.height = '0';
             }
@@ -391,7 +1127,10 @@ window.addEventListener('resize', adjustLayout);
 window.addEventListener('orientationchange', adjustLayout);
 adjustLayout();
 
-// Cerrar el menú si el usuario hace clic fuera de él
+// =========================
+// Cerrar Menús al Hacer Clic Fuera
+// =========================
+
 window.addEventListener('click', function(event) {
     if (!event.target.closest('#iframe1MenuButton')) {
         iframe1Menu.classList.remove('show');
@@ -401,546 +1140,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Obtener elementos del formulario de agregar enlaces
-const addLinkForm = document.getElementById('addLinkForm');
-const linkTextInput = document.getElementById('linkText');
-const linkURLInput = document.getElementById('linkURL');
-const addLinkMessage = document.getElementById('addLinkMessage');
-const linkList = document.getElementById('linkList');
-const updateLinkButton = document.getElementById('updateLinkButton');
-const cancelEditButton = document.getElementById('cancelEditButton');
+// =========================
+// Funciones de Exportación ya incluidas arriba
+// =========================
 
-let editIndex = null; // Variable para saber si estamos editando un enlace
-
-// Manejar el envío del formulario para agregar o actualizar enlaces
-addLinkForm.addEventListener('submit', (event) => {
-    event.preventDefault(); // Evitar el comportamiento por defecto del formulario
-
-    const linkText = linkTextInput.value.trim();
-    const linkURL = linkURLInput.value.trim();
-
-    if (linkText === '' || linkURL === '') {
-        addLinkMessage.textContent = 'Por favor, completa todos los campos.';
-        addLinkMessage.style.color = 'red';
-        return;
-    }
-
-    if (editIndex !== null) {
-        // Actualizar el enlace existente
-        updateExistingLink(linkText, linkURL);
-    } else {
-        // Agregar un nuevo enlace
-        addNewLink(linkText, linkURL);
-    }
-
-    // Limpiar los campos del formulario
-    linkTextInput.value = '';
-    linkURLInput.value = '';
-    editIndex = null;
-    updateLinkButton.style.display = 'none';
-    cancelEditButton.style.display = 'none';
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
-
-    // Guardar los enlaces en localStorage
-    saveLinks();
-});
-
-// Función para agregar un nuevo enlace
-function addNewLink(linkText, linkURL) {
-    // Crear nuevos elementos de enlace
-    const newLink1 = document.createElement('a');
-    newLink1.href = linkURL;
-    newLink1.textContent = linkText;
-
-    const newLink2 = newLink1.cloneNode(true);
-
-    // Agregar el enlace a ambos menús
-    iframe1MenuContent.appendChild(newLink1);
-    iframe2MenuContent.appendChild(newLink2);
-
-    // Actualizar los event listeners
-    updateMenuEventListeners();
-
-    // Agregar a la lista de enlaces
-    addLinkToList(linkText, linkURL);
-
-    addLinkMessage.textContent = 'Enlace agregado exitosamente.';
-    addLinkMessage.style.color = 'green';
-}
-
-// Función para actualizar un enlace existente
-function updateExistingLink(linkText, linkURL) {
-    // Actualizar en los menús
-    const links1 = iframe1MenuContent.querySelectorAll('a');
-    const links2 = iframe2MenuContent.querySelectorAll('a');
-
-    links1[editIndex].textContent = linkText;
-    links1[editIndex].href = linkURL;
-
-    links2[editIndex].textContent = linkText;
-    links2[editIndex].href = linkURL;
-
-    // Actualizar en la lista
-    const listItems = linkList.querySelectorAll('li');
-    const span = listItems[editIndex].querySelector('span');
-    span.textContent = linkText;
-
-    // Actualizar los event listeners
-    updateMenuEventListeners();
-
-    addLinkMessage.textContent = 'Enlace actualizado exitosamente.';
-    addLinkMessage.style.color = 'green';
-}
-
-// Función para agregar el enlace a la lista de enlaces
-function addLinkToList(linkText, linkURL) {
-    const li = document.createElement('li');
-    const span = document.createElement('span');
-    span.textContent = linkText;
-
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Editar';
-    editButton.classList.add('edit-button');
-    editButton.addEventListener('click', () => editLink(li, linkText, linkURL));
-
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Eliminar';
-    deleteButton.addEventListener('click', () => deleteLink(li));
-
-    li.appendChild(span);
-    li.appendChild(editButton);
-    li.appendChild(deleteButton);
-
-    linkList.appendChild(li);
-}
-
-// Función para editar un enlace
-function editLink(li, linkText, linkURL) {
-    const index = Array.from(linkList.children).indexOf(li);
-    editIndex = index;
-
-    linkTextInput.value = linkText;
-    linkURLInput.value = linkURL;
-
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'none';
-    updateLinkButton.style.display = 'block';
-    cancelEditButton.style.display = 'block';
-}
-
-// Event listener para el botón de actualizar enlace
-updateLinkButton.addEventListener('click', () => {
-    addLinkForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición
-cancelEditButton.addEventListener('click', () => {
-    linkTextInput.value = '';
-    linkURLInput.value = '';
-    editIndex = null;
-    updateLinkButton.style.display = 'none';
-    cancelEditButton.style.display = 'none';
-    addLinkForm.querySelector('button[type="submit"]').style.display = 'block';
-    addLinkMessage.textContent = '';
-});
-
-// Función para eliminar un enlace
-function deleteLink(li) {
-    const index = Array.from(linkList.children).indexOf(li);
-
-    // Eliminar de los menús
-    iframe1MenuContent.removeChild(iframe1MenuContent.children[index]);
-    iframe2MenuContent.removeChild(iframe2MenuContent.children[index]);
-
-    // Eliminar de la lista
-    linkList.removeChild(li);
-
-    // Actualizar los event listeners
-    updateMenuEventListeners();
-
-    // Guardar los enlaces en localStorage
-    saveLinks();
-}
-
-// Función para guardar los enlaces en localStorage
-function saveLinks() {
-    const iframe1Links = Array.from(iframe1MenuContent.querySelectorAll('a')).map(link => ({
-        text: link.textContent,
-        href: link.href
-    }));
-    const linksData = {
-        iframe1Links
-    };
-
-    localStorage.setItem('menuLinks', JSON.stringify(linksData));
-}
-
-// Función para cargar los enlaces desde localStorage
-function loadLinks() {
-    const linksData = JSON.parse(localStorage.getItem('menuLinks'));
-
-    if (linksData) {
-        // Limpiar menús y lista existentes
-        iframe1MenuContent.innerHTML = '';
-        iframe2MenuContent.innerHTML = '';
-        linkList.innerHTML = '';
-
-        // Cargar enlaces en los menús y en la lista
-        linksData.iframe1Links.forEach(linkData => {
-            // Agregar a los menús
-            const link1 = document.createElement('a');
-            link1.href = linkData.href;
-            link1.textContent = linkData.text;
-            iframe1MenuContent.appendChild(link1);
-
-            const link2 = document.createElement('a');
-            link2.href = linkData.href;
-            link2.textContent = linkData.text;
-            iframe2MenuContent.appendChild(link2);
-
-            // Agregar a la lista
-            addLinkToList(linkData.text, linkData.href);
-        });
-
-        // Actualizar event listeners
-        updateMenuEventListeners();
-    }
-}
-
-// Llamar a loadLinks() al cargar la página
-loadLinks();
-
-// Obtener elementos del formulario de gestionar usuarios
-const userForm = document.getElementById('userForm');
-const userEmailInput = document.getElementById('userEmail');
-const userUsernameInput = document.getElementById('userUsername');
-const userPasswordInput = document.getElementById('userPassword');
-const userRoleSelect = document.getElementById('userRole');
-const userMessage = document.getElementById('userMessage');
-const userList = document.getElementById('userList');
-const updateUserButton = document.getElementById('updateUserButton');
-const cancelUserEditButton = document.getElementById('cancelUserEditButton');
-
-let editUserIndex = null; // Variable para saber si estamos editando un usuario
-
-// Manejar el envío del formulario de usuarios
-userForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const userEmail = userEmailInput.value.trim();
-    const userUsername = userUsernameInput.value.trim();
-    const userPassword = userPasswordInput.value.trim();
-    const userRole = userRoleSelect.value;
-
-    if (userEmail === '' || userUsername === '' || userPassword === '' || userRole === '') {
-        userMessage.textContent = 'Por favor, completa todos los campos.';
-        userMessage.style.color = 'red';
-        return;
-    }
-
-    if (editUserIndex !== null) {
-        // Actualizar el usuario existente
-        updateExistingUser(userEmail, userUsername, userPassword, userRole);
-    } else {
-        // Agregar un nuevo usuario
-        addNewUser(userEmail, userUsername, userPassword, userRole);
-    }
-
-    // Limpiar los campos del formulario
-    userEmailInput.value = '';
-    userUsernameInput.value = '';
-    userPasswordInput.value = '';
-    userRoleSelect.value = 'miembro';
-    editUserIndex = null;
-    updateUserButton.style.display = 'none';
-    cancelUserEditButton.style.display = 'none';
-    userForm.querySelector('button[type="submit"]').style.display = 'block';
-
-    userMessage.textContent = '';
-});
-
-// Función para agregar un nuevo usuario
-function addNewUser(userEmail, userUsername, userPassword, userRole) {
-    // Agregar el usuario a la lista en memoria
-    usersData.push({
-        email: userEmail,
-        username: userUsername,
-        password: userPassword,
-        role: userRole
-    });
-
-    // Guardar y actualizar la interfaz
-    saveUsers();
-    renderUserList();
-
-    userMessage.textContent = 'Usuario agregado exitosamente.';
-    userMessage.style.color = 'green';
-}
-
-// Función para editar un usuario
-function editUser(index) {
-    editUserIndex = index;
-    const userData = usersData[index];
-
-    userEmailInput.value = userData.email;
-    userUsernameInput.value = userData.username;
-    userPasswordInput.value = userData.password;
-    userRoleSelect.value = userData.role;
-
-    userForm.querySelector('button[type="submit"]').style.display = 'none';
-    updateUserButton.style.display = 'block';
-    cancelUserEditButton.style.display = 'block';
-}
-
-// Función para actualizar un usuario existente
-function updateExistingUser(userEmail, userUsername, userPassword, userRole) {
-    // Actualizar en la lista en memoria
-    usersData[editUserIndex] = {
-        email: userEmail,
-        username: userUsername,
-        password: userPassword,
-        role: userRole
-    };
-
-    // Guardar y actualizar la interfaz
-    saveUsers();
-    renderUserList();
-
-    userMessage.textContent = 'Usuario actualizado exitosamente.';
-    userMessage.style.color = 'green';
-}
-
-// Event listener para el botón de actualizar usuario
-updateUserButton.addEventListener('click', () => {
-    userForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición de usuario
-cancelUserEditButton.addEventListener('click', () => {
-    userEmailInput.value = '';
-    userUsernameInput.value = '';
-    userPasswordInput.value = '';
-    userRoleSelect.value = 'miembro';
-    editUserIndex = null;
-    updateUserButton.style.display = 'none';
-    cancelUserEditButton.style.display = 'none';
-    userForm.querySelector('button[type="submit"]').style.display = 'block';
-    userMessage.textContent = '';
-});
-
-// Función para eliminar un usuario
-function deleteUser(index) {
-    // Eliminar del almacenamiento en memoria
-    usersData.splice(index, 1);
-
-    // Guardar y actualizar la interfaz
-    saveUsers();
-    renderUserList();
-
-    userMessage.textContent = 'Usuario eliminado exitosamente.';
-    userMessage.style.color = 'green';
-}
-
-// Función para guardar los usuarios en localStorage
-function saveUsers() {
-    localStorage.setItem('userList', JSON.stringify(usersData));
-}
-
-// Llamar a loadUsers() al cargar la página
-loadUsers();
-
-// Variables para gestionar incidencias
-let issuesData = [];
-
-// Función para cargar las incidencias desde localStorage
-function loadIssues() {
-    issuesData = JSON.parse(localStorage.getItem('issueList')) || [];
-    renderIssueList();
-}
-
-// Función para renderizar la lista de incidencias en la interfaz
-function renderIssueList() {
-    issueList.innerHTML = '';
-    issuesData.forEach((issueData, index) => {
-        const li = document.createElement('li');
-
-        const detailsDiv = document.createElement('div');
-        detailsDiv.classList.add('issue-details');
-        detailsDiv.innerHTML = `
-            <strong>${issueData.title}</strong><br>
-            Tipo: ${issueData.type}<br>
-            Estado: ${issueData.status}<br>
-            Prioridad: ${issueData.priority}<br>
-            Creador: ${issueData.creator}<br>
-            Responsable: ${issueData.responsible}<br>
-            Fecha de Creación: ${issueData.creationDate}<br>
-            Fecha de Vencimiento: ${issueData.dueDate}<br>
-            Disciplinas: ${issueData.discipline}<br>
-            Causas: ${issueData.cause}<br>
-            Descripción: ${issueData.description}
-        `;
-
-        if (issueData.screenshot) {
-            const img = document.createElement('img');
-            img.src = issueData.screenshot;
-            img.alt = 'Captura de pantalla';
-            img.style.maxWidth = '100%';
-            img.style.marginTop = '10px';
-            detailsDiv.appendChild(img);
-        }
-
-        const buttonsDiv = document.createElement('div');
-        buttonsDiv.style.display = 'flex';
-
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Editar';
-        editButton.classList.add('edit-issue-button');
-        editButton.addEventListener('click', () => editIssue(index));
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Eliminar';
-        deleteButton.addEventListener('click', () => deleteIssue(index));
-
-        buttonsDiv.appendChild(editButton);
-        buttonsDiv.appendChild(deleteButton);
-
-        li.appendChild(detailsDiv);
-        li.appendChild(buttonsDiv);
-
-        issueList.appendChild(li);
-    });
-}
-
-// Obtener elementos del formulario de incidencias
-const issueForm = document.getElementById('issueForm');
-const issueTitleInput = document.getElementById('issueTitle');
-const issueTypeInput = document.getElementById('issueType');
-const issueStatusInput = document.getElementById('issueStatus');
-const issuePriorityInput = document.getElementById('issuePriority');
-const issueCreatorInput = document.getElementById('issueCreator');
-const issueResponsibleInput = document.getElementById('issueResponsible');
-const issueCreationDateInput = document.getElementById('issueCreationDate');
-const issueDueDateInput = document.getElementById('issueDueDate');
-const issueDisciplineInput = document.getElementById('issueDiscipline');
-const issueCauseInput = document.getElementById('issueCause');
-const issueDescriptionInput = document.getElementById('issueDescription');
-const issueScreenshotInput = document.getElementById('issueScreenshot');
-const issueMessage = document.getElementById('issueMessage');
-const issueList = document.getElementById('issueList');
-const updateIssueButton = document.getElementById('updateIssueButton');
-const cancelIssueEditButton = document.getElementById('cancelIssueEditButton');
-
-let editIssueIndex = null; // Variable para saber si estamos editando una incidencia
-
-// Manejar el envío del formulario de incidencias
-issueForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const issueData = {
-        title: issueTitleInput.value.trim(),
-        type: issueTypeInput.value.trim(),
-        status: issueStatusInput.value.trim(),
-        priority: issuePriorityInput.value.trim(),
-        creator: issueCreatorInput.value.trim(),
-        responsible: issueResponsibleInput.value.trim(),
-        creationDate: issueCreationDateInput.value,
-        dueDate: issueDueDateInput.value,
-        discipline: issueDisciplineInput.value.trim(),
-        cause: issueCauseInput.value.trim(),
-        description: issueDescriptionInput.value.trim(),
-        screenshot: null
-    };
-
-    if (issueScreenshotInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            issueData.screenshot = e.target.result;
-            processIssueData(issueData);
-        };
-        reader.readAsDataURL(issueScreenshotInput.files[0]);
-    } else {
-        processIssueData(issueData);
-    }
-});
-
-function processIssueData(issueData) {
-    if (editIssueIndex !== null) {
-        // Actualizar la incidencia existente
-        issuesData[editIssueIndex] = issueData;
-        issueMessage.textContent = 'Incidencia actualizada exitosamente.';
-        issueMessage.style.color = 'green';
-    } else {
-        // Agregar una nueva incidencia
-        issuesData.push(issueData);
-        issueMessage.textContent = 'Incidencia agregada exitosamente.';
-        issueMessage.style.color = 'green';
-    }
-
-    // Limpiar los campos del formulario
-    issueForm.reset();
-    editIssueIndex = null;
-    updateIssueButton.style.display = 'none';
-    cancelIssueEditButton.style.display = 'none';
-    issueForm.querySelector('button[type="submit"]').style.display = 'block';
-
-    // Guardar y actualizar la interfaz
-    saveIssues();
-    renderIssueList();
-}
-
-// Event listener para el botón de actualizar incidencia
-updateIssueButton.addEventListener('click', () => {
-    issueForm.dispatchEvent(new Event('submit'));
-});
-
-// Event listener para cancelar la edición de incidencia
-cancelIssueEditButton.addEventListener('click', () => {
-    issueForm.reset();
-    editIssueIndex = null;
-    updateIssueButton.style.display = 'none';
-    cancelIssueEditButton.style.display = 'none';
-    issueForm.querySelector('button[type="submit"]').style.display = 'block';
-    issueMessage.textContent = '';
-});
-
-// Función para editar una incidencia
-function editIssue(index) {
-    editIssueIndex = index;
-    const issueData = issuesData[index];
-
-    issueTitleInput.value = issueData.title;
-    issueTypeInput.value = issueData.type;
-    issueStatusInput.value = issueData.status;
-    issuePriorityInput.value = issueData.priority;
-    issueCreatorInput.value = issueData.creator;
-    issueResponsibleInput.value = issueData.responsible;
-    issueCreationDateInput.value = issueData.creationDate;
-    issueDueDateInput.value = issueData.dueDate;
-    issueDisciplineInput.value = issueData.discipline;
-    issueCauseInput.value = issueData.cause;
-    issueDescriptionInput.value = issueData.description;
-
-    issueForm.querySelector('button[type="submit"]').style.display = 'none';
-    updateIssueButton.style.display = 'block';
-    cancelIssueEditButton.style.display = 'block';
-
-    // Mostrar el formulario si no está visible
-    issueFormContainer.style.display = 'block';
-    previouslyVisibleForm = 'issueForm';
-}
-
-// Función para eliminar una incidencia
-function deleteIssue(index) {
-    issuesData.splice(index, 1);
-    saveIssues();
-    renderIssueList();
-    issueMessage.textContent = 'Incidencia eliminada exitosamente.';
-    issueMessage.style.color = 'green';
-}
-
-// Función para guardar las incidencias en localStorage
-function saveIssues() {
-    localStorage.setItem('issueList', JSON.stringify(issuesData));
-}
-
-// Llamar a loadIssues() al cargar la página
-loadIssues();
