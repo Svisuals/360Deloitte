@@ -6,10 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Enlace al archivo CSS -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Cargar las bibliotecas necesarias para exportar -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
     <!-- Pantalla de inicio de sesión -->
@@ -184,10 +180,6 @@
             <button type="button" id="cancelIssueEditButton" style="display: none;">Cancelar</button>
         </form>
         <p id="issueMessage"></p>
-
-        <!-- Botones para exportar -->
-        <button type="button" id="exportExcelButton">Exportar a Excel</button>
-        <button type="button" id="exportPdfButton">Exportar a PDF</button>
 
         <!-- Lista de incidencias existentes -->
         <div id="issueListContainer">
